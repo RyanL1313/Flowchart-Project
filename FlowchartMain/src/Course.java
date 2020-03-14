@@ -17,7 +17,7 @@ public class Course {
      * If the attributes end up staying with these values, then that shows us an error in file reading occurred.
      */
     public Course() {
-        courseHours = -1;
+        courseHours = 0;
         fullCourseName = "Unknown";
         courseID = "Unknown";
     }
