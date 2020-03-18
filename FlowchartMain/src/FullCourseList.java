@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.io.*;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 /**
  * The FullCourseList is designed to hold every undergraduate class offered at UAH
@@ -39,7 +40,12 @@ public class FullCourseList {
         HTMLFileList.add("WGS.html"); HTMLFileList.add("WLC.html");
     }
 
-    FullCourseList() {
-        createFileNameList();
+    FullCourseList() throws ParserConfigurationException, IOException, SAXException {
+        createFileNameList(); // Add all HTML file names to HTMLFileList
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document doc = builder.parse("ACC.html");
+        doc.getElementsByTagName("div class=\"courseblock\"");
     }
 }
