@@ -103,4 +103,3 @@ public class DegreeSelectorWindow extends JFrame //implements ActionListener
         });
     }
 }
-
