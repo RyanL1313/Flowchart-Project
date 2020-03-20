@@ -24,6 +24,8 @@ public class DegreeSelectorWindow extends JFrame //implements ActionListener
     JComboBox minor = new JComboBox(MINORS);
     JComboBox conc = new JComboBox(CONCENTRATIONS);
 
+    JButton cont = new JButton("Continue");
+
     ActionListener majorListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -44,6 +46,16 @@ public class DegreeSelectorWindow extends JFrame //implements ActionListener
             conc.removeAllItems();
             for(int i = 0; i < CONCENTRATIONS.length; i++)
                 conc.addItem(CONCENTRATIONS[i]);
+
+            // Enable button
+            cont.setEnabled(true);
+        }
+    };
+
+    ActionListener buttonPress = new ActionListener(){
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.exit(0);
         }
     };
 
@@ -52,6 +64,12 @@ public class DegreeSelectorWindow extends JFrame //implements ActionListener
         initMajors();
         initMinors();
         initConcentrations();
+
+        cont.setBounds(150,400,150,30);
+        cont.setEnabled(false);
+        cont.addActionListener(buttonPress);
+        add(cont);
+        cont.setVisible(true);
     }
 
     public void initMajors()
@@ -87,7 +105,6 @@ public class DegreeSelectorWindow extends JFrame //implements ActionListener
         DegreeSelectorWindow frame = new DegreeSelectorWindow();
         frame.setLayout(null);
         frame.setSize(500,500);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
 
