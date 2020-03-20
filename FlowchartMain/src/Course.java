@@ -6,8 +6,8 @@ import java.util.*;
  * The setter methods will be called by the FullCourseList class
  */
 public class Course {
-    private ArrayList<Course> prereqs = new ArrayList<>(); // ArrayList of prerequisite courses
-    private ArrayList<Course> coreqs = new ArrayList<>(); // ArrayList of corequisite courses
+    private ArrayList<ArrayList<String>> prereqs = new ArrayList<ArrayList<String>>(); // ArrayList of prerequisite courses
+    private ArrayList<ArrayList<String>> coreqs = new ArrayList<ArrayList<String>>(); // ArrayList of corequisite courses
     private int courseHours; // Hours the course satisfies
     private String fullCourseName; // Full name of the course
     private String courseID; // Course ID with 2-3 letters then 3 numbers (ex. CS 321, ARH 101)
@@ -16,7 +16,7 @@ public class Course {
      * Course constructor
      * If the attributes end up staying with these values, then that shows us an error in file reading occurred.
      */
-    public Course() {
+    Course() {
         courseHours = 0;
         fullCourseName = "Unknown";
         courseID = "Unknown";
@@ -50,7 +50,7 @@ public class Course {
      * Getter for the prerequisites list
      * @return the prerequisites list
      */
-    public ArrayList<Course> getPrereqs() {
+    public ArrayList<ArrayList<String>> getPrereqs() {
         return prereqs;
     }
 
@@ -58,7 +58,7 @@ public class Course {
      * Getter for the corequisites list
      * @return the corequisites list
      */
-    public ArrayList<Course> getCoreqs() {
+    public ArrayList<ArrayList<String>> getCoreqs() {
         return coreqs;
     }
 
@@ -91,7 +91,7 @@ public class Course {
      * This list comes from the FullCourseList (FullCourseList will use this setPrereqs method)
      * @param prereqs The list of prerequisites
      */
-    public void setPrereqs(ArrayList<Course> prereqs) {
+    public void setPrereqs(ArrayList<ArrayList<String>> prereqs) {
         this.prereqs = prereqs;
     }
 
@@ -100,7 +100,15 @@ public class Course {
      * This list comes from the FullCourseList (FullCourseList will use this setCoreqs method)
      * @param coreqs The list of corequisites
      */
-    public void setCoreqs(ArrayList<Course> coreqs) {
+    public void setCoreqs(ArrayList<ArrayList<String>> coreqs) {
         this.coreqs = coreqs;
+    }
+
+    /**
+     * Used to print the attributes of a course
+     * Used for our purposes only to check if FullCourseList is created properly
+     */
+    public void printCourseValues() {
+        System.out.println("Course ID: " + courseID + "\tCourse Name: " + fullCourseName + " Credits: " + courseHours);
     }
 }

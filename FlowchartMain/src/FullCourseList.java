@@ -6,6 +6,7 @@ import java.util.ListIterator;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
+import java.util.Scanner;
 
 /**
  * The FullCourseList is designed to hold every undergraduate class offered at UAH
@@ -13,13 +14,14 @@ import org.xml.sax.SAXException;
  * value is a linked list of courses associated with that key.
  */
 public class FullCourseList {
-    private HashMap<String, LinkedList<Course>> FullCourseList = new HashMap<String, LinkedList<Course>>(); // The full list of UAH courses
+    private static HashMap<String, LinkedList<Course>> FullCourseList = new HashMap<String, LinkedList<Course>>(); // The full list of UAH courses
     private ArrayList<String> HTMLFileList = new ArrayList<String>(); // List of file names for all departments
 
     /**
      * The FullCourselist constructor goes through each HTML file for each department code and uses DOM parsing to
      * extract out the courseblock sections of each file. These courseblock sections have 3 subsections of information
-     * about the course, which get extracted. From there, it's just parsing out the strings to get the course code,
+     * about the course, which get extracted. From there, it's just parsing out
+     * the strings to get the course code,
      * full course name, number of credits, prerequisites, and corequisites, which is done through separate methods
      * but called in the constructor.
      */
@@ -58,21 +60,20 @@ public class FullCourseList {
                         // Obtaining the 3 strings with course data in the course block
                         courseAttributes = (Element) courseInfo.item(0);
                         courseTitle = courseAttributes.getTextContent();
-                        System.out.println(courseTitle);
+                        System.out.println("s1: " + courseTitle);
 
                         courseAttributes = (Element) courseInfo.item(1);
                         courseCredits = courseAttributes.getTextContent();
-                        System.out.println(courseCredits);
+                        System.out.println("s2: " + courseCredits);
 
                         courseAttributes = (Element) courseInfo.item(2);
                         courseDescription = courseAttributes.getTextContent();
-                        System.out.println(courseDescription);
+                        System.out.println("s3: " + courseDescription);
 
-
-                        System.out.println("courseInfo length: " + courseInfo.getLength());
+                        // Extract the necessary course attributes out of these strings
+                        extractDataFromStrings(courseTitle, courseCredits, courseDescription);
                     }
                 }
-                System.out.println("Size" + " " + courseBlockList.getLength());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -106,7 +107,130 @@ public class FullCourseList {
     }
 
 
-    private void extractDataFromStrings() {
 
+    private void extractDataFromStrings(String s1, String s2, String s3) {
+        String courseDepartment; // ex. CS (used to go to hash map key)
+        String courseID;
+        String courseName;
+        int courseHours = 0;
+        ArrayList<ArrayList<Course>> prereqs = new ArrayList<ArrayList<Course>>();
+        ArrayList<ArrayList<Course>> coreqs = new ArrayList<ArrayList<Course>>();
+        String temp; // To throw out string tokens we don't need
+        String preReqDataToParse;
+        Course CourseToAdd = new Course(); // The course gets added to FullCourseList after its data has been identified
+
+        Scanner s1Scanner = new Scanner(s1);
+        Scanner s2Scanner = new Scanner(s2);
+        Scanner s3Scanner = new Scanner(s3);
+
+        courseDepartment = s1Scanner.next();
+        courseID = courseDepartment + " " + s1Scanner.next();
+
+        // Setting the course's courseID
+        CourseToAdd.setCourseID(courseID);
+        System.out.println("courseID: " + courseID);
+
+        temp = s1Scanner.next(); // Throw out the em dash
+
+
+        courseName = s1Scanner.nextLine();
+
+        // Setting the course's fullCourseName
+        CourseToAdd.setFullCourseName(courseName);
+        System.out.println("courseName: " + " " + courseName);
+
+
+        temp = s2Scanner.nextLine();
+        temp = temp.replaceAll("\\D", "");
+        courseHours = Integer.parseInt(temp);
+        courseHours = fixCourseHours(courseHours);
+
+        // Setting the courseHours
+        CourseToAdd.setHours(courseHours);
+        System.out.println("courseHours: " + courseHours);
+
+        while (s3Scanner.hasNext()) {
+            temp = s3Scanner.next();
+
+            // This denotes if and when the file starts listing out prerequisite courses
+            if (temp.contains("Prerequisite")) {
+                System.out.println("Has prereqs");
+                sortOutAndSetPrereqs(s3Scanner.nextLine());
+            }
+
+
+        }
+
+        // Adding the course to the hashmap
+        if (FullCourseList.containsKey(courseDepartment)) // ex. If this isn't the first CS class being put in the hash map
+        {
+            LinkedList<Course> updatedList = FullCourseList.get(courseDepartment); // Getting the linked list associated with the department code
+            updatedList.add(CourseToAdd); // Adding the completed course to the list
+            FullCourseList.put(courseDepartment, updatedList); // Putting the updated list back into FullCourseList
+        }
+        else { // ex. If this is the first CS class being put in the hashmap => new linked list is added to hashmap
+            LinkedList<Course> newList = new LinkedList<Course>();
+            newList.add(CourseToAdd);
+            FullCourseList.put(courseDepartment, newList);
+        }
+    }
+
+    /**
+     * Getter for the FullCourseList hashmap for other classes to use
+     * @return The FullCourseList hashmap
+     */
+    public HashMap<String, LinkedList<Course>> getFullCourseList() {
+        return FullCourseList;
+    }
+
+    /**
+     * Prerequisites grouped together in the inner array list are equivalents for the course in question
+     * The outer array lists are separate prerequisites (not equivalent to one another)
+     * @param prereqData The string containing the prerequisites that needs to be parsed out
+     */
+    private void sortOutAndSetPrereqs(String prereqData) {
+        ArrayList<ArrayList<String>> allPrereqsForThisCourse = new ArrayList<ArrayList<String>>();
+        System.out.println("In here: " + prereqData);
+        String equivPrereqMarker = "or"; // When this is encountered, you can either take this prereq or other equivalent courses
+
+
+    }
+
+    /**
+     * This internal method is used to fix when, after using regex to isolate the credit hours, two different credit
+     * hours totals combine into one. (ex. if a course says 3-6 semester hours, after regex it will say 36, so remove
+     * the 6.)
+     * @param hours The original value of the credit hours that may need to be changed
+     * @return The fixed number of credit hours
+     */
+    private int fixCourseHours(int hours) {
+        if (hours >= 10) // Then it read in two different hours totals; we need the first one
+            return hours / 10;
+        else
+            return hours; // Otherwise just keep the original value
+    }
+
+    /**
+     * Remove a course from the FullCourseList
+     * @param courseID
+     * @return The course to be removed
+     */
+    public Course removeCourse(String courseID) {
+        String courseDepartment;
+        int courseNumber;
+
+        Scanner courseIDScanner = new Scanner(courseID);
+
+        courseDepartment = courseIDScanner.next();
+        courseNumber = Integer.parseInt(courseIDScanner.next());
+
+        LinkedList<Course> shortenedList = FullCourseList.get(courseDepartment); // Return the linked list for the necessary department
+        int index = shortenedList.indexOf(courseID);
+        if (index == -1) {
+            System.out.println("Error removing course");
+            return null;
+        }
+
+        return shortenedList.remove(index);
     }
 }
