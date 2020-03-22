@@ -111,4 +111,11 @@ public class Course {
     public void printCourseValues() {
         System.out.println("Course ID: " + courseID + "\tCourse Name: " + fullCourseName + " Credits: " + courseHours);
     }
+
+    public boolean equals(String courseID) {
+        if (this.courseID == courseID)
+            return true;
+
+        return false;
+    }
 }

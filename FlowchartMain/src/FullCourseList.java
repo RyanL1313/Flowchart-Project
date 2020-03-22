@@ -1,12 +1,8 @@
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.io.*;
-import java.util.LinkedList;
-import java.util.ListIterator;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
-import java.util.Scanner;
 
 /**
  * The FullCourseList is designed to hold every undergraduate class offered at UAH
@@ -216,6 +212,7 @@ public class FullCourseList {
      * @return The course to be removed
      */
     public Course removeCourse(String courseID) {
+        int indexToRemove = findCourse(courseID);
         String courseDepartment;
         int courseNumber;
 
@@ -224,13 +221,35 @@ public class FullCourseList {
         courseDepartment = courseIDScanner.next();
         courseNumber = Integer.parseInt(courseIDScanner.next());
 
-        LinkedList<Course> shortenedList = FullCourseList.get(courseDepartment); // Return the linked list for the necessary department
-        int index = shortenedList.indexOf(courseID);
-        if (index == -1) {
-            System.out.println("Error removing course");
-            return null;
-        }
+        LinkedList<Course> ListToShorten = FullCourseList.get(courseDepartment); // Return the linked list for the necessary department
 
-        return shortenedList.remove(index);
+        return ListToShorten.remove(indexToRemove);
+    }
+
+    /**
+     * Checks if a specified course is in FullCourseList by checking if the ID of the course is in FullCourseList
+     * Returns -1 if the course is not found in FullCourseList
+     * @param courseID The courseID (i.e. CS 321) (Space required)
+     * @return The index of the course in the corresponding linked list for that course's department (i.e. The CS linked list)
+     */
+    public int findCourse(String courseID) {
+        String courseDepartment;
+        int courseNumber;
+
+        Scanner courseIDScanner = new Scanner(courseID);
+
+        courseDepartment = courseIDScanner.next();
+        courseNumber = Integer.parseInt(courseIDScanner.next());
+
+        LinkedList<Course> ListToShorten = FullCourseList.get(courseDepartment); // Return the linked list for the necessary department
+
+        Iterator<Course> courseIterator = ListToShorten.iterator();
+        for (int i = 0; i < ListToShorten.size(); i++) {
+            if (courseIterator.hasNext()) {
+                if (courseIterator.next().getCourseID().equals(courseID))
+                    return i;
+            }
+        }
+        return -1;
     }
 }
