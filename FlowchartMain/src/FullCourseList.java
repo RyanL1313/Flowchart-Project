@@ -133,7 +133,6 @@ public class FullCourseList {
 
         temp = courseNameScanner.next(); // Throw out the em dash
 
-
         courseName = courseNameScanner.nextLine(); // The rest of this string is the course name
 
         // Setting the course's fullCourseName
@@ -151,7 +150,7 @@ public class FullCourseList {
             temp = prereqsAndCoreqsScanner.next();
 
             // This denotes if and when the file starts listing out prerequisite courses
-            if (temp.contains("Prerequisite") || temp.contains("Co-requisite")) {
+            if (temp.contains("Prerequisite") || temp.contains("Pre-requisite")) {
                 prereqAndCoreqDataToParse = prereqsAndCoreqsScanner.nextLine(); // Right after "Prerequisite" marker, so it should have the prereq courses (We could run into the "Corequisite" marker, though)
                 sortOutAndSetPrereqs(prereqAndCoreqDataToParse, CourseToAdd); // Gets the prereqs and sets them to the Course object
             }
@@ -203,7 +202,6 @@ public class FullCourseList {
         String separateMarker = "and"; // When this is encountered, the next prereq is not equivalent to the previous and must be in a new ArrayList (new row)
         Scanner prereqScanner = new Scanner(prereqData);
         String courseID; // Stores the various courseIDs of the prereqs as you loop through the string
-        boolean moreCourses; // Used to check if there are more prereq courses that need to be read in
         String nextToken; // Used after a courseID is read in to check for "or" or "and"
         boolean getOutFlag = false; // Used to get out of the while loop if need be
 

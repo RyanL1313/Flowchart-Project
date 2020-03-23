@@ -4,10 +4,12 @@ import java.util.*;
  * A course has a course ID, name, prerequisites and corequisites list, and number of credit hours.
  * A course is the most concrete object type used in this program
  * The setter methods will be called by the FullCourseList class
+ * The nested Array Lists for prereqs and coreqs are necessary to distinguish equivalent prereqs and coreqs from separate preregs and coregs.
+ * Equivalents are in the same row (or same ArrayList in the ArrayList of ArrayLists), separates are on different rows (different ArrayList inside the ArrayList of ArrayLists)
  */
 public class Course {
-    private ArrayList<ArrayList<String>> prereqs = new ArrayList<ArrayList<String>>(); // ArrayList of prerequisite courses
-    private ArrayList<ArrayList<String>> coreqs = new ArrayList<ArrayList<String>>(); // ArrayList of corequisite courses
+    private ArrayList<ArrayList<String>> prereqs = new ArrayList<ArrayList<String>>(); // ArrayList of ArrayList of prerequisite courses
+    private ArrayList<ArrayList<String>> coreqs = new ArrayList<ArrayList<String>>(); // ArrayList of ArrayList of corequisite courses
     private int courseHours; // Hours the course satisfies
     private String fullCourseName; // Full name of the course
     private String courseID; // Course ID with 2-3 letters then 3 numbers (ex. CS 321, ARH 101)
