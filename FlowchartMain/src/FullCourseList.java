@@ -205,6 +205,7 @@ public class FullCourseList {
         String courseID; // Stores the various courseIDs of the prereqs as you loop through the string
         boolean moreCourses; // Used to check if there are more prereq courses that need to be read in
         String nextToken; // Used after a courseID is read in to check for "or" or "and"
+        boolean getOutFlag = false; // Used to get out of the while loop if need be
 
         while (prereqScanner.hasNext()) {
             courseID = prereqScanner.next() + " " + prereqScanner.next(); // Read in course ID
@@ -212,6 +213,10 @@ public class FullCourseList {
 
             if (prereqScanner.hasNext()) { // Then more courses are available, otherwise, we just read in the last course
                 nextToken = prereqScanner.next(); // "or" or "and"
+                if (nextToken.contains("Corequisite") || nextToken.contains("Co-requisite")) { // Don't want to read the coreqs in as prereqs also
+                    getOutFlag = true;
+                    break; // We have to get out of the while loop; don't read in any more data
+                }
                 if (nextToken.toLowerCase().equals(equivMarker)) { // The course we just read in has equivalents, add them to the same ArrayList
                     continue; // Goes to beginning of the loop where a course gets added to the row
 
@@ -241,13 +246,18 @@ public class FullCourseList {
         Scanner coreqScanner = new Scanner(coreqData);
         String courseID; // Stores the various courseIDs of the coreqs as you loop through the string
         String nextToken; // Used after a courseID is read in to check for "or" or "and"
+        boolean getOutFlag = false; // Used to get out of the while loop if need be
 
-        while (coreqScanner.hasNext()) {
+        while (coreqScanner.hasNext() && getOutFlag == false) {
             courseID = coreqScanner.next() + " " + coreqScanner.next();
             rowOfCoreqs.add(courseID);
 
             if (coreqScanner.hasNext()) { // Then more courses are available, otherwise, we just read in the last course
-                nextToken = coreqScanner.next(); // "or" or "and"
+                nextToken = coreqScanner.next(); // "or" or "and". Could also be prerequisite marker; in that case, no more corequisites to be read in
+                if (nextToken.contains("Prerequisite") || nextToken.contains("Pre-requisite")) { // Don't want to read the prereqs in as coreqs also
+                    getOutFlag = true;
+                    break; // We have to get out of the while loop; don't read in any more data
+                }
                 if (nextToken.toLowerCase().equals(equivMarker)) { // The course we just read in has equivalents, add them to the same ArrayList
                     continue; // Goes to beginning of the loop where a course gets added to the row
 

@@ -130,10 +130,13 @@ public class Course {
         }
     }
 
+    /**
+     * Tells if a course is equal to another course or not
+     * Useful when removing a course from FullCourseList by providing the course ID
+     * @param courseID The ID of the course (i.e. CS 321)
+     * @return Whether or not the two courses are equal
+     */
     public boolean equals(String courseID) {
-        if (this.courseID == courseID)
-            return true;
-
-        return false;
+        return this.courseID == courseID;
     }
 }
