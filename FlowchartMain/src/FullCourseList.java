@@ -207,7 +207,7 @@ public class FullCourseList {
         String nextToken; // Used after a courseID is read in to check for "or" or "and"
         boolean getOutFlag = false; // Used to get out of the while loop if need be
 
-        while (prereqScanner.hasNext()) {
+        while (prereqScanner.hasNext() && getOutFlag == false) {
             courseID = prereqScanner.next() + " " + prereqScanner.next(); // Read in course ID
             rowOfPrereqs.add(courseID);
 
