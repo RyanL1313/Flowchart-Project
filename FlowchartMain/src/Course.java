@@ -89,7 +89,7 @@ public class Course {
     /**
      * Setter for the list of prerequisite courses
      * This list comes from the FullCourseList (FullCourseList will use this setPrereqs method)
-     * @param prereqs The list of prerequisites
+     * @param prereqs The list of prerequisites (by courseID)
      */
     public void setPrereqs(ArrayList<ArrayList<String>> prereqs) {
         this.prereqs = prereqs;
@@ -98,7 +98,7 @@ public class Course {
     /**
      * Setter for the list of corequisite courses
      * This list comes from the FullCourseList (FullCourseList will use this setCoreqs method)
-     * @param coreqs The list of corequisites
+     * @param coreqs The list of corequisites (by courseID)
      */
     public void setCoreqs(ArrayList<ArrayList<String>> coreqs) {
         this.coreqs = coreqs;
@@ -109,7 +109,25 @@ public class Course {
      * Used for our purposes only to check if FullCourseList is created properly
      */
     public void printCourseValues() {
-        System.out.println("Course ID: " + courseID + "\tCourse Name: " + fullCourseName + " Credits: " + courseHours);
+        System.out.println("Course ID: " + courseID + "\nCourse Name: " + fullCourseName + "\nCredits: " + courseHours);
+
+        System.out.println("Prerequisites: ");
+        for (ArrayList<String> separates: prereqs) {
+            for (String prereq: separates) {
+                System.out.printf(prereq + " ");
+            }
+
+            System.out.println();
+        }
+
+        System.out.println("Corequisites: ");
+        for (ArrayList<String> separates: coreqs) {
+            for (String coreq: separates) {
+                System.out.printf(coreq + " ");
+            }
+
+            System.out.println();
+        }
     }
 
     public boolean equals(String courseID) {
