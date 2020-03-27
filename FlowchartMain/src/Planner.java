@@ -8,7 +8,9 @@ import java.util.*;
 public class Planner {
     private boolean studentHasPreviousClasses; // Is set to true if the user selects the option that they do have previous credits to enter
     private boolean studentFinishedEnteringCourses; // Is set to true when the user selects "Done" when they're done entering previous credits into the textbox (should be in a loop)
-
+    public static String MAJOR;
+    public static String MINOR;
+    public static String CONCENTRATION;
     /**
      * Uses the findCourse method in FullCourseList to check if a course ID entered by the user is valid or not, then removes it from
      * the full course list if it finds it (since the user has already taken this class, they don't want to see it again

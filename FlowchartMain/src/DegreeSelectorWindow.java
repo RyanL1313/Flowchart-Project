@@ -55,6 +55,9 @@ public class DegreeSelectorWindow extends JFrame //implements ActionListener
     ActionListener buttonPress = new ActionListener(){
         @Override
         public void actionPerformed(ActionEvent e) {
+            Planner.MAJOR = (String)major.getSelectedItem();
+            Planner.MINOR = (String)minor.getSelectedItem();
+            Planner.CONCENTRATION = (String)conc.getSelectedItem();
             System.exit(0);
         }
     };
