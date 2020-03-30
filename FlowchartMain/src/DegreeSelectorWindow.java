@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 public class DegreeSelectorWindow extends JFrame //implements ActionListener
 {
     // These three arrays should really be constructed from data taken from the Degree Class. Info just here as a placeholder
-    // CONCENTRATIONS will be differenet from MINORS in that it will completely refill with different info based on which
+    // CONCENTRATIONS will be different from MINORS in that it will completely refill with different info based on which
     // MAJOR is selected. CS Concentrations are here as a placeholder.
     String MAJORS[] = {"Please select a Major","Computer Science","Engineering","Nursing","Physics","Math","Biology"};
     String MINORS[] = {"N/A","Computer Science","Engineering","Nursing","Physics","Math","Biology"};
@@ -55,6 +55,9 @@ public class DegreeSelectorWindow extends JFrame //implements ActionListener
     ActionListener buttonPress = new ActionListener(){
         @Override
         public void actionPerformed(ActionEvent e) {
+            Planner.MAJOR = (String)major.getSelectedItem();
+            Planner.MINOR = (String)minor.getSelectedItem();
+            Planner.CONCENTRATION = (String)conc.getSelectedItem();
             System.exit(0);
         }
     };

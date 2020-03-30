@@ -1,12 +1,8 @@
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.io.*;
-import java.util.LinkedList;
-import java.util.ListIterator;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
-import java.util.Scanner;
 
 /**
  * The FullCourseList is designed to hold every undergraduate class offered at UAH
@@ -60,15 +56,12 @@ public class FullCourseList {
                         // Obtaining the 3 strings with course data in the course block
                         courseAttributes = (Element) courseInfo.item(0);
                         courseTitle = courseAttributes.getTextContent();
-                        System.out.println("s1: " + courseTitle);
 
                         courseAttributes = (Element) courseInfo.item(1);
                         courseCredits = courseAttributes.getTextContent();
-                        System.out.println("s2: " + courseCredits);
 
                         courseAttributes = (Element) courseInfo.item(2);
                         courseDescription = courseAttributes.getTextContent();
-                        System.out.println("s3: " + courseDescription);
 
                         // Extract the necessary course attributes out of these strings
                         extractDataFromStrings(courseTitle, courseCredits, courseDescription);
@@ -107,7 +100,13 @@ public class FullCourseList {
     }
 
 
-
+    /**
+     * Three strings were pulled using the DOM parser for each courseblock. This method goes through those strings and
+     * pulls out the necessary information about the courses
+     * @param s1 Contains the course ID and course name
+     * @param s2 Contains the credit hours
+     * @param s3 Contains the prereqs and coreqs
+     */
     private void extractDataFromStrings(String s1, String s2, String s3) {
         String courseDepartment; // ex. CS (used to go to hash map key)
         String courseID;
@@ -116,49 +115,57 @@ public class FullCourseList {
         ArrayList<ArrayList<Course>> prereqs = new ArrayList<ArrayList<Course>>();
         ArrayList<ArrayList<Course>> coreqs = new ArrayList<ArrayList<Course>>();
         String temp; // To throw out string tokens we don't need
-        String preReqDataToParse;
+        String prereqAndCoreqDataToParse;
+
         Course CourseToAdd = new Course(); // The course gets added to FullCourseList after its data has been identified
+        boolean hasPrereqs = false; // Marker that signifies if we need to search for prereq courses
+        boolean hasCoreqs = false; // Marker that signifies if we need to search for coreq courses
 
-        Scanner s1Scanner = new Scanner(s1);
-        Scanner s2Scanner = new Scanner(s2);
-        Scanner s3Scanner = new Scanner(s3);
+        Scanner courseNameScanner = new Scanner(s1);
+        Scanner courseHoursScanner = new Scanner(s2);
+        Scanner prereqsAndCoreqsScanner = new Scanner(s3);
 
-        courseDepartment = s1Scanner.next();
-        courseID = courseDepartment + " " + s1Scanner.next();
+        courseDepartment = courseNameScanner.next();
+        courseID = courseDepartment + " " + courseNameScanner.next();
 
         // Setting the course's courseID
         CourseToAdd.setCourseID(courseID);
-        System.out.println("courseID: " + courseID);
 
-        temp = s1Scanner.next(); // Throw out the em dash
+        temp = courseNameScanner.next(); // Throw out the em dash
 
-
-        courseName = s1Scanner.nextLine();
+        courseName = courseNameScanner.nextLine(); // The rest of this string is the course name
 
         // Setting the course's fullCourseName
         CourseToAdd.setFullCourseName(courseName);
-        System.out.println("courseName: " + " " + courseName);
 
-
-        temp = s2Scanner.nextLine();
-        temp = temp.replaceAll("\\D", "");
+        temp = courseHoursScanner.nextLine();
+        temp = temp.replaceAll("\\D", ""); // So we only read in the hours
         courseHours = Integer.parseInt(temp);
         courseHours = fixCourseHours(courseHours);
 
         // Setting the courseHours
         CourseToAdd.setHours(courseHours);
-        System.out.println("courseHours: " + courseHours);
 
-        while (s3Scanner.hasNext()) {
-            temp = s3Scanner.next();
+        while (prereqsAndCoreqsScanner.hasNext()) {
+            temp = prereqsAndCoreqsScanner.next();
 
             // This denotes if and when the file starts listing out prerequisite courses
-            if (temp.contains("Prerequisite")) {
-                System.out.println("Has prereqs");
-                sortOutAndSetPrereqs(s3Scanner.nextLine());
+            if (temp.contains("Prerequisite") || temp.contains("Pre-requisite")) {
+                prereqAndCoreqDataToParse = prereqsAndCoreqsScanner.nextLine(); // Right after "Prerequisite" marker, so it should have the prereq courses (We could run into the "Corequisite" marker, though)
+                sortOutAndSetPrereqs(prereqAndCoreqDataToParse, CourseToAdd); // Gets the prereqs and sets them to the Course object
             }
+        }
 
+        prereqsAndCoreqsScanner = new Scanner(s3); // To go back to the beginning of the string to parse coreqs
 
+        while (prereqsAndCoreqsScanner.hasNext()) {
+            temp = prereqsAndCoreqsScanner.next();
+
+            // Same as above but for corequisites
+            if (temp.contains("Corequisite") || temp.contains("Co-requisite"))  {
+                prereqAndCoreqDataToParse = prereqsAndCoreqsScanner.nextLine(); // Right after "Corequisite" marker, so it should have the prereq courses (We could run into the "Prerequisite" marker, though)
+                sortOutAndSetCoreqs(prereqAndCoreqDataToParse, CourseToAdd); // Gets the coreqs and sets them to the Course object
+            }
         }
 
         // Adding the course to the hashmap
@@ -184,22 +191,91 @@ public class FullCourseList {
     }
 
     /**
-     * Prerequisites grouped together in the inner array list are equivalents for the course in question
+     * Prerequisites grouped together in the inner array list are equivalents for the course in question (i.e. on the same row)
      * The outer array lists are separate prerequisites (not equivalent to one another)
-     * @param prereqData The string containing the prerequisites that needs to be parsed out
+     * @param prereqData The string containing the prerequisites that need to be parsed out
      */
-    private void sortOutAndSetPrereqs(String prereqData) {
+    private void sortOutAndSetPrereqs(String prereqData, Course courseToAdd) {
         ArrayList<ArrayList<String>> allPrereqsForThisCourse = new ArrayList<ArrayList<String>>();
-        System.out.println("In here: " + prereqData);
-        String equivPrereqMarker = "or"; // When this is encountered, you can either take this prereq or other equivalent courses
+        ArrayList<String> rowOfPrereqs = new ArrayList<String>(); // Equivalent courses (i.e. you can take one course or this course and you have acquired the necessary prerequisite)
+        String equivMarker = "or"; // When this is encountered, the prereq has equivalents that will be read in next (same row)
+        String separateMarker = "and"; // When this is encountered, the next prereq is not equivalent to the previous and must be in a new ArrayList (new row)
+        Scanner prereqScanner = new Scanner(prereqData);
+        String courseID; // Stores the various courseIDs of the prereqs as you loop through the string
+        String nextToken; // Used after a courseID is read in to check for "or" or "and"
+        boolean getOutFlag = false; // Used to get out of the while loop if need be
 
+        while (prereqScanner.hasNext() && getOutFlag == false) {
+            courseID = prereqScanner.next() + " " + prereqScanner.next(); // Read in course ID
+            rowOfPrereqs.add(courseID);
 
+            if (prereqScanner.hasNext()) { // Then more courses are available, otherwise, we just read in the last course
+                nextToken = prereqScanner.next(); // "or" or "and"
+                if (nextToken.contains("Corequisite") || nextToken.contains("Co-requisite")) { // Don't want to read the coreqs in as prereqs also
+                    getOutFlag = true;
+                    break; // We have to get out of the while loop; don't read in any more data
+                }
+                if (nextToken.toLowerCase().equals(equivMarker)) { // The course we just read in has equivalents, add them to the same ArrayList
+                    continue; // Goes to beginning of the loop where a course gets added to the row
+
+                } else if (nextToken.toLowerCase().equals(separateMarker)) { // The course we just read in is not equivalent to the last one; new row
+                    allPrereqsForThisCourse.add(rowOfPrereqs); // All done with this row, add it
+                    rowOfPrereqs = new ArrayList<String>(); // Reset rowOfPrereqs to read in courses of different value
+                }
+            }
+        }
+
+        if (!rowOfPrereqs.isEmpty()) // Another row of courses has yet to be added
+            allPrereqsForThisCourse.add(rowOfPrereqs);
+
+        courseToAdd.setPrereqs(allPrereqsForThisCourse); // Add the prereqs to the course in question
+    }
+
+    /**
+     * Corequisites grouped together in the inner array list are equivalents for the course in question (i.e. on the same row)
+     * The outer array lists are separate corequisites (not equivalent to one another)
+     * @param coreqData The string containing the corequisites that need to be parsed out
+     */
+    private void sortOutAndSetCoreqs(String coreqData, Course CourseToAdd) {
+        ArrayList<ArrayList<String>> allCoreqsForThisCourse = new ArrayList<ArrayList<String>>();
+        ArrayList<String> rowOfCoreqs = new ArrayList<String>(); // Equivalent courses (i.e. you can take one course or this course and you have acquired the necessary corequisite)
+        String equivMarker = "or"; // When this is encountered, the coreq has equivalents that will be read in next (same row)
+        String separateMarker = "and"; // When this is encountered, the next coreq is not equivalent to the previous and must be in a new ArrayList (new row)
+        Scanner coreqScanner = new Scanner(coreqData);
+        String courseID; // Stores the various courseIDs of the coreqs as you loop through the string
+        String nextToken; // Used after a courseID is read in to check for "or" or "and"
+        boolean getOutFlag = false; // Used to get out of the while loop if need be
+
+        while (coreqScanner.hasNext() && getOutFlag == false) {
+            courseID = coreqScanner.next() + " " + coreqScanner.next();
+            rowOfCoreqs.add(courseID);
+
+            if (coreqScanner.hasNext()) { // Then more courses are available, otherwise, we just read in the last course
+                nextToken = coreqScanner.next(); // "or" or "and". Could also be prerequisite marker; in that case, no more corequisites to be read in
+                if (nextToken.contains("Prerequisite") || nextToken.contains("Pre-requisite")) { // Don't want to read the prereqs in as coreqs also
+                    getOutFlag = true;
+                    break; // We have to get out of the while loop; don't read in any more data
+                }
+                if (nextToken.toLowerCase().equals(equivMarker)) { // The course we just read in has equivalents, add them to the same ArrayList
+                    continue; // Goes to beginning of the loop where a course gets added to the row
+
+                } else if (nextToken.toLowerCase().equals(separateMarker)) { // The course we just read in is not equivalent to the last one; new row
+                    allCoreqsForThisCourse.add(rowOfCoreqs); // All done with this row, add it
+                    rowOfCoreqs = new ArrayList<String>(); // Reset rowOfPrereqs to read in courses of different value
+                }
+            }
+        }
+
+        if (!rowOfCoreqs.isEmpty()) // Another row of courses has yet to be added
+            allCoreqsForThisCourse.add(rowOfCoreqs);
+
+        CourseToAdd.setCoreqs(allCoreqsForThisCourse); // Add the coreqs to the course in question
     }
 
     /**
      * This internal method is used to fix when, after using regex to isolate the credit hours, two different credit
      * hours totals combine into one. (ex. if a course says 3-6 semester hours, after regex it will say 36, so remove
-     * the 6.)
+     * the 6. Can't really account for the varying hours so we'll just take the lower value)
      * @param hours The original value of the credit hours that may need to be changed
      * @return The fixed number of credit hours
      */
@@ -216,21 +292,59 @@ public class FullCourseList {
      * @return The course to be removed
      */
     public Course removeCourse(String courseID) {
-        String courseDepartment;
-        int courseNumber;
+        int indexToRemove = findCourse(courseID); // Index in the linked list with the associated key
+        String courseDepartment;  // Stores the key value of the FullCourseList hash map
 
         Scanner courseIDScanner = new Scanner(courseID);
-
         courseDepartment = courseIDScanner.next();
-        courseNumber = Integer.parseInt(courseIDScanner.next());
 
-        LinkedList<Course> shortenedList = FullCourseList.get(courseDepartment); // Return the linked list for the necessary department
-        int index = shortenedList.indexOf(courseID);
-        if (index == -1) {
-            System.out.println("Error removing course");
-            return null;
+        LinkedList<Course> ListToShorten = FullCourseList.get(courseDepartment); // Return the linked list for the necessary department
+
+        return ListToShorten.remove(indexToRemove); // Remove the course from FullCourseList and return the course object
+    }
+
+    /**
+     * Checks if a specified course is in FullCourseList by checking if the ID of the course is in FullCourseList
+     * Returns -1 if the course is not found in FullCourseList
+     * @param courseID The courseID (i.e. CS 321) (Space required)
+     * @return The index of the course in the corresponding linked list for that course's department (i.e. The CS linked list)
+     */
+    public int findCourse(String courseID) {
+        String courseDepartment; // Stores the key value of the FullCourseList hash map
+
+        Scanner courseIDScanner = new Scanner(courseID);
+        courseDepartment = courseIDScanner.next();
+
+        LinkedList<Course> ListToShorten = FullCourseList.get(courseDepartment); // Return the linked list for the necessary department
+
+        Iterator<Course> courseIterator = ListToShorten.iterator();
+        for (int i = 0; i < ListToShorten.size(); i++) {
+            if (courseIterator.hasNext()) {
+                if (courseIterator.next().getCourseID().equals(courseID))
+                    return i; // Index of the course in the associated linked list
+            }
+        }
+        return -1; // The course was not found in FullCourseList
+    }
+
+    /**
+     * Used to print every course in FullCourseList
+     * Used for debugging purposes
+     */
+    public void printFullCourseList() {
+        for (HashMap.Entry<String, LinkedList<Course>> entry: FullCourseList.entrySet()) {
+            String key = entry.getKey();
+            System.out.printf(key + " courses:\n");
+
+            LinkedList<Course> courseList = new LinkedList<>();
+            courseList = entry.getValue();
+
+            Iterator<Course> courseListIterator = courseList.iterator();
+
+            while (courseListIterator.hasNext()) {
+                courseListIterator.next().printCourseValues();
+            }
         }
 
-        return shortenedList.remove(index);
     }
 }
