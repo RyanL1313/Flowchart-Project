@@ -62,6 +62,7 @@ public class DegreeSelectorWindow extends JFrame //implements ActionListener
             Planner.MINOR = (String)minor.getSelectedItem();
             Planner.CONCENTRATION = (String)conc.getSelectedItem();
             Planner.studentHasPreviousClasses = false;
+            System.out.println(Planner.MAJOR);
             System.exit(0);
         }
     };
@@ -74,6 +75,9 @@ public class DegreeSelectorWindow extends JFrame //implements ActionListener
             // - possible course to take with a check box next to it. It is the user's responsibility to
             // - know what classes they have credit for already.
 
+            Planner.MAJOR = (String)major.getSelectedItem();
+            Planner.MINOR = (String)minor.getSelectedItem();
+            Planner.CONCENTRATION = (String)conc.getSelectedItem();
             Planner.studentHasPreviousClasses = true;
             CreditAdder credits = new CreditAdder();
             credits.setVisible(true);
