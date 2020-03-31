@@ -4,11 +4,14 @@
  * from the model (such as the full hash map of courses to the drop-down box of electives the user can choose from).
  */
 public class Planner {
-    private boolean studentHasPreviousClasses; // Is set to true if the user selects the option that they do have previous credits to enter
+    public boolean studentHasPreviousClasses; // Is set to true if the user selects the option that they do have previous credits to enter
     private boolean studentFinishedEnteringCourses; // Is set to true when the user selects "Done" when they're done entering previous credits into the textbox (should be in a loop)
     public static String MAJOR;
     public static String MINOR;
     public static String CONCENTRATION;
+    public static ArrayList<String> coursesAlreadyTaken;
+
+
     /**
      * Uses the findCourse method in FullCourseList to check if a course ID entered by the user is valid or not, then removes it from
      * the full course list if it finds it (since the user has already taken this class, they don't want to see it again
@@ -43,5 +46,23 @@ public class Planner {
         FullCourseList courseList = new FullCourseList();
 
         return courseList.removeCourse(courseID);
+        // still needs to remove from degree's list
     }
+    void drawSelectorWindow()
+    {
+        DegreeSelectorWindow selection= new DegreeSelectorWindow();
+    }
+    void drawCreditAdder()
+    {
+        CreditAdder adder= new CreditAdder();
+    }
+    void drawFourYearPlanDisplay()
+    {
+        FourYearPlanDisplay FYPD = new FourYearPlanDisplay();
+    }
+    void updateCoursesAlreadyTaken() //checks classes in courses alrady taken to see if valid, and then removes them from necessary
+    {
+
+    }
+
 }
