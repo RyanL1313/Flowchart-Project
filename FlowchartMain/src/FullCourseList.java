@@ -331,36 +331,32 @@ public class FullCourseList {
         return -1; // The course was not found in FullCourseList
     }
 
-    /**
-     * Returns a Course object from FullCourseList by simply providing the course ID
-     * @param courseID The ID of the course (i.e. CS 321)
-     * @return The desired Course object
-     */
-    public Course getCourse(String courseID) {
+    public Course getCourseByID(String courseID) {
         String courseDepartment; // Stores the key value of the FullCourseList hash map
-        int indexOfCourse;  // Index where the course is located in the respective linked list for its department
-        Scanner courseIDScanner = new Scanner(courseID);
-        courseDepartment = courseIDScanner.next(); // Getting the course department (i.e. CS)
+        int indexOfCourse; // Index of the course in the respective linked list for that department
 
-        LinkedList<Course> ListWithDesiredCourse = FullCourseList.get(courseDepartment);
+        Scanner courseIDScanner = new Scanner(courseID);
+        courseDepartment = courseIDScanner.next(); // Get the department ID (i.e. CS)
+
+        LinkedList<Course> ListWithDesiredCourse = FullCourseList.get(courseDepartment); // Return the linked list for the necessary department
+
+        Iterator<Course> courseIterator = ListWithDesiredCourse.iterator();
+
         indexOfCourse = findCourse(courseID);
 
         if (indexOfCourse == -1)
-            return null; // Could not find the course
+            return null; // Course not found
 
-        Iterator<Course> courseIterator = ListWithDesiredCourse.listIterator();
-
-        Course courseToReturn = null;
+        Course CourseToReturn = null;
+        // Otherwise, it was found. Iterate to the course's index, then return it
         for (int i = 0; i <= indexOfCourse; i++) {
             if (i != indexOfCourse)
-                courseIterator.next();
-            else
-                courseToReturn = (Course) courseIterator.next();
-
+                courseIterator.next(); // Move on to the next element
+            else // We are at the index
+                CourseToReturn = (Course) courseIterator.next();
         }
 
-
-        return courseToReturn;
+        return CourseToReturn;
     }
 
     /**
