@@ -2,7 +2,7 @@ import java.util.*;
 
 
 public class Semester {
-    private ArrayList<Course> courseList = new ArrayList<Course>(); // the number of hours
+    private ArrayList<Course> courseList = new ArrayList<>(); // the number of hours
     private int semesterHours = 0;
 
 
