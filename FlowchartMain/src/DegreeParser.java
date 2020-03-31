@@ -26,7 +26,7 @@ public class DegreeParser {
         Document doc = Jsoup.parse(new File(fileName), "utf-8");
 
         /*
-        Removes all of the unncessary parts of the html document
+        Removes all of the unnecessary parts of the html document
          */
         doc.select("div#tabs").remove();
         doc.select("div#textcontainer").remove();
