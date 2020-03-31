@@ -11,6 +11,9 @@ public class Planner {
     public static String MAJOR;
     public static String MINOR;
     public static String CONCENTRATION;
+    public static ArrayList<String> coursesAlreadyTaken;
+
+
     /**
      * Uses the findCourse method in FullCourseList to check if a course ID entered by the user is valid or not, then removes it from
      * the full course list if it finds it (since the user has already taken this class, they don't want to see it again
@@ -58,6 +61,10 @@ public class Planner {
     void drawFourYearPlanDisplay()
     {
         FourYearPlanDisplay FYPD = new FourYearPlanDisplay();
+    }
+    void updateCoursesAlreadyTaken() //checks classes in courses alrady taken to see if valid, and then removes them from necessary
+    {
+
     }
 
 }
