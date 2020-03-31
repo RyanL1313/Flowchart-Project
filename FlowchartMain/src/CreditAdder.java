@@ -16,7 +16,7 @@ public class CreditAdder extends JFrame
         {
             String addedCourse = entryBox.getText();
             entryBox.setText("");
-
+            Planner.coursesAlreadyTaken.add(addedCourse);
 
         }
     };
@@ -36,6 +36,7 @@ public class CreditAdder extends JFrame
 
         JButton addButton = new JButton("ADD");
         JButton doneButton = new JButton("DONE");
+        JLabel directions = new JLabel("Enter the course code you have credit for (Ex: \"CS 102\")");
 
         //FullCourseList fullList = new FullCourseList();
         //HashMap courseList = new HashMap(fullList.getFullCourseList());
@@ -49,7 +50,8 @@ public class CreditAdder extends JFrame
         add(entryBox,BorderLayout.CENTER);
         add(addButton,BorderLayout.EAST);
         add(doneButton,BorderLayout.SOUTH);
-        entryBox.setVisible(true);
+        add(directions,BorderLayout.NORTH);
+        //entryBox.setVisible(true);
 
         setVisible(true);
     }

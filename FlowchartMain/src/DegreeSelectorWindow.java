@@ -56,7 +56,12 @@ public class DegreeSelectorWindow extends JFrame //implements ActionListener
 
     ActionListener noPress = new ActionListener(){
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e)
+        {
+            Planner.MAJOR = (String)major.getSelectedItem();
+            Planner.MINOR = (String)minor.getSelectedItem();
+            Planner.CONCENTRATION = (String)conc.getSelectedItem();
+            Planner.studentHasPreviousClasses = false;
             System.exit(0);
         }
     };
@@ -69,6 +74,7 @@ public class DegreeSelectorWindow extends JFrame //implements ActionListener
             // - possible course to take with a check box next to it. It is the user's responsibility to
             // - know what classes they have credit for already.
 
+            Planner.studentHasPreviousClasses = true;
             CreditAdder credits = new CreditAdder();
             credits.setVisible(true);
         }
@@ -91,6 +97,11 @@ public class DegreeSelectorWindow extends JFrame //implements ActionListener
         yes.addActionListener(yesPress);
         add(yes);
         yes.setVisible(true);
+
+        JLabel question = new JLabel("Do you have college credits already?");
+        question.setBounds(50,360,300,30);
+        add(question);
+        question.setVisible(true);
     }
 
     public void initMajors()

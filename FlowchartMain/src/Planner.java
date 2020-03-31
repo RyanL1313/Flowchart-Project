@@ -6,12 +6,12 @@ import java.util.*;
  * from the model (such as the full hash map of courses to the drop-down box of electives the user can choose from).
  */
 public class Planner {
-    public boolean studentHasPreviousClasses; // Is set to true if the user selects the option that they do have previous credits to enter
+    public static boolean studentHasPreviousClasses; // Is set to true if the user selects the option that they do have previous credits to enter
     private boolean studentFinishedEnteringCourses; // Is set to true when the user selects "Done" when they're done entering previous credits into the textbox (should be in a loop)
     public static String MAJOR;
     public static String MINOR;
     public static String CONCENTRATION;
-    public static ArrayList<String> coursesAlreadyTaken;
+    public static ArrayList<String> coursesAlreadyTaken = new ArrayList<String>();
 
 
     /**
