@@ -24,7 +24,8 @@ public class DegreeSelectorWindow extends JFrame //implements ActionListener
     JComboBox minor = new JComboBox(MINORS);
     JComboBox conc = new JComboBox(CONCENTRATIONS);
 
-    JButton cont = new JButton("Continue");
+    JButton no = new JButton("No");
+    JButton yes = new JButton("Yes");
 
     ActionListener majorListener = new ActionListener() {
         @Override
@@ -48,17 +49,28 @@ public class DegreeSelectorWindow extends JFrame //implements ActionListener
                 conc.addItem(CONCENTRATIONS[i]);
 
             // Enable button
-            cont.setEnabled(true);
+            no.setEnabled(true);
+            yes.setEnabled(true);
         }
     };
 
-    ActionListener buttonPress = new ActionListener(){
+    ActionListener noPress = new ActionListener(){
         @Override
         public void actionPerformed(ActionEvent e) {
-            Planner.MAJOR = (String)major.getSelectedItem();
-            Planner.MINOR = (String)minor.getSelectedItem();
-            Planner.CONCENTRATION = (String)conc.getSelectedItem();
             System.exit(0);
+        }
+    };
+
+    ActionListener yesPress = new ActionListener(){
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // - This is where a new JFrame will be made for the user to enter their existing
+            // - college credits. It will implement FullCourseList and populate the JFrame with every
+            // - possible course to take with a check box next to it. It is the user's responsibility to
+            // - know what classes they have credit for already.
+
+            CreditAdder credits = new CreditAdder();
+            credits.setVisible(true);
         }
     };
 
@@ -68,11 +80,17 @@ public class DegreeSelectorWindow extends JFrame //implements ActionListener
         initMinors();
         initConcentrations();
 
-        cont.setBounds(150,400,150,30);
-        cont.setEnabled(false);
-        cont.addActionListener(buttonPress);
-        add(cont);
-        cont.setVisible(true);
+        no.setBounds(50,400,150,30);
+        no.setEnabled(false);
+        no.addActionListener(noPress);
+        add(no);
+        no.setVisible(true);
+
+        yes.setBounds(250,400,150,30);
+        yes.setEnabled(false);
+        yes.addActionListener(yesPress);
+        add(yes);
+        yes.setVisible(true);
     }
 
     public void initMajors()
