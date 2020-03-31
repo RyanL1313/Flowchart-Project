@@ -7,31 +7,10 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay
 {
     public FourYearPlanDisplay()// no arguments because Planner class accessed directly within constructor
     {
-        int x;
-        int y = 0;
-        for(int j = 0; j < 4; j++)
+        for(int i = 0; i < 45; i++)
         {
-            x = 0;
-            for(int i = 0; i < 3; i++)
-            {
-                FlowNode node = new FlowNode();
-                Rectangle bounds = new Rectangle(x,y,180,40);
-                node.setBounds(bounds);
-                getContentPane().add(node);
-                node.setVisible(true);
-                x += 400;
-            }
-            x = 200;
-            y += 80;
-            for(int k = 0; k < 3; k++)
-            {
-                FlowNode node = new FlowNode();
-                node.setBounds(x,y,180,40);
-                getContentPane().add(node);
-                node.setVisible(true);
-                x += 400;
-            }
-            y += 60;
+            FlowNode node = new FlowNode();
+            add(node);
         }
     }
 
@@ -107,12 +86,11 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay
 
     public static void updateDisplay()
     {
+
         FourYearPlanDisplay f = new FourYearPlanDisplay();
-        f.setLayout(null);
-        f.setSize(1200,680);
-        f.getContentPane().setPreferredSize(new Dimension(1200,640));
-        f.pack();
-        f.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        f.setLayout(new GridLayout(8,6,20,20));
+        f.setBounds(0,0,1200,605);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
     }
 

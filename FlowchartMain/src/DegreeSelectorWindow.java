@@ -62,7 +62,6 @@ public class DegreeSelectorWindow extends JFrame //implements ActionListener
             Planner.MINOR = (String)minor.getSelectedItem();
             Planner.CONCENTRATION = (String)conc.getSelectedItem();
             Planner.studentHasPreviousClasses = false;
-            System.out.println(Planner.MAJOR);
             System.exit(0);
         }
     };
