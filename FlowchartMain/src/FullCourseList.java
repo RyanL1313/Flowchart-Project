@@ -1,8 +1,12 @@
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
 import java.util.*;
-import java.io.*;
-import javax.xml.parsers.*;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
 
 /**
  * The FullCourseList is designed to hold every undergraduate class offered at UAH
@@ -186,7 +190,7 @@ public class FullCourseList {
      * Getter for the FullCourseList hashmap for other classes to use
      * @return The FullCourseList hashmap
      */
-    public HashMap<String, LinkedList<Course>> getFullCourseList() {
+    public static HashMap<String, LinkedList<Course>> getFullCourseList() {
         return FullCourseList;
     }
 
@@ -325,6 +329,38 @@ public class FullCourseList {
             }
         }
         return -1; // The course was not found in FullCourseList
+    }
+
+    /**
+     * Returns a Course object from FullCourseList by simply providing the course ID
+     * @param courseID The ID of the course (i.e. CS 321)
+     * @return The desired Course object
+     */
+    public Course getCourse(String courseID) {
+        String courseDepartment; // Stores the key value of the FullCourseList hash map
+        int indexOfCourse;  // Index where the course is located in the respective linked list for its department
+        Scanner courseIDScanner = new Scanner(courseID);
+        courseDepartment = courseIDScanner.next(); // Getting the course department (i.e. CS)
+
+        LinkedList<Course> ListWithDesiredCourse = FullCourseList.get(courseDepartment);
+        indexOfCourse = findCourse(courseID);
+
+        if (indexOfCourse == -1)
+            return null; // Could not find the course
+
+        Iterator<Course> courseIterator = ListWithDesiredCourse.listIterator();
+
+        Course courseToReturn = null;
+        for (int i = 0; i <= indexOfCourse; i++) {
+            if (i != indexOfCourse)
+                courseIterator.next();
+            else
+                courseToReturn = (Course) courseIterator.next();
+
+        }
+
+
+        return courseToReturn;
     }
 
     /**
