@@ -21,6 +21,7 @@ public class Semester {
     {
         for (Course course : courseList) { //itterates through courseList
             if (cID.equals(course.getCourseID())) {
+                courseList.remove(course);
                 return course;
             }
         }
