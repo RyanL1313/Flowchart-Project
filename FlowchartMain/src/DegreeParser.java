@@ -22,7 +22,7 @@ public class DegreeParser {
     public static void main(String[] args) throws IOException {
 
 
-        String fileName = "C:/Users/Jossy/Documents/School docs/Spring 2020/CS321/4-yr plan html.html";
+        String fileName = "Degree Plans/Computer Science Major.html";
         Document doc = Jsoup.parse(new File(fileName), "utf-8");
 
         /*
