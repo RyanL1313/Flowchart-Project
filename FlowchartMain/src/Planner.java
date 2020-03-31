@@ -1,5 +1,3 @@
-import java.util.*;
-
 /**
  * A planner object is used to facilitate interactions between the GUI and the model. It is important for upholding
  * the Model-View-Control principle. It will process user interactions with the GUI, and it will send data to the GUI
@@ -34,7 +32,7 @@ public class Planner {
      * Removes courses from the hash map of UAH's courses as the user enters past credits.
      * We can extend this method to remove from the Degree object's list of courses, too (remove this comment once done)
      * @param courseID The ID of the course (i.e. CS 321). Space is necessary.
-     * @return The course. We probably don't need it after this, but just in case.
+     * @return The course object. We probably don't need it after this, but just in case.
      */
     public Course removeCourse(String courseID) {
         boolean validCourse = isEnteredCourseValid(courseID); // Calls an internal method that checks if the course entered is valid
