@@ -1,3 +1,5 @@
+import java.util.*;
+
 /**
  * A planner object is used to facilitate interactions between the GUI and the model. It is important for upholding
  * the Model-View-Control principle. It will process user interactions with the GUI, and it will send data to the GUI
@@ -63,6 +65,31 @@ public class Planner {
     void updateCoursesAlreadyTaken() //checks classes in courses alrady taken to see if valid, and then removes them from necessary
     {
 
+    }
+
+    /**
+     * Used to get every remaining class in the full list of courses
+     * Used in the GUI to display all possible electives in a drop-down box
+     * @return An array list of the full list of courses
+     */
+    public ArrayList<String> getElectives() {
+        FullCourseList courseList = new FullCourseList();
+        HashMap<String, LinkedList<Course>> courseMap = courseList.getFullCourseList(); // Full list/mapping of UAH's courses
+        ArrayList<String> electiveList = new ArrayList<String>(); // The list of elective courses to be returned
+
+        // Iterating through each linked list in courseMap and adding each course ID to electiveList
+        for (HashMap.Entry<String, LinkedList<Course>> entry: courseMap.entrySet()) {
+            LinkedList<Course> courseListByDepartment =  entry.getValue();
+
+            Iterator<Course> courseListIterator = courseListByDepartment.iterator();
+
+            // Go through a single linked list, pulling out the course ID of each Course object
+            while (courseListIterator.hasNext()) {
+                electiveList.add(courseListIterator.next().getCourseID());
+            }
+        }
+
+        return electiveList;
     }
 
 }

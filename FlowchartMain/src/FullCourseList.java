@@ -190,7 +190,7 @@ public class FullCourseList {
      * Getter for the FullCourseList hashmap for other classes to use
      * @return The FullCourseList hashmap
      */
-    public static HashMap<String, LinkedList<Course>> getFullCourseList() {
+    public HashMap<String, LinkedList<Course>> getFullCourseList() {
         return FullCourseList;
     }
 
