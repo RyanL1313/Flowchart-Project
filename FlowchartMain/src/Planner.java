@@ -70,12 +70,12 @@ public class Planner {
     /**
      * Used to get every remaining class in the full list of courses
      * Used in the GUI to display all possible electives in a drop-down box
-     * @return An array list of the full list of courses
+     * @return An array of the full list of courses
      */
-    public ArrayList<String> getElectives() {
+    public String[] getElectives() {
         FullCourseList courseList = new FullCourseList();
         HashMap<String, LinkedList<Course>> courseMap = courseList.getFullCourseList(); // Full list/mapping of UAH's courses
-        ArrayList<String> electiveList = new ArrayList<String>(); // The list of elective courses to be returned
+        ArrayList<String> tempElectiveList = new ArrayList<String>(); // The array list of elective courses to be returned
 
         // Iterating through each linked list in courseMap and adding each course ID to electiveList
         for (HashMap.Entry<String, LinkedList<Course>> entry: courseMap.entrySet()) {
@@ -85,11 +85,19 @@ public class Planner {
 
             // Go through a single linked list, pulling out the course ID of each Course object
             while (courseListIterator.hasNext()) {
-                electiveList.add(courseListIterator.next().getCourseID());
+                tempElectiveList.add(courseListIterator.next().getCourseID());
             }
         }
 
-        return electiveList;
+        Iterator<String> courseIDIterator = tempElectiveList.iterator();
+        String[] ElectiveList = new String[tempElectiveList.size()]; // Primitive array of the course IDs to be returned
+
+        // Populate the array
+        for (int i = 0; i < tempElectiveList.size(); i++) {
+            ElectiveList[i] = courseIDIterator.next();
+        }
+
+        return ElectiveList;
     }
 
 }
