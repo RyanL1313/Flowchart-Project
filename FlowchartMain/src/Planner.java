@@ -72,7 +72,7 @@ public class Planner {
      * Used in the GUI to display all possible electives in a drop-down box
      * @return An array list of the full list of courses
      */
-    public ArrayList<String> getElectives() {
+    public static ArrayList<String> getElectives() {
         FullCourseList courseList = new FullCourseList();
         HashMap<String, LinkedList<Course>> courseMap = courseList.getFullCourseList(); // Full list/mapping of UAH's courses
         ArrayList<String> electiveList = new ArrayList<String>(); // The list of elective courses to be returned
