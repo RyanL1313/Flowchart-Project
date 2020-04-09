@@ -13,6 +13,9 @@ public class Planner {
     public static String CONCENTRATION;
     public static ArrayList<String> coursesAlreadyTaken = new ArrayList<String>();
 
+    public static FullCourseList fcl = new FullCourseList();    // BRYCE - made one static instance across
+                                                                // entirety of Planner
+
 
     /**
      * Uses the findCourse method in FullCourseList to check if a course ID entered by the user is valid or not, then removes it from
@@ -21,11 +24,11 @@ public class Planner {
      * @param courseID The ID of the course (i.e. CS 321). Must have the space; the user should be told the format to type the course ID in (on the GUI).
      * @return True if the course ID was found in the FullCourseList hash map, false otherwise.
      */
-    private boolean isEnteredCourseValid(String courseID) {
+    private static boolean isEnteredCourseValid(String courseID) {
         int indexOfCourse; // Index of the course in question in the linked list associated with the key of the courseID (i.e. the "MA" linked list)
-        FullCourseList courseList = new FullCourseList();
+        //FullCourseList courseList = new FullCourseList();
 
-        indexOfCourse = courseList.findCourse(courseID); // Returns -1 if it's not found, otherwise it returns the index of the course's location
+        indexOfCourse = fcl.findCourse(courseID); // Returns -1 if it's not found, otherwise it returns the index of the course's location
 
         if (indexOfCourse == -1)
             return false; // The course was not found
@@ -39,17 +42,33 @@ public class Planner {
      * @param courseID The ID of the course (i.e. CS 321). Space is necessary.
      * @return The course object. We probably don't need it after this, but just in case.
      */
-    public Course removeCourse(String courseID) {
+    public static Course removeCourse(String courseID) {
         boolean validCourse = isEnteredCourseValid(courseID); // Calls an internal method that checks if the course entered is valid
 
         if (!validCourse) // We don't want to remove an invalid course
             return null;
-
-        FullCourseList courseList = new FullCourseList();
-
-        return courseList.removeCourse(courseID);
-        // still needs to remove from degree's list
+        else
+        {
+            //FullCourseList courseList = new FullCourseList();
+            return fcl.removeCourse(courseID);
+            // still needs to remove from degree's list
+        }
     }
+
+    //--------------------- ADDED BY BRYCE -----------------------------------
+    public static Course addCourse(String courseID)
+    {
+        boolean validCourse = isEnteredCourseValid(courseID);
+        if(!validCourse)
+            return null;
+        else{
+            //FullCourseList courseList = new FullCourseList();
+
+            //return fcl.addCourse(courseID);
+            return new Course();    // placeholder return
+        }
+    }
+    //------------------------------------------------------------------------
     void drawSelectorWindow()
     {
         DegreeSelectorWindow selection= new DegreeSelectorWindow();
@@ -70,11 +89,11 @@ public class Planner {
     /**
      * Used to get every remaining class in the full list of courses
      * Used in the GUI to display all possible electives in a drop-down box
-     * @return An array list of the full list of courses
+     * @return A basic array of Strings that correspond to the full list of courses
      */
-    public static ArrayList<String> getElectives() {
-        FullCourseList courseList = new FullCourseList();
-        HashMap<String, LinkedList<Course>> courseMap = courseList.getFullCourseList(); // Full list/mapping of UAH's courses
+    public static String[] getElectives() {
+        //FullCourseList courseList = new FullCourseList();
+        HashMap<String, LinkedList<Course>> courseMap = fcl.getFullCourseList(); // Full list/mapping of UAH's courses
         ArrayList<String> electiveList = new ArrayList<String>(); // The list of elective courses to be returned
 
         // Iterating through each linked list in courseMap and adding each course ID to electiveList
@@ -89,7 +108,13 @@ public class Planner {
             }
         }
 
-        return electiveList;
+        //------------ ADDED BY BRYCE ------------------------------
+        String[] electivesArray = new String[electiveList.size()];
+        electivesArray[0] = "EMPTY";
+        for (int i = 1; i < electiveList.size(); i++)
+        {
+            electivesArray[i] = electiveList.get(i);
+        }
+        return electivesArray;
     }
-
 }
