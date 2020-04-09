@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class FlowNode extends JComponent
 {
 
-    String[] availableCourses = {"Placeholder", "Courses", "Go", "Here"};
+    String[] availableCourses = getElectivesArray();
     JComboBox dropDown = new JComboBox(availableCourses);
     JPanel rect = new JPanel();
 
@@ -30,32 +30,11 @@ public class FlowNode extends JComponent
         // dropDown.setVisible(true);
 
         // Drawing a rectangle
-        rect.setBackground(Color.DARK_GRAY);
+        rect.setBackground(Color.BLUE);
         rect.setBounds(0, 0, 180, 40);
         add(rect);
 
-        String classType = (String) dropDown.getSelectedItem();
-
-        switch (classType)
-        {
-            case "Placeholder":
-                rect.setBackground(Color.BLUE);
-                break;
-            case "Courses":
-                rect.setBackground(Color.RED);
-                break;
-            case "Go":
-                rect.setBackground(Color.GREEN);
-                break;
-            case "Here":
-                rect.setBackground(Color.YELLOW);
-                break;
-            default:
-                rect.setBackground(Color.DARK_GRAY);
-        }
         setVisible(true);
-
-        //rect.setVisible(true);
     }
 
     // Constructor for a uneditable, filled node.
@@ -64,4 +43,15 @@ public class FlowNode extends JComponent
 
     }
 
+    public static String[] getElectivesArray()
+    {
+        ArrayList<String> temp = Planner.getElectives();
+        String[] electivesArray = new String[temp.size()];
+        electivesArray[0] = "EMPTY";
+        for (int i = 1; i < temp.size(); i++)
+        {
+            electivesArray[i] = temp.get(i);
+        }
+        return electivesArray;
+    }
 }
