@@ -5,12 +5,26 @@ import java.awt.*;
 
 public class FourYearPlanDisplay extends JFrame implements PlanDisplay
 {
+    ArrayList<ArrayList<String>> Degree = new ArrayList<ArrayList<String>>();
+
     public FourYearPlanDisplay()// no arguments because Planner class accessed directly within constructor
     {
-        for(int i = 0; i < 45; i++)
+        // initialize degree for testing
+        for(int i = 0; i < 8; i++)  // 8 semesters
         {
-            FlowNode node = new FlowNode();
-            add(node);
+            Degree.add(new ArrayList<String>());
+            for(int j = 0; j < 6; j++)  // 6 courses per semester
+            {
+                Degree.get(i).add("S: " + i + " Course " + j);
+            }
+        }
+
+        for(int i = 0; i < Degree.size(); i++)  // semester loop
+        {
+            for(int j = 0; j < Degree.get(i).size(); j++)   // course loop
+            {
+                add(new FlowNode());
+            }
         }
     }
 
@@ -102,6 +116,7 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay
             public void run()
             {
                 updateDisplay();
+                FlowNode.main(null);
             }
         });
     }
