@@ -10,14 +10,23 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay
     public FourYearPlanDisplay()// no arguments because Planner class accessed directly within constructor
     {
         // initialize degree for testing
-        for(int i = 0; i < 7; i++)  // 7 semesters
-        {
+        for(int i = 0; i < 8; i++)
             Degree.add(new ArrayList<String>());
+
+        for(int i = 0; i < 2; i++)  // 2 semesters
+        {
             for(int j = 0; j < 6; j++)  // 6 courses per semester
             {
                 Degree.get(i).add("S: " + i + " Course " + j);
             }
         }
+
+        for(int j = 0; j < 3; j++)
+            Degree.get(3).add("S: 3 Course " + j);  // only 3 classes in third semester.
+
+        for(int i = 4; i < 8;i++)   // only 5 classes in semesters 4 through 8
+            for(int j = 0; j < 5; j++)
+                Degree.get(i).add("S: " + i + " Course " + j);
 
         for(int i = 0; i < Degree.size(); i++)  // semester loop
         {
