@@ -19,12 +19,12 @@ public class FlowNode extends JComponent
         @Override
         public void actionPerformed(ActionEvent e)
         {
+            dropDown.setSelectedIndex(0);
             dropDown.setVisible(true);
             String courseToAddBack = courseID.getText();
-            if(!(courseToAddBack.equals("EMPTY")))
-                Planner.addCourse(courseToAddBack);
             courseID.setVisible(false);
             clearButton.setVisible(false);
+
         }
     };
 
@@ -35,16 +35,15 @@ public class FlowNode extends JComponent
         {
             dropDown.setVisible(false);
             courseID.setText((String)dropDown.getSelectedItem());
-            /*String selected = (String)dropDown.getSelectedItem();
+            String selected = (String)dropDown.getSelectedItem();
             if(!(selected.equals("EMPTY")))
             {
                 Planner.removeCourse(selected);
                 for(int i =0; i < availableCourses.length; i++)
                 {
-                    //if(availableCourses[i].equals(selected))
 
                 }
-            }*/
+            }
             courseID.setVisible(true);
             clearButton.setVisible(true);
         }
@@ -77,9 +76,20 @@ public class FlowNode extends JComponent
     }
 
     // Constructor for a uneditable, filled node.
-    public FlowNode(String courseID)
+    public FlowNode(String id)
     {
+        courseID.setText(id);
+        courseID.setBounds(65,10,160,20);
+        courseID.setForeground(Color.WHITE);
+        add(courseID);
+        courseID.setVisible(true);
 
+        // Drawing a rectangle
+        rect.setBackground(Color.BLUE);
+        rect.setBounds(0, 0, 180, 40);
+        add(rect);
+
+        setVisible(true);
     }
 
     public static void update()

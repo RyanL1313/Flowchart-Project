@@ -10,7 +10,7 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay
     public FourYearPlanDisplay()// no arguments because Planner class accessed directly within constructor
     {
         // initialize degree for testing
-        for(int i = 0; i < 8; i++)  // 8 semesters
+        for(int i = 0; i < 7; i++)  // 7 semesters
         {
             Degree.add(new ArrayList<String>());
             for(int j = 0; j < 6; j++)  // 6 courses per semester
@@ -26,6 +26,9 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay
                 add(new FlowNode());
             }
         }
+        String[] id = {"CS 102","CS 221","MA 177","PH 111","HPE 137","ENG 101"};
+        for(int k = 0; k < 6;k++)
+            add(new FlowNode(id[k]));
     }
 
     public void removeSemester(int yLow, int yHigh)   // erases all nodes within y range.
