@@ -67,7 +67,7 @@ public class Degree {
     /**
      * Sets the semesters for the degree by calling DegreeParser, sending the major, minor, and concentration
      * if applicable
-     * @return arrayList
+     *
      */
     public void setSemesters() throws IOException {
 
@@ -93,31 +93,27 @@ public class Degree {
     }
 
 
-    public boolean addCourseToASemester(String course, int semesterNumber){
+    public ArrayList<ArrayList<String>> addCourseToASemester(String course, int semesterNumber){
 
-        boolean returnBool = true;
-        if(checkPreReq(course, semesterNumber) == false || checkCoReq(course, semesterNumber) == false){
-            returnBool = false;
-        }
-        else{
-            returnBool = true;
-            Course newCourse = new Course();
-            newCourse = makeStringToCourseObject(course);
+        ArrayList<ArrayList<String>> preReqCourses = checkPreReq(course, semesterNumber);
+
+        if (preReqCourses.get(0).isEmpty()) {
+            Course newCourse = makeStringToCourseObject(course);
             semesterList.get(semesterNumber - 1).addCourse(newCourse);
         }
-        return returnBool;
+
+          return preReqCourses;
+
     }
-    public boolean checkPreReq(String course, int semesterNumber){
+    public ArrayList<ArrayList<String>> checkPreReq(String course, int semesterNumber){
         ArrayList<Course> allPreviousCourses = new ArrayList<>();
-        for(int i = 0; i < semesterNumber; i++ ){
+        for(int i = 0; i < semesterNumber - 1; i++ ){
             for(int j = 0; j < semesterList.get(i).getCourseList().size(); j++){
                 allPreviousCourses.add(semesterList.get(i).getCourseList().get(j));
             }
         }
         Course courseUserWantsToAdd = makeStringToCourseObject(course);
         ArrayList<ArrayList<String>> preReqCourses = courseUserWantsToAdd.getPrereqs();
-
-        boolean sendBackBool = true;
 
         int row;
         int column;
@@ -127,27 +123,26 @@ public class Degree {
                 boolean PreReqs = false;
                 for (column = 0; column < preReqCourses.get(row).size(); column++){
 
-                    for(int k = 0; k < allPreviousCourses.size(); k++) {
-                        if (preReqCourses.get(row).get(column).equals(allPreviousCourses.get(k).getCourseID())) {
+                    for (Course allPreviousCours : allPreviousCourses) {
+                        if (preReqCourses.get(row).get(column).equals(allPreviousCours.getCourseID())) {
                             PreReqs = true;
                         }
                     }
 
                 }
-                if(PreReqs == false){
-                    sendBackBool = false;
-                    break;
+                if(PreReqs == true){
+                    preReqCourses.get(row).remove(column - 1);
                 }
             }
 
         }
 
 
-        return sendBackBool;
+        return preReqCourses;
 
     }
 
-    public boolean checkCoReq(String course, int semesterNumber){
+    public ArrayList<ArrayList<String>> checkCoReq(String course, int semesterNumber){
         ArrayList<Course> currentSemesterCourses = new ArrayList<>();
         for(int i = 0; i < semesterList.get(semesterNumber - 1).getCourseList().size(); i++){
             currentSemesterCourses.add(semesterList.get(semesterNumber - 1).getCourseList().get(i));
@@ -155,8 +150,6 @@ public class Degree {
 
         Course courseUserWantsToAdd = makeStringToCourseObject(course);
         ArrayList<ArrayList<String>> coReqCourses = courseUserWantsToAdd.getCoreqs();
-
-        boolean sendBackBool = true;
 
         int row;
         int column;
@@ -166,15 +159,15 @@ public class Degree {
                 boolean coReqs = false;
                 for (column = 0; column < coReqCourses.get(row).size(); column++){
 
-                    for(int k = 0; k < currentSemesterCourses.size(); k++) {
-                        if (coReqCourses.get(row).get(column).equals(currentSemesterCourses.get(k).getCourseID())) {
+                    for (Course currentSemesterCours : currentSemesterCourses) {
+                        if (coReqCourses.get(row).get(column).equals(currentSemesterCours.getCourseID())) {
                             coReqs = true;
                         }
                     }
 
                 }
-                if(coReqs == false){
-                    sendBackBool = false;
+                if(coReqs == true){
+                    coReqCourses.get(row).remove(column - 1);
                     break;
                 }
             }
@@ -182,14 +175,13 @@ public class Degree {
         }
 
 
-        return sendBackBool;
+        return coReqCourses;
 
     }
     public static Course makeStringToCourseObject(String courseID){
 
         FullCourseList fullCourseList = new FullCourseList();
-        Course newCourse = fullCourseList.getCourseByID(courseID);
-        return newCourse;
+        return fullCourseList.getCourseByID(courseID);
     }
 
 }

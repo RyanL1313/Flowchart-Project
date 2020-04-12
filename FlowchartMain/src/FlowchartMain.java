@@ -14,12 +14,12 @@ public class FlowchartMain {
 
         degreeObj.setSemesters();
 
-       boolean output =  degreeObj.addCourseToASemester("CS 214", 3);
+       String output =  degreeObj.addCourseToASemester("MA 201", 3);
        System.out.println(output);
 //        FullCourseList fullCourseList = new FullCourseList();
 //        Course course = new Course();
 //        course = fullCourseList.getCourseByID("CS 214");
-//
+
 //        course.printCourseValues();
        // FullCourseList courseList = new FullCourseList(); // CourseList contains a hashmap of all of UAH's courses which is used throughout this program
     }
