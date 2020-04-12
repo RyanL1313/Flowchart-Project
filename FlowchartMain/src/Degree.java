@@ -92,19 +92,35 @@ public class Degree {
         return semesterList;
     }
 
-
+    /**
+     * Adds a course to a semester
+     * @param course
+     * @param semesterNumber
+     * @return 2D array list with pre-req's needed (may have something or may be empty)
+     */
     public ArrayList<ArrayList<String>> addCourseToASemester(String course, int semesterNumber){
 
+        //Call to checkPreReq method
         ArrayList<ArrayList<String>> preReqCourses = checkPreReq(course, semesterNumber);
 
+        //if the 2D array is empty then that means that either there were no pre-reqs for the class
+        //or the user had the required pre-reqs for the class they wanted to add
+        //and so the course is added successfully to the semester
         if (preReqCourses.get(0).isEmpty()) {
             Course newCourse = makeStringToCourseObject(course);
             semesterList.get(semesterNumber - 1).addCourse(newCourse);
         }
 
-          return preReqCourses;
+
+        return preReqCourses;
 
     }
+    /**
+     * check the pre-reqs for a course
+     * @param course
+     * @param semesterNumber
+     * @return 2D array list with pre-req's needed (may have something or may be empty)
+     */
     public ArrayList<ArrayList<String>> checkPreReq(String course, int semesterNumber){
         ArrayList<Course> allPreviousCourses = new ArrayList<>();
         for(int i = 0; i < semesterNumber - 1; i++ ){
@@ -141,7 +157,12 @@ public class Degree {
         return preReqCourses;
 
     }
-
+    /**
+     * checks the co-reqs for a course
+     * @param course
+     * @param semesterNumber
+     * @return 2D array list with co-req's needed (may have something or may be empty)
+     */
     public ArrayList<ArrayList<String>> checkCoReq(String course, int semesterNumber){
         ArrayList<Course> currentSemesterCourses = new ArrayList<>();
         for(int i = 0; i < semesterList.get(semesterNumber - 1).getCourseList().size(); i++){
