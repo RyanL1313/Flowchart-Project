@@ -75,6 +75,18 @@ public class FullCourseList {
                 e.printStackTrace();
             }
         }
+
+        // Sorting the hashmap by its key
+        ArrayList<String> sortedDepartmentKeys = new ArrayList(FullCourseList.keySet());
+        Collections.sort(sortedDepartmentKeys);
+
+        HashMap<String, LinkedList<Course>> sortedMap = new LinkedHashMap<String, LinkedList<Course>>(); // New sorted FCL to be returned
+
+        for (String key : sortedDepartmentKeys) {
+            sortedMap.put(key, FullCourseList.get(key));
+        }
+
+        FullCourseList = sortedMap; // FullCourseList is now sorted
     }
 
     /**
