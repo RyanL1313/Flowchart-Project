@@ -93,6 +93,15 @@ public class Degree {
     }
 
     /**
+     * Sets semesterList to a given semester list
+     * Made by Ryan to test methods in this class (can delete later)
+     * @param semesters A given array list of semesters
+     */
+    public void setSemesterList(ArrayList<Semester> semesters) {
+        semesterList = semesters;
+    }
+
+    /**
      * Adds a course to a semester
      * @param course
      * @param semesterNumber
@@ -122,7 +131,7 @@ public class Degree {
      * @return 2D array list with pre-req's needed (may have something or may be empty)
      */
     public ArrayList<ArrayList<String>> checkPreReq(String course, int semesterNumber){
-        ArrayList<Course> allPreviousCourses = new ArrayList<>();
+        java.util.ArrayList<Course> allPreviousCourses = new ArrayList<>();
         for(int i = 0; i < semesterNumber - 1; i++ ){
             for(int j = 0; j < semesterList.get(i).getCourseList().size(); j++){
                 allPreviousCourses.add(semesterList.get(i).getCourseList().get(j));
@@ -130,32 +139,28 @@ public class Degree {
         }
         Course courseUserWantsToAdd = makeStringToCourseObject(course);
         ArrayList<ArrayList<String>> preReqCourses = courseUserWantsToAdd.getPrereqs();
-
-        int row;
-        int column;
+        Boolean PreReqs;
+        ArrayList<ArrayList<String>> newPreReqCourses = new ArrayList<ArrayList<String>>(); // This 2D array list has rows removed if the user has at least one prereq on that row
 
         if(preReqCourses.size() != 0) {
-            for (row = 0; row < preReqCourses.size(); row++) {
-                boolean PreReqs = false;
-                for (column = 0; column < preReqCourses.get(row).size(); column++){
-
+            for (int row = 0; row < preReqCourses.size(); row++) {
+                PreReqs = false;
+                for (int column = 0; column < preReqCourses.get(row).size(); column++){
                     for (Course allPreviousCours : allPreviousCourses) {
                         if (preReqCourses.get(row).get(column).equals(allPreviousCours.getCourseID())) {
                             PreReqs = true;
                         }
                     }
-
                 }
-                if(PreReqs == true){
-                    preReqCourses.get(row).remove(column - 1);
+                if (PreReqs == false){
+                    newPreReqCourses.add(preReqCourses.get(row));
                 }
             }
 
         }
 
 
-        return preReqCourses;
-
+        return newPreReqCourses;
     }
     /**
      * checks the co-reqs for a course
