@@ -119,11 +119,40 @@ public class Planner {
     }
 
     /**
-     *
+     * Tells the user what prerequisite courses they are missing in their degree plan.
+     * Uses checkPreReq method from Degree to obtain the missing prerequisites that need to be put into the String to be returned
      * @return A String telling the user what prereqs they must take before the class they just tried
      */
     public String electivePrereqAddError(String courseID, int semesterNumber) {
-        return null;
+        String errorMessage = ""; // Error message to be returned
+        Degree degreePlan = new Degree();
+        ArrayList<ArrayList<String>> missingPrereqs = degreePlan.checkPreReq(courseID, semesterNumber);
+        if (missingPrereqs == null)
+            return errorMessage; // The user had all the prerequisites, the course can be added to the flowchart (returns empty string)
+
+        // Otherwise there was an error adding electives. Send a message to the user.
+
+        errorMessage = "Missing prereqs: ";
+        String errorMessageAddition = ""; // Adds on to errorMessage throughout the loop
+
+        for (ArrayList<String> orRelationshipRow : missingPrereqs) {
+            errorMessage = errorMessage.concat("Must take ");
+            Iterator<String> colIterator = orRelationshipRow.iterator(); // Goes through each course ID in the row
+            while (colIterator.hasNext()) {
+                int count = 0; // Number of courses read in on this row
+
+                errorMessageAddition = errorMessageAddition.concat(colIterator.next()); // A course
+                if (colIterator.hasNext()) { // Need to add an "or". Otherwise, we are at the end of this row. No more "ors".
+                    errorMessageAddition = errorMessageAddition.concat(" or ");
+                }
+                count++;
+            }
+
+            errorMessage = errorMessage.concat(errorMessageAddition + ". ");
+            errorMessageAddition = ""; // Make this empty again
+        }
+
+        return errorMessage;
     }
 
     /**
