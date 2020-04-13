@@ -9,11 +9,11 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay
 
     public FourYearPlanDisplay()// no arguments because Planner class accessed directly within constructor
     {
-        // initialize degree for testing
+       /* // initialize degree for testing ***************************************************
         for(int i = 0; i < 8; i++)
             Degree.add(new ArrayList<String>());
 
-        for(int i = 0; i < 2; i++)  // 2 semesters
+        for(int i = 0; i < 1; i++)  // 2 semesters
         {
             for(int j = 0; j < 6; j++)  // 6 courses per semester
             {
@@ -22,22 +22,29 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay
         }
 
         for(int j = 0; j < 3; j++)
-            Degree.get(3).add("S: 3 Course " + j);  // only 3 classes in third semester.
+            Degree.get(2).add("S: 3 Course " + j);  // only 3 classes in third semester.
 
-        for(int i = 4; i < 8;i++)   // only 5 classes in semesters 4 through 8
+        for(int i = 3; i < 7;i++)   // only 5 classes in semesters 4 through 8
             for(int j = 0; j < 5; j++)
                 Degree.get(i).add("S: " + i + " Course " + j);
 
-        for(int i = 0; i < Degree.size(); i++)  // semester loop
+            //*********************************************************************/
+
+        for(int i = 0; i < Degree.size();i++)
         {
-            for(int j = 0; j < Degree.get(i).size(); j++)   // course loop
+            JPanel semester1 = new JPanel();
+            semester1.setSize(1200, 60);
+            semester1.setLayout(new GridLayout(1, 8, 10, 0));
+            semester1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            semester1.setVisible(true);
+            for (int j = 0; j < Degree.get(i).size(); j++)
             {
-                add(new FlowNode());
+                FlowNode node = new FlowNode();
+                semester1.add(node);
+                node.setVisible(true);
+                add(semester1);
             }
         }
-        String[] id = {"CS 102","CS 221","MA 177","PH 111","HPE 137","ENG 101"};
-        for(int k = 0; k < 6;k++)
-            add(new FlowNode(id[k]));
     }
 
     public void removeSemester(int yLow, int yHigh)   // erases all nodes within y range.
@@ -50,7 +57,7 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay
 
     }
 
-    public void paint(Graphics g) {
+    /*public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2 = (Graphics2D) g;
         int x;
@@ -66,7 +73,7 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay
             y += 140;
         }
         //paintLines(g);
-    }
+    }*/
 
     public void paintLines(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
@@ -114,7 +121,7 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay
     {
 
         FourYearPlanDisplay f = new FourYearPlanDisplay();
-        f.setLayout(new GridLayout(8,6,20,20));
+        f.setLayout(new GridLayout(8,1,20,0));
         f.setBounds(0,0,1200,605);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
