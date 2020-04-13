@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class FourYearPlanDisplay extends JFrame implements PlanDisplay
 {
-    ArrayList<ArrayList<String>> Degree = new ArrayList<ArrayList<String>>();
+    ArrayList<ArrayList<String>> Degree = Planner.getDegree();
 
     public FourYearPlanDisplay()// no arguments because Planner class accessed directly within constructor
     {
@@ -29,6 +29,8 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay
                 Degree.get(i).add("S: " + i + " Course " + j);
 
             //*********************************************************************/
+
+
 
         for(int i = 0; i < Degree.size();i++)
         {

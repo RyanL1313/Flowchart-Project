@@ -6,7 +6,7 @@ import java.util.*;
  */
 public class Degree {
 
-    private ArrayList <Semester> semesterList;
+    private static ArrayList <Semester> semesterList;
     private String major;
     private String minor;
     private String concentration;
@@ -88,7 +88,7 @@ public class Degree {
      *
      * @return semesterList
      */
-    public ArrayList<Semester> getSemesterList() {
+    public static ArrayList<Semester> getSemesterList() {
         return semesterList;
     }
 

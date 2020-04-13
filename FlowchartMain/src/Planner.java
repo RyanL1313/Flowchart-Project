@@ -124,4 +124,24 @@ public class Planner {
     public String electivePrereqAddError(String courseID, int semesterNumber) {
         return null;
     }
+
+    /**
+     * Converts the Degree object into an ArrayList<ArrayList<String>> for the PlanDisplays
+     * @return ArrayList<ArrayList<String>> which has the courseID's separated by semester.
+     */
+    public static ArrayList<ArrayList<String>> getDegree()
+    {
+        ArrayList<ArrayList<String>> degree = new ArrayList<ArrayList<String>>();
+        ArrayList<Semester> semesterList = Degree.getSemesterList();
+        for(int i = 0; i < semesterList.size(); i++)
+        {
+            ArrayList<String> semester = new ArrayList<String>();
+            for(int j = 0; j < semesterList.get(i).getCourseList().size(); j++)
+            {
+                semester.add(semesterList.get(i).getCourseList().get(j).getCourseID());
+            }
+            degree.add(semester);
+        }
+        return degree;
+    }
 }
