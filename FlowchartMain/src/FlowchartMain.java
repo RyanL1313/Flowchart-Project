@@ -4,23 +4,36 @@ import java.util.*;
 public class FlowchartMain {
     public static void main(String[] args) throws IOException {
         System.out.println("This is the main class for our whole project. Just testing things out.");
-
+        FullCourseList courseList = new FullCourseList(); // CourseList contains a hashmap of all of UAH's courses which is used throughout this program
         ArrayList<Semester> degreeSemesters = new ArrayList<>();
         Degree degreeObj = new Degree();
+        Planner plan = new Planner();
+        Semester tempSemester = new Semester();
+        tempSemester.addCourse(FullCourseList.getCourseByID("EH 101"));
+        tempSemester.addCourse(FullCourseList.getCourseByID("CS 105"));
+        tempSemester.addCourse(FullCourseList.getCourseByID("MA 171"));
+        tempSemester.addCourse(FullCourseList.getCourseByID("CS 102"));
+        degreeSemesters.add(tempSemester);
+        tempSemester = new Semester();
+        tempSemester.addCourse(FullCourseList.getCourseByID("EH 102"));
+        tempSemester.addCourse(FullCourseList.getCourseByID("CS 121"));
+        tempSemester.addCourse(FullCourseList.getCourseByID("MA 172"));
+        degreeSemesters.add(tempSemester);
+        tempSemester = new Semester();
+        //tempSemester.addCourse(FullCourseList.getCourseByID("CS 221"));
+        degreeSemesters.add(tempSemester);
 
-        degreeObj.setMajor("Computer Science Major");
-        degreeObj.setMinor(null);
-        degreeObj.setConcentration(null);
+       // courseList.printFullCourseList();
+        degreeObj.setSemesterList(degreeSemesters);
+        //String errorMessage = plan.electivePrereqAddError("CS 221", 3);
 
-        degreeObj.setSemesters();
 
-       String output =  degreeObj.addCourseToASemester("MA 201", 3);
-       System.out.println(output);
-//        FullCourseList fullCourseList = new FullCourseList();
-//        Course course = new Course();
-//        course = fullCourseList.getCourseByID("CS 214");
-
-//        course.printCourseValues();
-       // FullCourseList courseList = new FullCourseList(); // CourseList contains a hashmap of all of UAH's courses which is used throughout this program
+       /* for (ArrayList<String> orRelationships : prereqsNeeded) {
+            Iterator<String> courseIterator = orRelationships.iterator();
+            while (courseIterator.hasNext()) {
+                System.out.printf(courseIterator.next() + " or ");
+            }
+            System.out.printf("and ");
+        }*/
     }
 }
