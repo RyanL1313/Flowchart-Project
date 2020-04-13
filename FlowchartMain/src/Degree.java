@@ -6,10 +6,10 @@ import java.util.*;
  */
 public class Degree {
 
-    private ArrayList <Semester> semesterList;
-    private String major;
-    private String minor;
-    private String concentration;
+    private static ArrayList <Semester> semesterList; // Ryan - made these static so when Planner creates a Degree object,
+    private static String major;
+    private static String minor;
+    private static String concentration;
     private int MAX_SEMESTERS = 8;
 
     /**
@@ -92,6 +92,14 @@ public class Degree {
         return semesterList;
     }
 
+    /**
+     * Sets semesterList to a given semester list
+     * Made by Ryan to test methods in this class (can delete later)
+     * @param semesters A given array list of semesters
+     */
+    public void setSemesterList(ArrayList<Semester> semesters) {
+        semesterList = semesters;
+    }
 
     public ArrayList<ArrayList<String>> addCourseToASemester(String course, int semesterNumber){
 
@@ -114,31 +122,36 @@ public class Degree {
         }
         Course courseUserWantsToAdd = makeStringToCourseObject(course);
         ArrayList<ArrayList<String>> preReqCourses = courseUserWantsToAdd.getPrereqs();
-
-        int row;
-        int column;
+        Boolean PreReqs;
+        ArrayList<ArrayList<String>> newPreReqCourses = new ArrayList<ArrayList<String>>(); // This 2D array list has rows removed if the user has at least one prereq on that row
 
         if(preReqCourses.size() != 0) {
-            for (row = 0; row < preReqCourses.size(); row++) {
-                boolean PreReqs = false;
-                for (column = 0; column < preReqCourses.get(row).size(); column++){
-
+            for (int row = 0; row < preReqCourses.size(); row++) {
+                System.out.println("Row " + row);
+                System.out.println(preReqCourses.size());
+                PreReqs = false;
+                for (int column = 0; column < preReqCourses.get(row).size(); column++){
+                    System.out.println("Column " + column);
                     for (Course allPreviousCours : allPreviousCourses) {
                         if (preReqCourses.get(row).get(column).equals(allPreviousCours.getCourseID())) {
+                            System.out.println(preReqCourses.get(row).get(column) + " Equals " + allPreviousCours.getCourseID());
                             PreReqs = true;
                         }
+                        else
+                            System.out.println(preReqCourses.get(row).get(column) + " Does not Equals " + allPreviousCours.getCourseID());
                     }
 
                 }
-                if(PreReqs == true){
-                    preReqCourses.get(row).remove(column - 1);
+                if (PreReqs == false){
+                    newPreReqCourses.add(preReqCourses.get(row));
                 }
+                System.out.println("IN HERE: BOOL IS " + PreReqs);
             }
 
         }
 
 
-        return preReqCourses;
+        return newPreReqCourses;
 
     }
 
