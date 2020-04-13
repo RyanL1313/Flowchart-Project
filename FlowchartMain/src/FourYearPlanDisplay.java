@@ -41,7 +41,7 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay
             semester1.setVisible(true);
             for (int j = 0; j < Degree.get(i).size(); j++)
             {
-                FlowNode node = new FlowNode();
+                FlowNode node = new FlowNode(Degree.get(i).get(j));
                 semester1.add(node);
                 node.setVisible(true);
                 add(semester1);

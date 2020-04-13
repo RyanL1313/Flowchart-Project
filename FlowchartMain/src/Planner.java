@@ -12,6 +12,7 @@ public class Planner {
     public static String MINOR;
     public static String CONCENTRATION;
     public static ArrayList<String> coursesAlreadyTaken = new ArrayList<String>();
+    public static Degree deg;
 
    // public static FullCourseList fcl = new FullCourseList();    // BRYCE - made one static instance across
                                                                 // entirety of Planner
@@ -132,7 +133,7 @@ public class Planner {
     public static ArrayList<ArrayList<String>> getDegree()
     {
         ArrayList<ArrayList<String>> degree = new ArrayList<ArrayList<String>>();
-        ArrayList<Semester> semesterList = Degree.getSemesterList();
+        ArrayList<Semester> semesterList = deg.getSemesterList();
         for(int i = 0; i < semesterList.size(); i++)
         {
             ArrayList<String> semester = new ArrayList<String>();

@@ -49,7 +49,7 @@ public class FlowNode extends JComponent
         add(courseID);
         courseID.setVisible(false);
 
-        clearButton.setBounds(140,10,40,20);
+        clearButton.setBounds(140,10,60,20);
         clearButton.addActionListener(clearButtonPress);
         clearButton.setFont(clearButton.getFont().deriveFont(7.0f));
         add(clearButton);

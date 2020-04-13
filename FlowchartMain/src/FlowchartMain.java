@@ -26,7 +26,10 @@ public class FlowchartMain {
        // courseList.printFullCourseList();
         degreeObj.setSemesterList(degreeSemesters);
         //String errorMessage = plan.electivePrereqAddError("CS 221", 3);
-
+        plan.deg = degreeObj;
+        //plan.drawFourYearPlanDisplay();
+        FourYearPlanDisplay display = new FourYearPlanDisplay();
+        display.main(null);
 
        /* for (ArrayList<String> orRelationships : prereqsNeeded) {
             Iterator<String> courseIterator = orRelationships.iterator();
