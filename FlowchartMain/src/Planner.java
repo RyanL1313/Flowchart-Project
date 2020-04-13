@@ -13,7 +13,7 @@ public class Planner {
     public static String CONCENTRATION;
     public static ArrayList<String> coursesAlreadyTaken = new ArrayList<String>();
 
-    public static FullCourseList fcl = new FullCourseList();    // BRYCE - made one static instance across
+   // public static FullCourseList fcl = new FullCourseList();    // BRYCE - made one static instance across
                                                                 // entirety of Planner
 
 
@@ -28,7 +28,7 @@ public class Planner {
         int indexOfCourse; // Index of the course in question in the linked list associated with the key of the courseID (i.e. the "MA" linked list)
         //FullCourseList courseList = new FullCourseList();
 
-        indexOfCourse = fcl.findCourse(courseID); // Returns -1 if it's not found, otherwise it returns the index of the course's location
+        indexOfCourse = FullCourseList.findCourse(courseID); // Returns -1 if it's not found, otherwise it returns the index of the course's location
 
         if (indexOfCourse == -1)
             return false; // The course was not found
@@ -49,8 +49,8 @@ public class Planner {
             return null;
         else
         {
-            //FullCourseList courseList = new FullCourseList();
-            return fcl.removeCourse(courseID);
+            FullCourseList courseList = new FullCourseList();
+            return FullCourseList.removeCourse(courseID);
             // still needs to remove from degree's list
         }
     }
@@ -92,8 +92,7 @@ public class Planner {
      * @return A basic array of Strings that correspond to the full list of courses
      */
     public static String[] getElectives() {
-        //FullCourseList courseList = new FullCourseList();
-        HashMap<String, LinkedList<Course>> courseMap = fcl.getFullCourseList(); // Full list/mapping of UAH's courses
+        HashMap<String, LinkedList<Course>> courseMap = FullCourseList.getFullCourseList(); // Full list/mapping of UAH's courses
         ArrayList<String> electiveList = new ArrayList<String>(); // The list of elective courses to be returned
 
         // Iterating through each linked list in courseMap and adding each course ID to electiveList
@@ -109,12 +108,20 @@ public class Planner {
         }
 
         //------------ ADDED BY BRYCE ------------------------------
-        String[] electivesArray = new String[electiveList.size()];
+        String[] electivesArray = new String[electiveList.size() + 1];
         electivesArray[0] = "EMPTY";
-        for (int i = 1; i < electiveList.size(); i++)
+        for (int i = 1; i < electiveList.size() + 1; i++)
         {
-            electivesArray[i] = electiveList.get(i);
+            electivesArray[i] = electiveList.get(i - 1); // The array and array list are offset by 1 because of the EMPTY slot in the array
         }
         return electivesArray;
+    }
+
+    /**
+     *
+     * @return A String telling the user what prereqs they must take before the class they just tried
+     */
+    public String electivePrereqAddError(String courseID, int semesterNumber) {
+        return null;
     }
 }

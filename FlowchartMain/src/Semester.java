@@ -11,7 +11,8 @@ public class Semester {
         //itterates through courseList
         for (Course course : courseList) semesterHours += course.getHours(); // tallies the hours of each class
     }
-    
+
+    //May not need this method here
     public void addCourse(Course a)
     {
         courseList.add(a);
@@ -27,4 +28,35 @@ public class Semester {
         }
         return null;
     }
+
+    public Course getCourse(String courseID){
+
+        Course returnedCourse = new Course();
+
+        for(Course course: courseList){
+            if(courseID.equals(course.getCourseID())){
+                returnedCourse = course;
+                break;
+            }
+        }
+        return returnedCourse;
+    }
+    public int getSemesterHours(){
+
+        return semesterHours;
+    }
+
+    public ArrayList<Course> getCourseList(){
+        return courseList;
+    }
+
+    public int getTotalNumberOfCourses(){
+        int counter = 0;
+        for(Course couse: courseList){
+            counter++;
+        }
+        return counter;
+    }
+
+
 }

@@ -26,13 +26,13 @@ import java.util.List;
                         "PY","SOC","ST","TH","WGS","WLC"};
 
 
-public ArrayList<Semester> degreeParser(String minor, String major) throws IOException {
+public ArrayList<Semester> degreeParser(String major, String minor) throws IOException {
 //public static void main(String[] args) throws IOException {
 
-        String majorName = major + ".html";
+        String majorName = "Degree Plans/" + major + ".html";
         //String majorName = "Degree Plans/Mathematical_Sciences_Major.html";
 
-        String minorName = minor + ".html";
+        String minorName = minor + "Degree Plans/" + minor + ".html";
         //String minorName = "Degree Plans/Mathematical Sciences Minor.html";
 
         Document doc1 = Jsoup.parse(new File(majorName), "utf-8");
@@ -221,6 +221,164 @@ public ArrayList<Semester> degreeParser(String minor, String major) throws IOExc
 //        }
     }
 
+    public ArrayList<Semester> degreeParser(String major) throws IOException {
+//public static void main(String[] args) throws IOException {
+
+        String majorName = "Degree Plans/" + major + ".html";
+        //String majorName = "Degree Plans/Mathematical_Sciences_Major.html";
+
+        Document doc1 = Jsoup.parse(new File(majorName), "utf-8");
+        /*
+        Removes all of the unnecessary parts of the major html document
+         */
+        doc1.select("div#tabs").remove();
+        doc1.select("div#textcontainer").remove();
+        doc1.select("div#requirementstextcontainer").remove();
+
+        //Selects the first table of the major html
+        Element table1 = doc1.selectFirst("table");
+
+        //ArrayList of Semesters
+        ArrayList<Semester> semesterArrayList = new ArrayList<>();
+
+        //When the major HTML is parsed, all of its text is put into this list
+        List<String> arr1 = new LinkedList<>();
+
+        //major HTML is parsed by tag "tr" and put into the LinkedList
+        for (Element tr : table1.getElementsByTag("tr")) {
+            arr1.add(tr.text());
+        }
+
+        //Removes unncessary sentences from linkedlist
+        for (int j = 0; j < arr1.size(); j++) {
+            if (arr1.get(j).contains("Electives") || arr1.get(j).contains("No more than") || arr1.get(j).contains("Term Semester")
+                    || arr1.get(j).contains("If interested") || arr1.get(j).contains("Choose") || arr1.get(j).contains("For a")
+                    || arr1.get(j).contains("Ex:") || arr1.get(j).contains("Total") || arr1.get(j).contains("See Requirements")
+                    || arr1.get(j).startsWith("or")) {
+                arr1.remove(j);
+                j--;
+            }
+        }
+
+        //This loop goes through the linkedlist and organizes it into an array of courses that
+        //are then put into a semester object and then put into ArrayList of Semesters
+        int i = 0;
+        String text1 = arr1.get(i);
+        while (text1.contains("Year") && i < arr1.size()) {
+            String yearName = text1;
+            i++;
+            text1 = arr1.get(i);
+            if (text1.contains("Fall")) {
+                Semester semester = new Semester();
+                i++;
+                do {
+                    text1 = arr1.get(i);
+                    String newText = removeCreditHrs(text1);
+                    //if course has a lab
+                    if(newText.contains("&")){
+                        String[] courseWithLab ={};
+                        courseWithLab = splitCourseAndLab(newText);
+
+                        String RegCourse = courseWithLab[0];
+                        String labCourse = courseWithLab[1];
+
+                        Course newCourse1 = new Course();
+                        Course newCourse3 = new Course();
+                        newCourse1 = makeStringToCourseObject(RegCourse);
+                        newCourse3 = makeStringToCourseObject(labCourse);
+                        semester.addCourse(newCourse1);
+                        semester.addCourse(newCourse3);
+                        //System.out.println(RegCourse);
+                        //System.out.println(labCourse);
+                    }
+                    //course doesn't have lab
+                    else{
+                        boolean checkIfItsACourse = checkIfTextIsCourse(newText);
+                        Course newCourse2 = new Course();
+                        if(checkIfItsACourse == true) {
+                            String courseWithOutDesc = takeAwayCourseDescr(newText);
+                            newCourse2 = makeStringToCourseObject(courseWithOutDesc);
+                            coursesReqToGraduate.add(newText);
+                            semester.addCourse(newCourse2);
+                        }
+                        else{
+                            coursesReqToGraduate.add(newText);
+                        }
+
+                        // System.out.println(newText);
+
+                    }
+                    i++;
+                    if (i == arr1.size()) {
+                        i--;
+                        break;
+                    }
+                } while (!arr1.get(i).contains("Fall") && !arr1.get(i).equals("Spring") && !arr1.get(i).contains("Year"));
+                semester.updateSemesterHours();
+                semesterArrayList.add(semester);
+            }
+            text1 = arr1.get(i);
+            if (text1.equals("Spring")) {
+                Semester semester = new Semester();
+                i++;
+                do {
+                    text1 = arr1.get(i);
+                    String newText = removeCreditHrs(text1);
+                    //if course has a lab
+                    if(newText.contains("&")){
+                        String[] courseWithLab ={};
+                        courseWithLab = splitCourseAndLab(newText);
+
+                        String RegCourse = courseWithLab[0];
+                        String labCourse = courseWithLab[1];
+
+                        Course newCourse1 = new Course();
+                        Course newCourse3 = new Course();
+                        newCourse1 = makeStringToCourseObject(RegCourse);
+                        newCourse3 = makeStringToCourseObject(labCourse);
+                        semester.addCourse(newCourse1);
+                        semester.addCourse(newCourse3);
+                        //System.out.println(RegCourse);
+                        //System.out.println(labCourse);
+                    }
+                    //course doesn't have lab
+                    else{
+                        boolean checkIfItsACourse = checkIfTextIsCourse(newText);
+                        Course newCourse2 = new Course();
+                        if(checkIfItsACourse == true){
+                            String courseWithOutDesc = takeAwayCourseDescr(newText);
+                            newCourse2 = makeStringToCourseObject(courseWithOutDesc);
+                            coursesReqToGraduate.add(newText);
+                            semester.addCourse(newCourse2);
+                        }
+                        else{
+                            coursesReqToGraduate.add(newText);
+                        }
+
+
+
+                    }
+
+                    i++;
+                    if (i == arr1.size()) {
+                        i--;
+                        break;
+                    }
+                } while (!arr1.get(i).contains("Fall") && !arr1.get(i).equals("Spring") && !arr1.get(i).contains("Year"));
+                semester.updateSemesterHours();
+                semesterArrayList.add(semester);
+            }
+            text1 = arr1.get(i);
+        }
+
+//       for(int k = 0; k < semesterArrayList.size(); k++){
+//           System.out.println(semesterArrayList.get(k));
+//       }
+        return semesterArrayList;
+//        for(String singleCourse: coursesReqToGraduate){
+//            System.out.println(singleCourse);
+//        }
+    }
 
     public static String removeCreditHrs(String text){
 
