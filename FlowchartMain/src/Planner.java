@@ -127,10 +127,8 @@ public class Planner {
         String errorMessage = ""; // Error message to be returned
         Degree degreePlan = new Degree();
         ArrayList<ArrayList<String>> missingPrereqs = degreePlan.checkPreReq(courseID, semesterNumber);
-        if (missingPrereqs.size() == 0) {
-            System.out.println("It's null.");
+        if (missingPrereqs.size() == 0)
             return errorMessage; // The user had all the prerequisites, the course can be added to the flowchart (returns empty string)
-        }
         // Otherwise there was an error adding electives. Send a message to the user.
 
         errorMessage = "Missing prereqs: ";
