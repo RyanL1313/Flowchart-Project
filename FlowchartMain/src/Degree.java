@@ -7,8 +7,8 @@ import java.util.*;
 public class Degree {
 
     private static ArrayList <Semester> semesterList;
-    private String major;
-    private String minor;
+    private static String major;
+    private static String minor;
     private String concentration;
     private int MAX_SEMESTERS = 8;
 
@@ -69,17 +69,18 @@ public class Degree {
      * if applicable
      *
      */
-    public void setSemesters() throws IOException {
+    public static void setSemesters() throws IOException {
 
         DegreeParser degreeParser = new DegreeParser();
-        String major = this.major;
-        String minor = this.minor;
+        //String major = this.major;
+        //String minor = this.minor;
 
-        if(minor == null){
-            this.semesterList = degreeParser.degreeParser(major);
+        //if(minor == null){
+        if(minor.equals("N/A Minor")) {
+            semesterList = degreeParser.degreeParser(major);
         }
         else {
-            this.semesterList = degreeParser.degreeParser(major, minor);
+            semesterList = degreeParser.degreeParser(major, minor);
         }
 
     }

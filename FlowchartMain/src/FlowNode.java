@@ -79,22 +79,4 @@ public class FlowNode extends JComponent
 
         setVisible(true);
     }
-
-    public static void update()
-    {
-        FlowNode node = new FlowNode();
-        node.setVisible(true);
-    }
-
-    public static void main(String[] args)
-    {
-        javax.swing.SwingUtilities.invokeLater(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                update();
-            }
-        });
-    }
 }

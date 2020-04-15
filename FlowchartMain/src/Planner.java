@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -6,17 +7,12 @@ import java.util.*;
  * from the model (such as the full hash map of courses to the drop-down box of electives the user can choose from).
  */
 public class Planner {
-    public static boolean studentHasPreviousClasses; // Is set to true if the user selects the option that they do have previous credits to enter
     private boolean studentFinishedEnteringCourses; // Is set to true when the user selects "Done" when they're done entering previous credits into the textbox (should be in a loop)
     public static String MAJOR;
     public static String MINOR;
     public static String CONCENTRATION;
     public static ArrayList<String> coursesAlreadyTaken = new ArrayList<String>();
-    public static Degree deg;
-
-   // public static FullCourseList fcl = new FullCourseList();    // BRYCE - made one static instance across
-                                                                // entirety of Planner
-
+    public static Degree deg = new Degree();
 
     /**
      * Uses the findCourse method in FullCourseList to check if a course ID entered by the user is valid or not, then removes it from
@@ -56,35 +52,20 @@ public class Planner {
         }
     }
 
-    //--------------------- ADDED BY BRYCE -----------------------------------
-    public static Course addCourse(String courseID)
-    {
-        boolean validCourse = isEnteredCourseValid(courseID);
-        if(!validCourse)
-            return null;
-        else{
-            //FullCourseList courseList = new FullCourseList();
-
-            //return fcl.addCourse(courseID);
-            return new Course();    // placeholder return
-        }
-    }
-    //------------------------------------------------------------------------
     void drawSelectorWindow()
     {
-        DegreeSelectorWindow selection= new DegreeSelectorWindow();
+        DegreeSelectorWindow selection = new DegreeSelectorWindow();
+        selection.main(null);
     }
-    void drawCreditAdder()
+    static void drawCreditAdder()
     {
         CreditAdder adder= new CreditAdder();
+
     }
-    void drawFourYearPlanDisplay()
+    static void drawFourYearPlanDisplay()
     {
         FourYearPlanDisplay FYPD = new FourYearPlanDisplay();
-    }
-    void updateCoursesAlreadyTaken() //checks classes in courses alrady taken to see if valid, and then removes them from necessary
-    {
-
+        FYPD.main(null);
     }
 
     /**
@@ -172,5 +153,18 @@ public class Planner {
             degree.add(semester);
         }
         return degree;
+    }
+
+    public static void setDegree(Degree degree)
+    {
+        deg = degree;
+    }
+
+    public static void setMajor(String maj) { deg.setMajor(maj);}
+
+    public static void setMinor(String min) throws IOException
+    {
+        deg.setMinor(min);
+        deg.setSemesters();
     }
 }
