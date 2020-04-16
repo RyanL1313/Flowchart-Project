@@ -26,7 +26,7 @@ import java.util.List;
                         "PY","SOC","ST","TH","WGS","WLC"};
 
 
-public ArrayList<Semester> degreeParser(String major, String minor) throws IOException {
+    public ArrayList<Semester> degreeParser(String major, String minor) throws IOException {
 //public static void main(String[] args) throws IOException {
 
         String majorName = "Degree Plans/" + major + ".html";
@@ -72,8 +72,7 @@ public ArrayList<Semester> degreeParser(String major, String minor) throws IOExc
         for (int j = 0; j < arr1.size(); j++) {
             if (arr1.get(j).contains("Electives") || arr1.get(j).contains("No more than") || arr1.get(j).contains("Term Semester")
                     || arr1.get(j).contains("If interested") || arr1.get(j).contains("Choose") || arr1.get(j).contains("For a")
-                    || arr1.get(j).contains("Ex:") || arr1.get(j).contains("Total") || arr1.get(j).contains("See Requirements")
-                    || arr1.get(j).startsWith("or")) {
+                    || arr1.get(j).contains("Ex:") || arr1.get(j).contains("Total") || arr1.get(j).startsWith("or")) {
                 arr1.remove(j);
                 j--;
             }
@@ -105,6 +104,8 @@ public ArrayList<Semester> degreeParser(String major, String minor) throws IOExc
                         Course newCourse3 = new Course();
                         newCourse1 = makeStringToCourseObject(RegCourse);
                         newCourse3 = makeStringToCourseObject(labCourse);
+                        coursesReqToGraduate.add(RegCourse);
+                        coursesReqToGraduate.add(labCourse);
                         semester.addCourse(newCourse1);
                         semester.addCourse(newCourse3);
                         //System.out.println(RegCourse);
@@ -117,7 +118,7 @@ public ArrayList<Semester> degreeParser(String major, String minor) throws IOExc
                         if(checkIfItsACourse == true) {
                             String courseWithOutDesc = takeAwayCourseDescr(newText);
                             newCourse2 = makeStringToCourseObject(courseWithOutDesc);
-                            coursesReqToGraduate.add(newText);
+                            coursesReqToGraduate.add(courseWithOutDesc);
                             semester.addCourse(newCourse2);
                         }
                         else{
@@ -155,6 +156,8 @@ public ArrayList<Semester> degreeParser(String major, String minor) throws IOExc
                         Course newCourse3 = new Course();
                         newCourse1 = makeStringToCourseObject(RegCourse);
                         newCourse3 = makeStringToCourseObject(labCourse);
+                        coursesReqToGraduate.add(RegCourse);
+                        coursesReqToGraduate.add(labCourse);
                         semester.addCourse(newCourse1);
                         semester.addCourse(newCourse3);
                        //System.out.println(RegCourse);
@@ -167,7 +170,7 @@ public ArrayList<Semester> degreeParser(String major, String minor) throws IOExc
                         if(checkIfItsACourse == true){
                             String courseWithOutDesc = takeAwayCourseDescr(newText);
                             newCourse2 = makeStringToCourseObject(courseWithOutDesc);
-                            coursesReqToGraduate.add(newText);
+                            coursesReqToGraduate.add(courseWithOutDesc);
                             semester.addCourse(newCourse2);
                         }
                         else{
@@ -204,7 +207,7 @@ public ArrayList<Semester> degreeParser(String major, String minor) throws IOExc
             boolean checkIfItsACourse = checkIfTextIsCourse(newText);
             if(checkIfItsACourse == true){
                 String courseWithOutDesc = takeAwayCourseDescr(newText);
-                coursesReqToGraduate.add(newText);
+                coursesReqToGraduate.add(courseWithOutDesc);
             }
             else{
                 coursesReqToGraduate.add(newText);
@@ -253,8 +256,7 @@ public ArrayList<Semester> degreeParser(String major, String minor) throws IOExc
         for (int j = 0; j < arr1.size(); j++) {
             if (arr1.get(j).contains("Electives") || arr1.get(j).contains("No more than") || arr1.get(j).contains("Term Semester")
                     || arr1.get(j).contains("If interested") || arr1.get(j).contains("Choose") || arr1.get(j).contains("For a")
-                    || arr1.get(j).contains("Ex:") || arr1.get(j).contains("Total") || arr1.get(j).contains("See Requirements")
-                    || arr1.get(j).startsWith("or")) {
+                    || arr1.get(j).contains("Ex:") || arr1.get(j).contains("Total") || arr1.get(j).startsWith("or")) {
                 arr1.remove(j);
                 j--;
             }
@@ -286,6 +288,8 @@ public ArrayList<Semester> degreeParser(String major, String minor) throws IOExc
                         Course newCourse3 = new Course();
                         newCourse1 = makeStringToCourseObject(RegCourse);
                         newCourse3 = makeStringToCourseObject(labCourse);
+                        coursesReqToGraduate.add(RegCourse);
+                        coursesReqToGraduate.add(labCourse);
                         semester.addCourse(newCourse1);
                         semester.addCourse(newCourse3);
                         //System.out.println(RegCourse);
@@ -298,7 +302,7 @@ public ArrayList<Semester> degreeParser(String major, String minor) throws IOExc
                         if(checkIfItsACourse == true) {
                             String courseWithOutDesc = takeAwayCourseDescr(newText);
                             newCourse2 = makeStringToCourseObject(courseWithOutDesc);
-                            coursesReqToGraduate.add(newText);
+                            coursesReqToGraduate.add(courseWithOutDesc);
                             semester.addCourse(newCourse2);
                         }
                         else{
@@ -336,6 +340,8 @@ public ArrayList<Semester> degreeParser(String major, String minor) throws IOExc
                         Course newCourse3 = new Course();
                         newCourse1 = makeStringToCourseObject(RegCourse);
                         newCourse3 = makeStringToCourseObject(labCourse);
+                        coursesReqToGraduate.add(RegCourse);
+                        coursesReqToGraduate.add(labCourse);
                         semester.addCourse(newCourse1);
                         semester.addCourse(newCourse3);
                         //System.out.println(RegCourse);
@@ -348,7 +354,7 @@ public ArrayList<Semester> degreeParser(String major, String minor) throws IOExc
                         if(checkIfItsACourse == true){
                             String courseWithOutDesc = takeAwayCourseDescr(newText);
                             newCourse2 = makeStringToCourseObject(courseWithOutDesc);
-                            coursesReqToGraduate.add(newText);
+                            coursesReqToGraduate.add(courseWithOutDesc);
                             semester.addCourse(newCourse2);
                         }
                         else{
@@ -382,7 +388,7 @@ public ArrayList<Semester> degreeParser(String major, String minor) throws IOExc
 
     public static String removeCreditHrs(String text){
 
-        if(text.equals("Elective 3") || text.equals("Elective 1")) {
+        if(text.equals("Elective 3") || text.equals("Elective 1") || text.equals("Elective 4")) {
             return text;
         }
         //String[] arrOfText = text.split(" ");
@@ -442,7 +448,7 @@ public ArrayList<Semester> degreeParser(String major, String minor) throws IOExc
         return courseIDplusAcr;
     }
 
-    public LinkedList getCoursesRequiredToGraduate(){
+    public LinkedList<String> getCoursesRequiredToGraduate(){
         return coursesReqToGraduate;
     }
 
