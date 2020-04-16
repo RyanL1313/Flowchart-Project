@@ -6,14 +6,14 @@ import java.util.*;
  */
 public class Degree {
 
-    private ArrayList <Semester> semesterList;
-    private String major;
-    private String minor;
+    private static ArrayList <Semester> semesterList;
+    private static String major;
+    private static String minor;
     private String concentration;
     private int MAX_SEMESTERS = 8;
     private LinkedList<String> coursesNeedToGraduate;
 
-    DegreeParser degreeParser = new DegreeParser();
+    static DegreeParser degreeParser = new DegreeParser();
     /**
      * Getter for the degree major
      *
@@ -71,15 +71,13 @@ public class Degree {
      * if applicable
      *
      */
-    public void setSemesters() throws IOException {
+    public static void setSemesters() throws IOException {
 
-       // DegreeParser degreeParser = new DegreeParser();
-
-        if(minor == null){
-         this.semesterList = degreeParser.degreeParser(major);
+        if(minor.equals("N/A Minor")){
+         semesterList = degreeParser.degreeParser(major);
         }
         else {
-          this.semesterList = degreeParser.degreeParser(major, minor);
+          semesterList = degreeParser.degreeParser(major, minor);
         }
 
     }
