@@ -134,8 +134,6 @@ public class FullCourseList {
         String prereqAndCoreqDataToParse;
 
         Course CourseToAdd = new Course(); // The course gets added to FullCourseList after its data has been identified
-        boolean hasPrereqs = false; // Marker that signifies if we need to search for prereq courses
-        boolean hasCoreqs = false; // Marker that signifies if we need to search for coreq courses
 
         Scanner courseNameScanner = new Scanner(s1);
         Scanner courseHoursScanner = new Scanner(s2);
@@ -202,7 +200,7 @@ public class FullCourseList {
      * Getter for the FullCourseList hashmap for other classes to use
      * @return The FullCourseList hashmap
      */
-    public HashMap<String, LinkedList<Course>> getFullCourseList() {
+    public static HashMap<String, LinkedList<Course>> getFullCourseList() {
         return FullCourseList;
     }
 
@@ -307,7 +305,7 @@ public class FullCourseList {
      * @param courseID
      * @return The course to be removed
      */
-    public Course removeCourse(String courseID) {
+    public static Course removeCourse(String courseID) {
         int indexToRemove = findCourse(courseID); // Index in the linked list with the associated key
         String courseDepartment;  // Stores the key value of the FullCourseList hash map
 
@@ -325,7 +323,7 @@ public class FullCourseList {
      * @param courseID The courseID (i.e. CS 321) (Space required)
      * @return The index of the course in the corresponding linked list for that course's department (i.e. The CS linked list)
      */
-    public int findCourse(String courseID) {
+    public static int findCourse(String courseID) {
         String courseDepartment; // Stores the key value of the FullCourseList hash map
 
         Scanner courseIDScanner = new Scanner(courseID);
@@ -343,7 +341,7 @@ public class FullCourseList {
         return -1; // The course was not found in FullCourseList
     }
 
-    public Course getCourseByID(String courseID) {
+    public static Course getCourseByID(String courseID) {
         String courseDepartment; // Stores the key value of the FullCourseList hash map
         int indexOfCourse; // Index of the course in the respective linked list for that department
 
@@ -365,7 +363,7 @@ public class FullCourseList {
             if (i != indexOfCourse)
                 courseIterator.next(); // Move on to the next element
             else // We are at the index
-                CourseToReturn = (Course) courseIterator.next();
+                CourseToReturn = courseIterator.next();
         }
 
         return CourseToReturn;

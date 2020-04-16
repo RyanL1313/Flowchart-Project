@@ -25,8 +25,10 @@ public class CreditAdder extends JFrame
     {
         @Override
         public void actionPerformed(ActionEvent e)
+
         {
-            System.exit(0);
+            dispose();
+            Planner.drawFourYearPlanDisplay();
         }
     };
 
@@ -46,12 +48,10 @@ public class CreditAdder extends JFrame
         addButton.addActionListener(addPress);
         doneButton.addActionListener(donePress);
 
-
         add(entryBox,BorderLayout.CENTER);
         add(addButton,BorderLayout.EAST);
         add(doneButton,BorderLayout.SOUTH);
         add(directions,BorderLayout.NORTH);
-        //entryBox.setVisible(true);
 
         setVisible(true);
     }

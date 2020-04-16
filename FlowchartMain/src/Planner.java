@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -6,16 +7,12 @@ import java.util.*;
  * from the model (such as the full hash map of courses to the drop-down box of electives the user can choose from).
  */
 public class Planner {
-    public static boolean studentHasPreviousClasses; // Is set to true if the user selects the option that they do have previous credits to enter
     private boolean studentFinishedEnteringCourses; // Is set to true when the user selects "Done" when they're done entering previous credits into the textbox (should be in a loop)
     public static String MAJOR;
     public static String MINOR;
     public static String CONCENTRATION;
     public static ArrayList<String> coursesAlreadyTaken = new ArrayList<String>();
-
-    public static FullCourseList fcl = new FullCourseList();    // BRYCE - made one static instance across
-                                                                // entirety of Planner
-
+    public static Degree deg = new Degree();
 
     /**
      * Uses the findCourse method in FullCourseList to check if a course ID entered by the user is valid or not, then removes it from
@@ -28,7 +25,7 @@ public class Planner {
         int indexOfCourse; // Index of the course in question in the linked list associated with the key of the courseID (i.e. the "MA" linked list)
         //FullCourseList courseList = new FullCourseList();
 
-        indexOfCourse = fcl.findCourse(courseID); // Returns -1 if it's not found, otherwise it returns the index of the course's location
+        indexOfCourse = FullCourseList.findCourse(courseID); // Returns -1 if it's not found, otherwise it returns the index of the course's location
 
         if (indexOfCourse == -1)
             return false; // The course was not found
@@ -49,41 +46,26 @@ public class Planner {
             return null;
         else
         {
-            //FullCourseList courseList = new FullCourseList();
-            return fcl.removeCourse(courseID);
+            FullCourseList courseList = new FullCourseList();
+            return FullCourseList.removeCourse(courseID);
             // still needs to remove from degree's list
         }
     }
 
-    //--------------------- ADDED BY BRYCE -----------------------------------
-    public static Course addCourse(String courseID)
-    {
-        boolean validCourse = isEnteredCourseValid(courseID);
-        if(!validCourse)
-            return null;
-        else{
-            //FullCourseList courseList = new FullCourseList();
-
-            //return fcl.addCourse(courseID);
-            return new Course();    // placeholder return
-        }
-    }
-    //------------------------------------------------------------------------
     void drawSelectorWindow()
     {
-        DegreeSelectorWindow selection= new DegreeSelectorWindow();
+        DegreeSelectorWindow selection = new DegreeSelectorWindow();
+        selection.main(null);
     }
-    void drawCreditAdder()
+    static void drawCreditAdder()
     {
         CreditAdder adder= new CreditAdder();
+
     }
-    void drawFourYearPlanDisplay()
+    static void drawFourYearPlanDisplay()
     {
         FourYearPlanDisplay FYPD = new FourYearPlanDisplay();
-    }
-    void updateCoursesAlreadyTaken() //checks classes in courses alrady taken to see if valid, and then removes them from necessary
-    {
-
+        FYPD.main(null);
     }
 
     /**
@@ -92,8 +74,7 @@ public class Planner {
      * @return A basic array of Strings that correspond to the full list of courses
      */
     public static String[] getElectives() {
-        //FullCourseList courseList = new FullCourseList();
-        HashMap<String, LinkedList<Course>> courseMap = fcl.getFullCourseList(); // Full list/mapping of UAH's courses
+        HashMap<String, LinkedList<Course>> courseMap = FullCourseList.getFullCourseList(); // Full list/mapping of UAH's courses
         ArrayList<String> electiveList = new ArrayList<String>(); // The list of elective courses to be returned
 
         // Iterating through each linked list in courseMap and adding each course ID to electiveList
@@ -116,5 +97,74 @@ public class Planner {
             electivesArray[i] = electiveList.get(i - 1); // The array and array list are offset by 1 because of the EMPTY slot in the array
         }
         return electivesArray;
+    }
+
+    /**
+     * Tells the user what prerequisite courses they are missing in their degree plan.
+     * Uses checkPreReq method from Degree to obtain the missing prerequisites that need to be put into the String to be returned
+     * @return A String telling the user what prereqs they must take before the class they just tried
+     */
+    public String electivePrereqAddError(String courseID, int semesterNumber) {
+        String errorMessage = ""; // Error message to be returned
+        Degree degreePlan = new Degree();
+        ArrayList<ArrayList<String>> missingPrereqs = degreePlan.checkPreReq(courseID, semesterNumber);
+        if (missingPrereqs.size() == 0)
+            return errorMessage; // The user had all the prerequisites, the course can be added to the flowchart (returns empty string)
+        // Otherwise there was an error adding electives. Send a message to the user.
+
+        errorMessage = "Missing prereqs: ";
+        String errorMessageAddition = ""; // Adds on to errorMessage throughout the loop
+
+        for (ArrayList<String> orRelationshipRow : missingPrereqs) {
+            errorMessage = errorMessage.concat("Must take ");
+            Iterator<String> colIterator = orRelationshipRow.iterator(); // Goes through each course ID in the row
+            while (colIterator.hasNext()) {
+                int count = 0; // Number of courses read in on this row
+
+                errorMessageAddition = errorMessageAddition.concat(colIterator.next()); // A course
+                if (colIterator.hasNext()) { // Need to add an "or". Otherwise, we are at the end of this row. No more "ors".
+                    errorMessageAddition = errorMessageAddition.concat(" or ");
+                }
+                count++;
+            }
+
+            errorMessage = errorMessage.concat(errorMessageAddition + ". ");
+            errorMessageAddition = ""; // Make this empty again
+        }
+
+        return errorMessage;
+    }
+
+    /**
+     * Converts the Degree object into an ArrayList<ArrayList<String>> for the PlanDisplays
+     * @return ArrayList<ArrayList<String>> which has the courseID's separated by semester.
+     */
+    public static ArrayList<ArrayList<String>> getDegree()
+    {
+        ArrayList<ArrayList<String>> degree = new ArrayList<ArrayList<String>>();
+        ArrayList<Semester> semesterList = deg.getSemesterList();
+        for(int i = 0; i < semesterList.size(); i++)
+        {
+            ArrayList<String> semester = new ArrayList<String>();
+            for(int j = 0; j < semesterList.get(i).getCourseList().size(); j++)
+            {
+                semester.add(semesterList.get(i).getCourseList().get(j).getCourseID());
+            }
+            degree.add(semester);
+        }
+        return degree;
+    }
+
+    public static void setDegree(Degree degree)
+    {
+        deg = degree;
+    }
+
+    public static void setMajor(String maj) { deg.setMajor(maj);}
+
+    public static void setMinor(String min) throws IOException
+    {
+        deg.setMinor(min);
+        deg.setSemesters();
     }
 }

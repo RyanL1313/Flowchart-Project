@@ -8,7 +8,7 @@ public class Semester {
 
     public void updateSemesterHours()
     {
-        //itterates through courseList
+        //iterates through courseList
         for (Course course : courseList) semesterHours += course.getHours(); // tallies the hours of each class
     }
 
@@ -20,7 +20,7 @@ public class Semester {
 
     public Course removeCourse(String cID)
     {
-        for (Course course : courseList) { //itterates through courseList
+        for (Course course : courseList) { //iterates through courseList
             if (cID.equals(course.getCourseID())) {
                 courseList.remove(course);
                 return course;

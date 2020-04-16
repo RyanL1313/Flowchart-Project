@@ -6,8 +6,6 @@ import java.util.ArrayList;
 
 public class FlowNode extends JComponent
 {
-
-    //String[] availableCourses = getElectivesArray();
     static String[] availableCourses = Planner.getElectives();
     JComboBox dropDown = new JComboBox(availableCourses);
     JLabel courseID = new JLabel();
@@ -21,7 +19,6 @@ public class FlowNode extends JComponent
         {
             dropDown.setSelectedIndex(0);
             dropDown.setVisible(true);
-            String courseToAddBack = courseID.getText();
             courseID.setVisible(false);
             clearButton.setVisible(false);
 
@@ -35,15 +32,6 @@ public class FlowNode extends JComponent
         {
             dropDown.setVisible(false);
             courseID.setText((String)dropDown.getSelectedItem());
-            String selected = (String)dropDown.getSelectedItem();
-            if(!(selected.equals("EMPTY")))
-            {
-                Planner.removeCourse(selected);
-                for(int i =0; i < availableCourses.length; i++)
-                {
-
-                }
-            }
             courseID.setVisible(true);
             clearButton.setVisible(true);
         }
@@ -52,16 +40,16 @@ public class FlowNode extends JComponent
     // Constructor for creating an empty node.
     public FlowNode()
     {
-        dropDown.setBounds(10, 10, 160, 20);
+        dropDown.setBounds(20, 20, 160, 20);
         dropDown.addActionListener(dropDownListener);
         add(dropDown);
 
-        courseID.setBounds(10,10,160,20);
+        courseID.setBounds(20,20,160,20);
         courseID.setForeground(Color.WHITE);
         add(courseID);
         courseID.setVisible(false);
 
-        clearButton.setBounds(120,0,60,20);
+        clearButton.setBounds(140,10,60,20);
         clearButton.addActionListener(clearButtonPress);
         clearButton.setFont(clearButton.getFont().deriveFont(7.0f));
         add(clearButton);
@@ -69,7 +57,7 @@ public class FlowNode extends JComponent
 
         // Drawing a rectangle
         rect.setBackground(Color.BLUE);
-        rect.setBounds(0, 0, 180, 40);
+        rect.setBounds(10,10, 190, 40);
         add(rect);
 
         setVisible(true);
@@ -79,34 +67,16 @@ public class FlowNode extends JComponent
     public FlowNode(String id)
     {
         courseID.setText(id);
-        courseID.setBounds(65,10,160,20);
+        courseID.setBounds(75,20,160,20);
         courseID.setForeground(Color.WHITE);
         add(courseID);
         courseID.setVisible(true);
 
         // Drawing a rectangle
         rect.setBackground(Color.BLUE);
-        rect.setBounds(0, 0, 180, 40);
+        rect.setBounds(10, 10, 190, 40);
         add(rect);
 
         setVisible(true);
-    }
-
-    public static void update()
-    {
-        FlowNode node = new FlowNode();
-        node.setVisible(true);
-    }
-
-    public static void main(String[] args)
-    {
-        javax.swing.SwingUtilities.invokeLater(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                update();
-            }
-        });
     }
 }
