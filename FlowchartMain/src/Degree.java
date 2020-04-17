@@ -9,9 +9,7 @@ public class Degree {
     private static ArrayList <Semester> semesterList;
     private static String major;
     private static String minor;
-    private String concentration;
     private int MAX_SEMESTERS = 8;
-    private LinkedList<String> coursesNeedToGraduate;
 
     static DegreeParser degreeParser = new DegreeParser();
     /**
@@ -21,12 +19,7 @@ public class Degree {
      * This is because majors and concentrations are related
      */
     public String getMajor() {
-        if(concentration == null){
-            return major;
-        }
-        else{
-            return major + concentration;
-        }
+        return major;
 
     }
     /**
@@ -58,25 +51,12 @@ public class Degree {
     }
 
     /**
-     * Setter for the concentration
-     *
-     * @param concentration The Degree's concentration
-     */
-    public void setConcentration(String concentration) {
-        this.concentration = concentration;
-    }
-
-    /**
      * Sets the semesters for the degree by calling DegreeParser, sending the major, minor, and concentration
      * if applicable
      *
      */
     public static void setSemesters() throws IOException {
 
-        //String major = this.major;
-        //String minor = this.minor;
-
-        //if(minor == null){
         if(minor.equals("N/A Minor")) {
             semesterList = degreeParser.degreeParser(major);
         }
@@ -215,12 +195,7 @@ public class Degree {
     }
 
 
-    public void setCoursesNeededToGraduate() throws IOException {
-     coursesNeedToGraduate = degreeParser.getCoursesRequiredToGraduate();
-    }
-    public LinkedList<String> getCoursesNeededToGraduate(){
-        return coursesNeedToGraduate;
-    }
+
 
 //    public boolean checkIfDegreeIsComplete() throws IOException {
 //        DegreeParser degreeParser = new DegreeParser();
