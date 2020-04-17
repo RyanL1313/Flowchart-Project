@@ -31,7 +31,11 @@ public class Semester {
 
     public Course getCourse(String courseID){
 
-        Course returnedCourse = new Course();
+        Course returnedCourse;
+        if(courseID.contains("+"))
+            returnedCourse = new BroadCourse(courseID);
+        else
+            returnedCourse = new SpecificCourse();
 
         for(Course course: courseList){
             if(courseID.equals(course.getCourseID())){

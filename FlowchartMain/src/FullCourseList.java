@@ -14,7 +14,7 @@ import java.util.*;
  * value is a linked list of courses associated with that key.
  */
 public class FullCourseList {
-    private static HashMap<String, LinkedList<Course>> FullCourseList = new HashMap<String, LinkedList<Course>>(); // The full list of UAH courses
+    private static HashMap<String, LinkedList<SpecificCourse>> FullCourseList = new HashMap<String, LinkedList<SpecificCourse>>(); // The full list of UAH courses
     private ArrayList<String> HTMLFileList = new ArrayList<String>(); // List of file names for all departments
 
     /**
@@ -80,7 +80,7 @@ public class FullCourseList {
         ArrayList<String> sortedDepartmentKeys = new ArrayList(FullCourseList.keySet());
         Collections.sort(sortedDepartmentKeys);
 
-        HashMap<String, LinkedList<Course>> sortedMap = new LinkedHashMap<String, LinkedList<Course>>(); // New sorted FCL to be returned
+        HashMap<String, LinkedList<SpecificCourse>> sortedMap = new LinkedHashMap<String, LinkedList<SpecificCourse>>(); // New sorted FCL to be returned
 
         for (String key : sortedDepartmentKeys) {
             sortedMap.put(key, FullCourseList.get(key));
@@ -128,12 +128,12 @@ public class FullCourseList {
         String courseID;
         String courseName;
         int courseHours = 0;
-        ArrayList<ArrayList<Course>> prereqs = new ArrayList<ArrayList<Course>>();
-        ArrayList<ArrayList<Course>> coreqs = new ArrayList<ArrayList<Course>>();
+        ArrayList<ArrayList<SpecificCourse>> prereqs = new ArrayList<ArrayList<SpecificCourse>>();
+        ArrayList<ArrayList<SpecificCourse>> coreqs = new ArrayList<ArrayList<SpecificCourse>>();
         String temp; // To throw out string tokens we don't need
         String prereqAndCoreqDataToParse;
 
-        Course CourseToAdd = new Course(); // The course gets added to FullCourseList after its data has been identified
+        SpecificCourse CourseToAdd = new SpecificCourse(); // The course gets added to FullCourseList after its data has been identified
 
         Scanner courseNameScanner = new Scanner(s1);
         Scanner courseHoursScanner = new Scanner(s2);
@@ -185,12 +185,12 @@ public class FullCourseList {
         // Adding the course to the hashmap
         if (FullCourseList.containsKey(courseDepartment)) // ex. If this isn't the first CS class being put in the hash map
         {
-            LinkedList<Course> updatedList = FullCourseList.get(courseDepartment); // Getting the linked list associated with the department code
+            LinkedList<SpecificCourse> updatedList = FullCourseList.get(courseDepartment); // Getting the linked list associated with the department code
             updatedList.add(CourseToAdd); // Adding the completed course to the list
             FullCourseList.put(courseDepartment, updatedList); // Putting the updated list back into FullCourseList
         }
         else { // ex. If this is the first CS class being put in the hashmap => new linked list is added to hashmap
-            LinkedList<Course> newList = new LinkedList<Course>();
+            LinkedList<SpecificCourse> newList = new LinkedList<SpecificCourse>();
             newList.add(CourseToAdd);
             FullCourseList.put(courseDepartment, newList);
         }
@@ -200,7 +200,7 @@ public class FullCourseList {
      * Getter for the FullCourseList hashmap for other classes to use
      * @return The FullCourseList hashmap
      */
-    public static HashMap<String, LinkedList<Course>> getFullCourseList() {
+    public static HashMap<String, LinkedList<SpecificCourse>> getFullCourseList() {
         return FullCourseList;
     }
 
@@ -209,7 +209,7 @@ public class FullCourseList {
      * The outer array lists are separate prerequisites (not equivalent to one another)
      * @param prereqData The string containing the prerequisites that need to be parsed out
      */
-    private void sortOutAndSetPrereqs(String prereqData, Course courseToAdd) {
+    private void sortOutAndSetPrereqs(String prereqData, SpecificCourse courseToAdd) {
         ArrayList<ArrayList<String>> allPrereqsForThisCourse = new ArrayList<ArrayList<String>>();
         ArrayList<String> rowOfPrereqs = new ArrayList<String>(); // Equivalent courses (i.e. you can take one course or this course and you have acquired the necessary prerequisite)
         String equivMarker = "or"; // When this is encountered, the prereq has equivalents that will be read in next (same row)
@@ -250,7 +250,7 @@ public class FullCourseList {
      * The outer array lists are separate corequisites (not equivalent to one another)
      * @param coreqData The string containing the corequisites that need to be parsed out
      */
-    private void sortOutAndSetCoreqs(String coreqData, Course CourseToAdd) {
+    private void sortOutAndSetCoreqs(String coreqData, SpecificCourse CourseToAdd) {
         ArrayList<ArrayList<String>> allCoreqsForThisCourse = new ArrayList<ArrayList<String>>();
         ArrayList<String> rowOfCoreqs = new ArrayList<String>(); // Equivalent courses (i.e. you can take one course or this course and you have acquired the necessary corequisite)
         String equivMarker = "or"; // When this is encountered, the coreq has equivalents that will be read in next (same row)
@@ -305,14 +305,14 @@ public class FullCourseList {
      * @param courseID
      * @return The course to be removed
      */
-    public static Course removeCourse(String courseID) {
+    public static SpecificCourse removeCourse(String courseID) {
         int indexToRemove = findCourse(courseID); // Index in the linked list with the associated key
         String courseDepartment;  // Stores the key value of the FullCourseList hash map
 
         Scanner courseIDScanner = new Scanner(courseID);
         courseDepartment = courseIDScanner.next();
 
-        LinkedList<Course> ListToShorten = FullCourseList.get(courseDepartment); // Return the linked list for the necessary department
+        LinkedList<SpecificCourse> ListToShorten = FullCourseList.get(courseDepartment); // Return the linked list for the necessary department
 
         return ListToShorten.remove(indexToRemove); // Remove the course from FullCourseList and return the course object
     }
@@ -329,9 +329,9 @@ public class FullCourseList {
         Scanner courseIDScanner = new Scanner(courseID);
         courseDepartment = courseIDScanner.next();
 
-        LinkedList<Course> ListToShorten = FullCourseList.get(courseDepartment); // Return the linked list for the necessary department
+        LinkedList<SpecificCourse> ListToShorten = FullCourseList.get(courseDepartment); // Return the linked list for the necessary department
 
-        Iterator<Course> courseIterator = ListToShorten.iterator();
+        Iterator<SpecificCourse> courseIterator = ListToShorten.iterator();
         for (int i = 0; i < ListToShorten.size(); i++) {
             if (courseIterator.hasNext()) {
                 if (courseIterator.next().getCourseID().equals(courseID))
@@ -341,23 +341,23 @@ public class FullCourseList {
         return -1; // The course was not found in FullCourseList
     }
 
-    public static Course getCourseByID(String courseID) {
+    public static SpecificCourse getCourseByID(String courseID) {
         String courseDepartment; // Stores the key value of the FullCourseList hash map
         int indexOfCourse; // Index of the course in the respective linked list for that department
 
         Scanner courseIDScanner = new Scanner(courseID);
         courseDepartment = courseIDScanner.next(); // Get the department ID (i.e. CS)
 
-        LinkedList<Course> ListWithDesiredCourse = FullCourseList.get(courseDepartment); // Return the linked list for the necessary department
+        LinkedList<SpecificCourse> ListWithDesiredCourse = FullCourseList.get(courseDepartment); // Return the linked list for the necessary department
 
-        Iterator<Course> courseIterator = ListWithDesiredCourse.iterator();
+        Iterator<SpecificCourse> courseIterator = ListWithDesiredCourse.iterator();
 
         indexOfCourse = findCourse(courseID);
 
         if (indexOfCourse == -1)
             return null; // Course not found
 
-        Course CourseToReturn = null;
+        SpecificCourse CourseToReturn = null;
         // Otherwise, it was found. Iterate to the course's index, then return it
         for (int i = 0; i <= indexOfCourse; i++) {
             if (i != indexOfCourse)
@@ -374,14 +374,14 @@ public class FullCourseList {
      * Used for debugging purposes
      */
     public void printFullCourseList() {
-        for (HashMap.Entry<String, LinkedList<Course>> entry: FullCourseList.entrySet()) {
+        for (HashMap.Entry<String, LinkedList<SpecificCourse>> entry: FullCourseList.entrySet()) {
             String key = entry.getKey();
             System.out.printf(key + " courses:\n");
 
-            LinkedList<Course> courseList = new LinkedList<>();
+            LinkedList<SpecificCourse> courseList = new LinkedList<>();
             courseList = entry.getValue();
 
-            Iterator<Course> courseListIterator = courseList.iterator();
+            Iterator<SpecificCourse> courseListIterator = courseList.iterator();
 
             while (courseListIterator.hasNext()) {
                 courseListIterator.next().printCourseValues();

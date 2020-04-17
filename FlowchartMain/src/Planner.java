@@ -73,14 +73,14 @@ public class Planner {
      * @return A basic array of Strings that correspond to the full list of courses
      */
     public static String[] getElectives() {
-        HashMap<String, LinkedList<Course>> courseMap = FullCourseList.getFullCourseList(); // Full list/mapping of UAH's courses
+        HashMap<String, LinkedList<SpecificCourse>> courseMap = FullCourseList.getFullCourseList(); // Full list/mapping of UAH's courses
         ArrayList<String> electiveList = new ArrayList<String>(); // The list of elective courses to be returned
 
         // Iterating through each linked list in courseMap and adding each course ID to electiveList
-        for (HashMap.Entry<String, LinkedList<Course>> entry: courseMap.entrySet()) {
-            LinkedList<Course> courseListByDepartment =  entry.getValue();
+        for (HashMap.Entry<String, LinkedList<SpecificCourse>> entry: courseMap.entrySet()) {
+            LinkedList<SpecificCourse> courseListByDepartment =  entry.getValue();
 
-            Iterator<Course> courseListIterator = courseListByDepartment.iterator();
+            Iterator<SpecificCourse> courseListIterator = courseListByDepartment.iterator();
 
             // Go through a single linked list, pulling out the course ID of each Course object
             while (courseListIterator.hasNext()) {
@@ -159,13 +159,13 @@ public class Planner {
     public static ArrayList<ArrayList<String>> getDegree()
     {
         ArrayList<ArrayList<String>> degree = new ArrayList<ArrayList<String>>();
-        ArrayList<Semester> semesterList = deg.getSemesterList();
-        for(int i = 0; i < semesterList.size(); i++)
+        //ArrayList<Semester> semesterList = deg.getSemesterList();
+        for(int i = 0; i < deg.getSemesterList().size(); i++)
         {
             ArrayList<String> semester = new ArrayList<String>();
-            for(int j = 0; j < semesterList.get(i).getCourseList().size(); j++)
+            for(int j = 0; j < deg.getSemesterList().get(i).getCourseList().size(); j++)
             {
-                semester.add(semesterList.get(i).getCourseList().get(j).getCourseID());
+                semester.add(deg.getSemesterList().get(i).getCourseList().get(j).getCourseID());
             }
             degree.add(semester);
         }
