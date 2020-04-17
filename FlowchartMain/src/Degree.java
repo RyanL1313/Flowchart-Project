@@ -230,6 +230,18 @@ public class Degree {
 //
 //    }
 
+    public Course removeObtainedCredit(String courseID)
+    {
+        Course result = null;
+        for(int i =0; i < semesterList.size(); i++)
+        {
+            result = semesterList.get(i).removeCourse(courseID);
+            if(result != null)
+                return result;
+        }
+        return result;
+    }
+
 }
 
 

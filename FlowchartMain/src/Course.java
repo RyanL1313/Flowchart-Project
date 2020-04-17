@@ -139,6 +139,6 @@ public class Course {
      * @return Whether or not the two courses are equal
      */
     public boolean equals(String courseID) {
-        return this.courseID == courseID;
+        return this.courseID.equals(courseID);
     }
 }

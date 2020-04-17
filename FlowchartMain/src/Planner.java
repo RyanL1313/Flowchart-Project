@@ -39,16 +39,15 @@ public class Planner {
      * @param courseID The ID of the course (i.e. CS 321). Space is necessary.
      * @return The course object. We probably don't need it after this, but just in case.
      */
-    public static Course removeCourse(String courseID) {
+    public static String removeCourse(String courseID) {
         boolean validCourse = isEnteredCourseValid(courseID); // Calls an internal method that checks if the course entered is valid
 
         if (!validCourse) // We don't want to remove an invalid course
             return null;
         else
         {
-            FullCourseList courseList = new FullCourseList();
-            return FullCourseList.removeCourse(courseID);
-            // still needs to remove from degree's list
+            Course removed = deg.removeObtainedCredit(courseID);
+            return "Success";
         }
     }
 
@@ -90,6 +89,24 @@ public class Planner {
         }
 
         //------------ ADDED BY BRYCE ------------------------------
+
+        ArrayList<String> coreCourses = new ArrayList<String>();
+        ArrayList<Semester> sem = deg.getSemesterList();
+        for(int i = 0; i < sem.size(); i++)     // moves all courses from the Degree into a single ArrayList containing the course IDs
+        {
+            for(int j = 0; j < sem.get(i).getCourseList().size(); j++)
+            {
+                coreCourses.add(sem.get(i).getCourseList().get(j).getCourseID());
+            }
+        }
+
+        for(int i = 0; i < electiveList.size(); i++)
+            for(int j = 0; j < coreCourses.size(); j++)
+                if(coreCourses.get(j).equals(electiveList.get(i)))
+                {
+                    electiveList.remove(i);
+                    i--;
+                }
         String[] electivesArray = new String[electiveList.size() + 1];
         electivesArray[0] = "EMPTY";
         for (int i = 1; i < electiveList.size() + 1; i++)

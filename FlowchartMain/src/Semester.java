@@ -52,7 +52,7 @@ public class Semester {
 
     public int getTotalNumberOfCourses(){
         int counter = 0;
-        for(Course couse: courseList){
+        for(Course course: courseList){
             counter++;
         }
         return counter;
