@@ -10,36 +10,61 @@ import java.util.LinkedList;
  */
 
 public class DegreeCompletion {
-
+    private static String major;
+    private static String minor;
     private LinkedList<String> coursesNeededToGraduate;
     private LinkedList<String> coursesRequiredByMajorAndOrMinor;
     private LinkedList<String> nonSpecificCoursesRequiredByMajorOrMinor;
+    static DegreeParser degreeParser = new DegreeParser();
 
-    public void setCoursesNeededToGraduate(String degree) throws IOException {
-        DegreeParser degreeParser = new DegreeParser();
-        degreeParser.degreeParser(degree);
+    public void setMajor(String major) {
+        this.major = major;
+
+    }
+
+    public void setMinor(String minor) {
+        this.minor = minor;
+    }
+
+    public void setCoursesNeededToGraduate() throws IOException {
+        if(minor.equals("N/A Minor")){
+            degreeParser.degreeParser(major);
+        }
+        else{
+            degreeParser.degreeParser(major, minor);
+        }
         coursesNeededToGraduate = degreeParser.getCoursesRequiredToGraduate();
     }
-    public void setCoursesNeededToGraduate(String degree, String minor) throws IOException {
-        DegreeParser degreeParser = new DegreeParser();
-        degreeParser.degreeParser(degree, minor);
-        coursesNeededToGraduate = degreeParser.getCoursesRequiredToGraduate();
-    }
-    public void setCoursesRequiredByMajorAndOrMinorAndNonSpecificCoursesRequiredByMajorOrMinor(){
+
+    public void setCoursesRequiredByMajorAndOrMinorAndNonSpecificCoursesRequiredByMajorAndOrMinor(){
+        coursesRequiredByMajorAndOrMinor = new LinkedList<>();
+        nonSpecificCoursesRequiredByMajorOrMinor = new LinkedList<>();
+
         for(String course: coursesNeededToGraduate){
-            if(checkIfTextIsCourse(course) == false){
-                coursesRequiredByMajorAndOrMinor.add(course);
+            if(checkIfTextIsCourse(course) == true){
+               this.coursesRequiredByMajorAndOrMinor.add(course);
             }
             else{
-                nonSpecificCoursesRequiredByMajorOrMinor.add(course);
+                this.nonSpecificCoursesRequiredByMajorOrMinor.add(course);
             }
         }
     }
+
+    public LinkedList<String> getCoursesNeededToGraduate(){
+        return coursesNeededToGraduate;
+    }
+
+    //debugging purposes
+    public LinkedList<String> getCoursesRequiredByMajorAndOrMinor(){return coursesRequiredByMajorAndOrMinor;}
+
+    //debugging purposes
+    public LinkedList<String> getNonSpecificCoursesRequiredByMajorOrMinor(){return nonSpecificCoursesRequiredByMajorOrMinor;}
 
     public static String[] coursesListAcronyms = {"ACC", "AMS","ARH", "ARS","AST", "ATS", "BYS","BLS","CHE","CH","CE","CM","CPE","CS",
             "ECH","ESS","ECN","ED","EDC","EE","ENG", "EH","EHL","FIN", "GY","GS","HPE","HY","ISE","IS","KIN","MGT",
             "MSC","MS","MKT","MA","MAE","ME","MIL","MU","MUA","MUE","MUJ","NUR","OPE","OPT","PHL","PH","PSC","PRO",
             "PY","SOC","ST","TH","WGS","WLC"};
+
     public boolean isMajorComplete(Degree degree) throws IOException {
 
         boolean majorComplete = true;
@@ -49,24 +74,26 @@ public class DegreeCompletion {
        for(Semester singleSemester: degreeSemesters){
            for(Course singleCourse: singleSemester.getCourseList()){
                String singleCourseID = singleCourse.getCourseID();
-
+                    boolean courseRemoved = false;
                     //check to see if its in coursesRequiredByMajorAndOrMinor list
                    for(String singleCourseFromMajorOrMinorList: coursesRequiredByMajorAndOrMinor){
-                       if(singleCourse.equals(singleCourseFromMajorOrMinorList)){
+                       if(singleCourseID.equals(singleCourseFromMajorOrMinorList)){
                            coursesNeededToGraduate.removeFirstOccurrence(singleCourseID);
+                           courseRemoved = true;
                        }
-                       else if(singleCourseID.contains("3")){
-                           if(checkIfItsAnAlreadyRequiredCourse(singleCourseID) == false){
-                               checkIf300PlusCourseIsValid(singleCourseID);
-                           }
-                           else{
-                               //if the course is an already course, break and continue onto
-                               //next singleCourseID in the list
-                               break;
-                           }
+                   }
+                   if(courseRemoved == false){
+                        //check if it's a lab science
+                       //break
+
+                       //check if it's an elective
+
+                       //check if it's FYE 101
+
+                       //check if it's MA 200+ level course
 
 
-                       }
+                       //check if it's
                    }
 
            }
@@ -83,10 +110,10 @@ public class DegreeCompletion {
     }
 
     public boolean checkIfItsAnAlreadyRequiredCourse(String course){
-        boolean alreadyRequiredCourse =  true;
+        boolean alreadyRequiredCourse =  false;
         for(String singleReqCourse: coursesRequiredByMajorAndOrMinor){
             if(course.equals(singleReqCourse)){
-                alreadyRequiredCourse = false;
+                alreadyRequiredCourse = true;
                 break;
             }
         }
