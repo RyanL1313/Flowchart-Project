@@ -6,8 +6,11 @@ import java.util.ArrayList;
 
 public class FlowNode extends JComponent
 {
-    static String[] availableCourses = Planner.getElectives();
-    JComboBox dropDown = new JComboBox(availableCourses);
+    String[] menu = {"Menu","MA 200+","MA 300+","MA 400+","CS 200+","CS 300+","CS 400+",
+            "Literature","Social and Behavioral Science","Fine Art","History",
+            "Lab Science","Technical Elective","Humanities","Elective"};
+    static String[] electiveCourses = Planner.getElectives();
+    JComboBox dropDown = new JComboBox(menu);
     JLabel courseID = new JLabel();
     JButton clearButton = new JButton("CLEAR");
     JPanel rect = new JPanel();
@@ -30,10 +33,25 @@ public class FlowNode extends JComponent
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            dropDown.setVisible(false);
-            courseID.setText((String)dropDown.getSelectedItem());
-            courseID.setVisible(true);
-            clearButton.setVisible(true);
+            if(dropDown.getSelectedItem().equals("BACK"))
+            {
+                dropDown.removeAllItems();
+                for(int i = 0; i < menu.length; i++)
+                    dropDown.addItem(menu[i]);
+            }
+            else if(dropDown.getSelectedItem().equals("Elective"))
+            {
+                dropDown.removeAllItems();
+                for(int i = 0; i < electiveCourses.length; i++)
+                    dropDown.addItem(electiveCourses[i]);
+            }
+            else
+            {
+                dropDown.setVisible(false);
+                courseID.setText((String) dropDown.getSelectedItem());
+                courseID.setVisible(true);
+                clearButton.setVisible(true);
+            }
         }
     };
 
