@@ -2,31 +2,29 @@
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 
-
 /**
  * A DegreeParser class scans a file that has information of a degree and sends that information to Degree class.
  */
-    public class DegreeParser {
+public class DegreeParser {
 
     private static LinkedList<String> coursesReqToGraduate = new LinkedList<>();
 
     public static String[] coursesListAcronyms = {"ACC", "AMS","ARH", "ARS","AST", "ATS", "BYS","BLS","CHE","CH","CE","CM","CPE","CS",
-                       "ECH","ESS","ECN","ED","EDC","EE","ENG", "EH","EHL","FIN", "GY","GS","HPE","HY","ISE","IS","KIN","MGT",
-                        "MSC","MS","MKT","MA","MAE","ME","MIL","MU","MUA","MUE","MUJ","NUR","OPE","OPT","PHL","PH","PSC","PRO",
-                        "PY","SOC","ST","TH","WGS","WLC"};
+            "ECH","ESS","ECN","ED","EDC","EE","ENG", "EH","EHL","FIN", "GY","GS","HPE","HY","ISE","IS","KIN","MGT",
+            "MSC","MS","MKT","MA","MAE","ME","MIL","MU","MUA","MUE","MUJ","NUR","OPE","OPT","PHL","PH","PSC","PRO",
+            "PY","SOC","ST","TH","WGS","WLC"};
 
 
-    public ArrayList<Semester> degreeParser(String major, String minor) throws IOException {
+    public ArrayList<Semester> degreeParser(String major, String minor) throws IOException
+    {
 //public static void main(String[] args) throws IOException {
 
         String majorName = "Degree Plans/" + major + ".html";
@@ -72,7 +70,8 @@ import java.util.List;
         for (int j = 0; j < arr1.size(); j++) {
             if (arr1.get(j).contains("Electives") || arr1.get(j).contains("No more than") || arr1.get(j).contains("Term Semester")
                     || arr1.get(j).contains("If interested") || arr1.get(j).contains("Choose") || arr1.get(j).contains("For a")
-                    || arr1.get(j).contains("Ex:") || arr1.get(j).contains("Total") || arr1.get(j).startsWith("or")) {
+                    || arr1.get(j).contains("Ex:") || arr1.get(j).contains("Total") || arr1.get(j).contains("See Requirements")
+                    || arr1.get(j).startsWith("or")) {
                 arr1.remove(j);
                 j--;
             }
@@ -100,12 +99,10 @@ import java.util.List;
                         String RegCourse = courseWithLab[0];
                         String labCourse = courseWithLab[1];
 
-                        Course newCourse1 = new Course();
-                        Course newCourse3 = new Course();
+                        Course newCourse1 = new SpecificCourse();
+                        Course newCourse3 = new SpecificCourse();
                         newCourse1 = makeStringToCourseObject(RegCourse);
                         newCourse3 = makeStringToCourseObject(labCourse);
-                        coursesReqToGraduate.add(RegCourse);
-                        coursesReqToGraduate.add(labCourse);
                         semester.addCourse(newCourse1);
                         semester.addCourse(newCourse3);
                         //System.out.println(RegCourse);
@@ -114,18 +111,26 @@ import java.util.List;
                     //course doesn't have lab
                     else{
                         boolean checkIfItsACourse = checkIfTextIsCourse(newText);
-                        Course newCourse2 = new Course();
+                        Course newCourse2;
+                        if(newText.contains("+")){
+                            newCourse2 = new BroadCourse(newText);
+                        }
+                        else
+                        {
+                            newCourse2 = new SpecificCourse();
+                        }
                         if(checkIfItsACourse == true) {
                             String courseWithOutDesc = takeAwayCourseDescr(newText);
                             newCourse2 = makeStringToCourseObject(courseWithOutDesc);
-                            coursesReqToGraduate.add(courseWithOutDesc);
+                            coursesReqToGraduate.add(newText);
                             semester.addCourse(newCourse2);
                         }
                         else{
                             coursesReqToGraduate.add(newText);
+                            semester.addCourse(newCourse2);
                         }
 
-                       // System.out.println(newText);
+                        // System.out.println(newText);
 
                     }
                     i++;
@@ -152,29 +157,35 @@ import java.util.List;
                         String RegCourse = courseWithLab[0];
                         String labCourse = courseWithLab[1];
 
-                        Course newCourse1 = new Course();
-                        Course newCourse3 = new Course();
+                        Course newCourse1 = new SpecificCourse();
+                        Course newCourse3 = new SpecificCourse();
                         newCourse1 = makeStringToCourseObject(RegCourse);
                         newCourse3 = makeStringToCourseObject(labCourse);
-                        coursesReqToGraduate.add(RegCourse);
-                        coursesReqToGraduate.add(labCourse);
                         semester.addCourse(newCourse1);
                         semester.addCourse(newCourse3);
-                       //System.out.println(RegCourse);
-                       //System.out.println(labCourse);
+                        //System.out.println(RegCourse);
+                        //System.out.println(labCourse);
                     }
                     //course doesn't have lab
                     else{
                         boolean checkIfItsACourse = checkIfTextIsCourse(newText);
-                        Course newCourse2 = new Course();
+                        Course newCourse2;
+                        if(newText.contains("+")){
+                            newCourse2 = new BroadCourse(newText);
+                        }
+                        else
+                        {
+                            newCourse2 = new SpecificCourse();
+                        }
                         if(checkIfItsACourse == true){
                             String courseWithOutDesc = takeAwayCourseDescr(newText);
                             newCourse2 = makeStringToCourseObject(courseWithOutDesc);
-                            coursesReqToGraduate.add(courseWithOutDesc);
+                            coursesReqToGraduate.add(newText);
                             semester.addCourse(newCourse2);
                         }
                         else{
                             coursesReqToGraduate.add(newText);
+                            semester.addCourse(newCourse2);
                         }
 
 
@@ -207,7 +218,7 @@ import java.util.List;
             boolean checkIfItsACourse = checkIfTextIsCourse(newText);
             if(checkIfItsACourse == true){
                 String courseWithOutDesc = takeAwayCourseDescr(newText);
-                coursesReqToGraduate.add(courseWithOutDesc);
+                coursesReqToGraduate.add(newText);
             }
             else{
                 coursesReqToGraduate.add(newText);
@@ -224,7 +235,8 @@ import java.util.List;
 //        }
     }
 
-    public ArrayList<Semester> degreeParser(String major) throws IOException {
+    public ArrayList<Semester> degreeParser(String major) throws IOException
+    {
 //public static void main(String[] args) throws IOException {
 
         String majorName = "Degree Plans/" + major + ".html";
@@ -256,7 +268,8 @@ import java.util.List;
         for (int j = 0; j < arr1.size(); j++) {
             if (arr1.get(j).contains("Electives") || arr1.get(j).contains("No more than") || arr1.get(j).contains("Term Semester")
                     || arr1.get(j).contains("If interested") || arr1.get(j).contains("Choose") || arr1.get(j).contains("For a")
-                    || arr1.get(j).contains("Ex:") || arr1.get(j).contains("Total") || arr1.get(j).startsWith("or")) {
+                    || arr1.get(j).contains("Ex:") || arr1.get(j).contains("Total") || arr1.get(j).contains("See Requirements")
+                    || arr1.get(j).startsWith("or")) {
                 arr1.remove(j);
                 j--;
             }
@@ -284,12 +297,10 @@ import java.util.List;
                         String RegCourse = courseWithLab[0];
                         String labCourse = courseWithLab[1];
 
-                        Course newCourse1 = new Course();
-                        Course newCourse3 = new Course();
+                        Course newCourse1 = new SpecificCourse();
+                        Course newCourse3 = new SpecificCourse();
                         newCourse1 = makeStringToCourseObject(RegCourse);
                         newCourse3 = makeStringToCourseObject(labCourse);
-                        coursesReqToGraduate.add(RegCourse);
-                        coursesReqToGraduate.add(labCourse);
                         semester.addCourse(newCourse1);
                         semester.addCourse(newCourse3);
                         //System.out.println(RegCourse);
@@ -298,15 +309,23 @@ import java.util.List;
                     //course doesn't have lab
                     else{
                         boolean checkIfItsACourse = checkIfTextIsCourse(newText);
-                        Course newCourse2 = new Course();
+                        Course newCourse2;
+                        if((newText.contains("+")) || (newText.contains("Elective"))){
+                            newCourse2 = new BroadCourse(newText);
+                        }
+                        else
+                        {
+                            newCourse2 = new SpecificCourse();
+                        }
                         if(checkIfItsACourse == true) {
                             String courseWithOutDesc = takeAwayCourseDescr(newText);
                             newCourse2 = makeStringToCourseObject(courseWithOutDesc);
-                            coursesReqToGraduate.add(courseWithOutDesc);
+                            coursesReqToGraduate.add(newText);
                             semester.addCourse(newCourse2);
                         }
                         else{
                             coursesReqToGraduate.add(newText);
+                            semester.addCourse(newCourse2);
                         }
 
                         // System.out.println(newText);
@@ -336,12 +355,10 @@ import java.util.List;
                         String RegCourse = courseWithLab[0];
                         String labCourse = courseWithLab[1];
 
-                        Course newCourse1 = new Course();
-                        Course newCourse3 = new Course();
+                        Course newCourse1 = new SpecificCourse();
+                        Course newCourse3 = new SpecificCourse();
                         newCourse1 = makeStringToCourseObject(RegCourse);
                         newCourse3 = makeStringToCourseObject(labCourse);
-                        coursesReqToGraduate.add(RegCourse);
-                        coursesReqToGraduate.add(labCourse);
                         semester.addCourse(newCourse1);
                         semester.addCourse(newCourse3);
                         //System.out.println(RegCourse);
@@ -350,15 +367,24 @@ import java.util.List;
                     //course doesn't have lab
                     else{
                         boolean checkIfItsACourse = checkIfTextIsCourse(newText);
-                        Course newCourse2 = new Course();
+                        Course newCourse2;
+                        if((newText.contains("Elective")) ||(newText.contains("+"))){
+                            System.out.println("The course is " + newText + "...");
+                            newCourse2 = new BroadCourse(newText);
+                        }
+                        else
+                        {
+                            newCourse2 = new SpecificCourse();
+                        }
                         if(checkIfItsACourse == true){
                             String courseWithOutDesc = takeAwayCourseDescr(newText);
                             newCourse2 = makeStringToCourseObject(courseWithOutDesc);
-                            coursesReqToGraduate.add(courseWithOutDesc);
+                            coursesReqToGraduate.add(newText);
                             semester.addCourse(newCourse2);
                         }
                         else{
                             coursesReqToGraduate.add(newText);
+                            semester.addCourse(newCourse2);
                         }
 
 
@@ -388,7 +414,7 @@ import java.util.List;
 
     public static String removeCreditHrs(String text){
 
-        if(text.equals("Elective 3") || text.equals("Elective 1") || text.equals("Elective 4")) {
+        if(text.equals("Elective 3") || text.equals("Elective 1")) {
             return text;
         }
         //String[] arrOfText = text.split(" ");
@@ -399,9 +425,7 @@ import java.util.List;
     }
 
     public static Course makeStringToCourseObject(String courseID){
-
-        FullCourseList fullCourseList = new FullCourseList();
-        Course newCourse = fullCourseList.getCourseByID(courseID);
+        Course newCourse = FullCourseList.getCourseByID(courseID);
         return newCourse;
     }
 
@@ -448,7 +472,7 @@ import java.util.List;
         return courseIDplusAcr;
     }
 
-    public LinkedList<String> getCoursesRequiredToGraduate(){
+    public LinkedList getCoursesRequiredToGraduate(){
         return coursesReqToGraduate;
     }
 

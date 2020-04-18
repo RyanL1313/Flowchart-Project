@@ -120,7 +120,7 @@ public class Degree {
                 allPreviousCourses.add(semesterList.get(i).getCourseList().get(j));
             }
         }
-        Course courseUserWantsToAdd = makeStringToCourseObject(course);
+        SpecificCourse courseUserWantsToAdd = makeStringToCourseObject(course);
         ArrayList<ArrayList<String>> preReqCourses = courseUserWantsToAdd.getPrereqs();
         Boolean PreReqs;
         ArrayList<ArrayList<String>> newPreReqCourses = new ArrayList<ArrayList<String>>(); // This 2D array list has rows removed if the user has at least one prereq on that row
@@ -157,7 +157,7 @@ public class Degree {
             currentSemesterCourses.add(semesterList.get(semesterNumber - 1).getCourseList().get(i));
         }
 
-        Course courseUserWantsToAdd = makeStringToCourseObject(course);
+        SpecificCourse courseUserWantsToAdd = makeStringToCourseObject(course);
         ArrayList<ArrayList<String>> coReqCourses = courseUserWantsToAdd.getCoreqs();
 
         int row;
@@ -188,7 +188,7 @@ public class Degree {
 
     }
 
-    public static Course makeStringToCourseObject(String courseID){
+    public static SpecificCourse makeStringToCourseObject(String courseID){
 
         FullCourseList fullCourseList = new FullCourseList();
         return fullCourseList.getCourseByID(courseID);
@@ -204,6 +204,18 @@ public class Degree {
 //
 //
 //    }
+
+    public Course removeObtainedCredit(String courseID)
+    {
+        Course result = null;
+        for(int i =0; i < semesterList.size(); i++)
+        {
+            result = semesterList.get(i).removeCourse(courseID);
+            if(result != null)
+                return result;
+        }
+        return result;
+    }
 
 }
 

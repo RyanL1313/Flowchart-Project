@@ -84,10 +84,12 @@ public class DegreeSelectorWindow extends JFrame //implements Runnable
             // - college credits. It will implement FullCourseList and populate the JFrame with every
             // - possible course to take with a check box next to it. It is the user's responsibility to
             // - know what classes they have credit for already.
-            Planner.setMajor((String) major.getSelectedItem() + " Major");
+            String maj = major.getSelectedItem() + " Major";
+            String min = minor.getSelectedItem() + " Minor";
+            Planner.setMajor(maj);
             try
             {
-                Planner.setMinor((String) minor.getSelectedItem() + " Minor");
+                Planner.setMinor(min);
             } catch (IOException ex)
             {
                 ex.printStackTrace();
@@ -101,7 +103,6 @@ public class DegreeSelectorWindow extends JFrame //implements Runnable
     {
         initMajors();
         initMinors();
-        //initConcentrations();
 
         no.setBounds(50, 400, 150, 30);
         no.setEnabled(false);
@@ -140,16 +141,6 @@ public class DegreeSelectorWindow extends JFrame //implements Runnable
         add(minTitle);
     }
 
-    /*
-        public void initConcentrations()
-        {
-            conc.setBounds(100,300,300,50);
-            add(conc);
-            JLabel concTitle = new JLabel("Concentration");
-            concTitle.setBounds(100,270,300,20);
-            add(concTitle);
-        }
-    */
     private static void updateDropdowns()
     {
         DegreeSelectorWindow frame = new DegreeSelectorWindow();

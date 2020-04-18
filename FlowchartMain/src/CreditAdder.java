@@ -16,8 +16,7 @@ public class CreditAdder extends JFrame
         {
             String addedCourse = entryBox.getText();
             entryBox.setText("");
-            Planner.coursesAlreadyTaken.add(addedCourse);
-
+            removeCourse(addedCourse);
         }
     };
 
@@ -55,4 +54,13 @@ public class CreditAdder extends JFrame
 
         setVisible(true);
     }
+
+    public void removeCourse(String courseID)
+    {
+        String check;
+        check = Planner.removeCourse(courseID);
+        if(check == null)
+            System.out.println("Invalid course");
+    }
+
 }

@@ -1,7 +1,6 @@
 import javax.swing.*;
-import java.awt.geom.Line2D;
-import java.util.ArrayList;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class FourYearPlanDisplay extends JFrame implements PlanDisplay//, Runnable
 {
@@ -25,11 +24,12 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay//, Runnab
             for (int j = 0; j < Degree.get(i).size(); j++)
             {
                 FlowNode node;
-                if(Degree.get(i).get(j).equals("Unknown"))
+                if((Degree.get(i).get(j).contains("+")) || Degree.get(i).get(j).contains("Elective"))
                     node = new FlowNode();
                 else
                     node = new FlowNode(Degree.get(i).get(j));
-                semester.add(node,BorderLayout.CENTER);
+
+                semester.add(node, BorderLayout.CENTER);
                 node.setVisible(true);
                 chart.add(semester);
             }
@@ -37,7 +37,7 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay//, Runnab
         JScrollPane pane = new JScrollPane(chart);
         pane.getVerticalScrollBar().setUnitIncrement(20);
         pane.setPreferredSize(new Dimension(1300,605));
-        add(pane,BorderLayout.CENTER);
+        add(pane, BorderLayout.CENTER);
     }
 
     public void removeSemester(int yLow, int yHigh)   // erases all nodes within y range.
