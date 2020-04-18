@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -13,6 +15,7 @@ public class Planner {
     public static String CONCENTRATION;
     public static ArrayList<String> coursesAlreadyTaken = new ArrayList<String>();
     public static Degree deg = new Degree();
+    private static String courseGroupsTextFileLocation = "./List of Courses/Various Courses"; // Used for reading in Humanities course IDs, for example
 
     /**
      * Uses the findCourse method in FullCourseList to check if a course ID entered by the user is valid or not, then removes it from
@@ -315,7 +318,227 @@ public class Planner {
         return convertArrayListToArray(CS400CourseList); // Return primitive array with necessary course IDs
     }
 
-    //public static
+    /**
+     * Getter for literature course IDs
+     * Used by FourYearPlanDisplay's dropdowns.
+     * Just three courses count for a literature credit at UAH.
+     * @return List of literature course IDs
+     */
+    public static String[] getLiteratureCourseIDs() {
+        final int litCourses = 3; // 3 literature courses offered at UAH
+        String[] literatureCourseList = new String[litCourses];
+
+        literatureCourseList[0] = "EH 207"; literatureCourseList[1] = "EH 208"; literatureCourseList[2] = "EH 242";
+
+        return literatureCourseList;
+
+    }
+
+    /**
+     * Getter for History course IDs
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of History course IDs
+     */
+    public static String[] getHistoryCourseIDs() {
+        File courseFile = new File(courseGroupsTextFileLocation); // File for reading
+        Scanner scanCourseFile;
+        String tempLine;
+        ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+
+        try {
+            scanCourseFile = new Scanner(courseFile); // Scanner to read the file
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        while (scanCourseFile.hasNext()) {
+            tempLine = scanCourseFile.nextLine();
+            if (tempLine.equals("History")) // Start reading from here
+                break; // Go to next loop
+        }
+
+        tempLine = scanCourseFile.nextLine();
+        while (scanCourseFile.hasNext() && !tempLine.equals("Fine Arts") && !tempLine.equals("Lab Science") && !tempLine.equals("Technical Elective") && !tempLine.equals("Humanities") && !tempLine.equals("Social and Behavioral Science")) {
+            courseIDs.add(tempLine);
+
+            tempLine = scanCourseFile.nextLine();
+        }
+
+        return convertArrayListToArray(courseIDs);
+    }
+
+    /**
+     * Getter for fine arts course IDs
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of fine arts course IDs
+     */
+    public static String[] getFineArtsCourseIDs() {
+        File courseFile = new File(courseGroupsTextFileLocation); // File for reading
+        Scanner scanCourseFile;
+        String tempLine;
+        ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+
+        try {
+            scanCourseFile = new Scanner(courseFile); // Scanner to read the file
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        while (scanCourseFile.hasNext()) {
+            tempLine = scanCourseFile.nextLine();
+            if (tempLine.equals("Fine Arts")) // Start reading from here
+                break; // Go to next loop
+        }
+
+        tempLine = scanCourseFile.nextLine();
+        while (scanCourseFile.hasNext() && !tempLine.equals("Lab Science") && !tempLine.equals("Technical Elective") && !tempLine.equals("Humanities") && !tempLine.equals("Social and Behavioral Science")) {
+            courseIDs.add(tempLine);
+
+            tempLine = scanCourseFile.nextLine();
+        }
+
+        return convertArrayListToArray(courseIDs);
+    }
+
+    /**
+     * Getter for Lab Science course IDs
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of lab science course IDs
+     */
+    public static String[] getLabScienceCourseIDs() {
+        File courseFile = new File(courseGroupsTextFileLocation); // File for reading
+        Scanner scanCourseFile;
+        String tempLine;
+        ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+
+        try {
+            scanCourseFile = new Scanner(courseFile); // Scanner to read the file
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        while (scanCourseFile.hasNext()) {
+            tempLine = scanCourseFile.nextLine();
+            if (tempLine.equals("Lab Science")) // Start reading from here
+                break; // Go to next loop
+        }
+
+        tempLine = scanCourseFile.nextLine();
+        while (scanCourseFile.hasNext() && !tempLine.equals("Technical Elective") && !tempLine.equals("Humanities") && !tempLine.equals("Social and Behavioral Science")) {
+            courseIDs.add(tempLine);
+
+            tempLine = scanCourseFile.nextLine();
+        }
+
+        return convertArrayListToArray(courseIDs);
+    }
+
+    /**
+     * Getter for technical elective course IDs
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of technical elective course IDs for CS courses
+     */
+    public static String[] getTechnicalElectiveCourseIDs() {
+        File courseFile = new File(courseGroupsTextFileLocation); // File for reading
+        Scanner scanCourseFile;
+        String tempLine;
+        ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+
+        try {
+            scanCourseFile = new Scanner(courseFile); // Scanner to read the file
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        while (scanCourseFile.hasNext()) {
+            tempLine = scanCourseFile.nextLine();
+            if (tempLine.equals("Technical Elective")) // Start reading from here
+                break; // Go to next loop
+        }
+
+        tempLine = scanCourseFile.nextLine();
+        while (scanCourseFile.hasNext() && !tempLine.equals("Humanities") && !tempLine.equals("Social and Behavioral Science")) {
+            courseIDs.add(tempLine);
+
+            tempLine = scanCourseFile.nextLine();
+        }
+
+        return convertArrayListToArray(courseIDs);
+    }
+
+    /**
+     * Getter for humanities course IDs
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of humanities course IDs
+     */
+    public static String[] getHumanitiesCourseIDs() {
+        File courseFile = new File(courseGroupsTextFileLocation); // File for reading
+        Scanner scanCourseFile;
+        String tempLine;
+        ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+
+        try {
+            scanCourseFile = new Scanner(courseFile); // Scanner to read the file
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        while (scanCourseFile.hasNext()) {
+            tempLine = scanCourseFile.nextLine();
+            if (tempLine.equals("Humanities")) // Start reading from here
+                break; // Go to next loop
+        }
+
+        tempLine = scanCourseFile.nextLine();
+        while (scanCourseFile.hasNext() && !tempLine.equals("Social and Behavioral Science")) {
+            courseIDs.add(tempLine);
+
+            tempLine = scanCourseFile.nextLine();
+        }
+
+        return convertArrayListToArray(courseIDs);
+    }
+
+    /**
+     * Getter for social and behavioral science course IDs
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of social and behavioral science course IDs
+     */
+    public static String[] getSocialAndBehavioralSciencesCourseIDs() {
+        File courseFile = new File(courseGroupsTextFileLocation); // File for reading
+        Scanner scanCourseFile;
+        String tempLine;
+        ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+
+        try {
+            scanCourseFile = new Scanner(courseFile); // Scanner to read the file
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        while (scanCourseFile.hasNext()) {
+            tempLine = scanCourseFile.nextLine();
+            if (tempLine.equals("Social and Behavioral Science")) // Start reading from here
+                break; // Go to next loop
+        }
+
+        tempLine = scanCourseFile.nextLine();
+        while (scanCourseFile.hasNext()) {
+            courseIDs.add(tempLine);
+
+            tempLine = scanCourseFile.nextLine();
+        }
+
+        courseIDs.add(tempLine); // To read in last course of file
+
+        return convertArrayListToArray(courseIDs);
+    }
 
     /**
      * Converts the Degree object into an ArrayList<ArrayList<String>> for the PlanDisplays
