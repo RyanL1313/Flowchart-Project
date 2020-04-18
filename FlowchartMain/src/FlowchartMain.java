@@ -6,8 +6,9 @@ public class FlowchartMain {
         System.out.println("This is the main class for our whole project. Just testing things out.");
         FullCourseList courseList = new FullCourseList(); // CourseList contains a hashmap of all of UAH's courses which is used throughout this program
         ArrayList<Semester> degreeSemesters = new ArrayList<>();
-        Degree degreeObj = new Degree();
+        //Degree degreeObj = new Degree();
         Planner plan = new Planner();
+/*
         Semester tempSemester = new Semester();
         tempSemester.addCourse(FullCourseList.getCourseByID("EH 101"));
         tempSemester.addCourse(FullCourseList.getCourseByID("CS 105"));
@@ -22,16 +23,18 @@ public class FlowchartMain {
         tempSemester = new Semester();
         //tempSemester.addCourse(FullCourseList.getCourseByID("CS 221"));
         degreeSemesters.add(tempSemester);
-
+*/
        // courseList.printFullCourseList();
-        degreeObj.setSemesterList(degreeSemesters);
+        //degreeObj.setSemesterList(degreeSemesters);
         //String errorMessage = plan.electivePrereqAddError("CS 221", 3);
-        plan.deg = degreeObj;
+        //plan.deg = degreeObj;
         //plan.drawFourYearPlanDisplay();
-        FourYearPlanDisplay display = new FourYearPlanDisplay();
-        display.main(null);
+        //FourYearPlanDisplay display = new FourYearPlanDisplay();
+        //display.main(null);
 
-       /* for (ArrayList<String> orRelationships : prereqsNeeded) {
+        plan.drawSelectorWindow();
+
+        /* for (ArrayList<String> orRelationships : prereqsNeeded) {
             Iterator<String> courseIterator = orRelationships.iterator();
             while (courseIterator.hasNext()) {
                 System.out.printf(courseIterator.next() + " or ");
