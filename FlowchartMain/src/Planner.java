@@ -111,7 +111,7 @@ public class Planner {
                     i--;
                 }
         String[] electivesArray = new String[electiveList.size() + 1];
-        electivesArray[0] = "EMPTY";
+        electivesArray[0] = "BACK";
         for (int i = 1; i < electiveList.size() + 1; i++)
         {
             electivesArray[i] = electiveList.get(i - 1); // The array and array list are offset by 1 because of the EMPTY slot in the array
