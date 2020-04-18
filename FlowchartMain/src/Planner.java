@@ -590,4 +590,11 @@ public class Planner {
         return newPrimArray;
     }
 
+    //TODO logic about the classes that the user enters if they have previous classes
+
+    //TODO send course that user picked from drop-down menu to removeCourseFromCoursesNeededToGraduate in DegreeCompletion class
+
+    //TODO in the case the user changes their mind and picks another course, we send it to removeCourseFromCoursesNeededToGraduate and addBackInCourse in DegreeCompletion class
+
+    //TODO check to see if the coursesNeededToGraduate in DegreeCompletion class is empty. If it is, then degree is complete. If not, then send back the leftover courses in the linked list
 }
