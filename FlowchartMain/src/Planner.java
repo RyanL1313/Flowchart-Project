@@ -157,7 +157,7 @@ public class Planner {
      * Used by FourYearPlanDisplay's dropdowns.
      * @return List of course IDS for MA 200+ courses
      */
-    public String[] getMA200PlusCourseIDs() {
+    public static String[] getMA200PlusCourseIDs() {
         LinkedList<SpecificCourse> MACourses = FullCourseList.getFullCourseList().get("MA"); // All MA courses
         Iterator<SpecificCourse> courseIterator = MACourses.iterator();
         ArrayList<String> MA200CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
@@ -185,7 +185,7 @@ public class Planner {
      * Used by FourYearPlanDisplay's dropdowns.
      * @return List of course IDS for CS 200+ courses
      */
-    public String[] getCS200PlusCourseIDs() {
+    public static String[] getCS200PlusCourseIDs() {
         LinkedList<SpecificCourse> CSCourses = FullCourseList.getFullCourseList().get("CS"); // All CS courses
         Iterator<SpecificCourse> courseIterator = CSCourses.iterator();
         ArrayList<String> CS200CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
@@ -206,6 +206,116 @@ public class Planner {
 
         return convertArrayListToArray(CS200CourseList); // Return primitive array with necessary course IDs
     }
+
+    /**
+     * Retrieves all MA 300+ courses and puts their course IDs into an array.
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of course IDS for MA 300+ courses
+     */
+    public static String[] getMA300PlusCourseIDs() {
+        LinkedList<SpecificCourse> MACourses = FullCourseList.getFullCourseList().get("MA"); // All MA courses
+        Iterator<SpecificCourse> courseIterator = MACourses.iterator();
+        ArrayList<String> MA300CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
+
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next(); // Get the next course in the linked list
+            if (NextCourse.getCourseID().contains("MA 3")) { // Start looping at this point to get 300+ courses
+                MA300CourseList.add(NextCourse.getCourseID()); // Store this course now; it gets wiped out later
+                break; // Break out of the while loop because now we need to store course IDs
+            }
+        }
+
+        // New loop to start storing course IDs into the array list
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next();
+            MA300CourseList.add(NextCourse.getCourseID());
+        }
+
+        return convertArrayListToArray(MA300CourseList); // Return primitive array with necessary course IDs
+    }
+
+    /**
+     * Retrieves all CS 300+ courses and puts their course IDs into an array.
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of course IDS for CS 300+ courses
+     */
+    public static String[] getCS300PlusCourseIDs() {
+        LinkedList<SpecificCourse> CSCourses = FullCourseList.getFullCourseList().get("CS"); // All CS courses
+        Iterator<SpecificCourse> courseIterator = CSCourses.iterator();
+        ArrayList<String> CS300CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
+
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next(); // Get the next course in the linked list
+            if (NextCourse.getCourseID().contains("CS 3")) { // Start looping at this point to get 300+ courses
+                CS300CourseList.add(NextCourse.getCourseID()); // Store this course now; it gets wiped out later
+                break; // Break out of the while loop because now we need to store course IDs
+            }
+        }
+
+        // New loop to start storing course IDs into the array list
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next();
+            CS300CourseList.add(NextCourse.getCourseID());
+        }
+
+        return convertArrayListToArray(CS300CourseList); // Return primitive array with necessary course IDs
+    }
+
+    /**
+     * Retrieves all MA 400+ courses and puts their course IDs into an array.
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of course IDS for MA 400+ courses
+     */
+    public static String[] getMA400PlusCourseIDs() {
+        LinkedList<SpecificCourse> MACourses = FullCourseList.getFullCourseList().get("MA"); // All MA courses
+        Iterator<SpecificCourse> courseIterator = MACourses.iterator();
+        ArrayList<String> MA400CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
+
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next(); // Get the next course in the linked list
+            if (NextCourse.getCourseID().contains("MA 4")) { // Start looping at this point to get 400+ courses
+                MA400CourseList.add(NextCourse.getCourseID()); // Store this course now; it gets wiped out later
+                break; // Break out of the while loop because now we need to store course IDs
+            }
+        }
+
+        // New loop to start storing course IDs into the array list
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next();
+            MA400CourseList.add(NextCourse.getCourseID());
+        }
+
+        return convertArrayListToArray(MA400CourseList); // Return primitive array with necessary course IDs
+    }
+
+    /**
+     * Retrieves all CS 400+ courses and puts their course IDs into an array.
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of course IDS for CS 400+ courses
+     */
+    public static String[] getCS400PlusCourseIDs() {
+        LinkedList<SpecificCourse> CSCourses = FullCourseList.getFullCourseList().get("CS"); // All CS courses
+        Iterator<SpecificCourse> courseIterator = CSCourses.iterator();
+        ArrayList<String> CS400CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
+
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next(); // Get the next course in the linked list
+            if (NextCourse.getCourseID().contains("CS 4")) { // Start looping at this point to get 400+ courses
+                CS400CourseList.add(NextCourse.getCourseID()); // Store this course now; it gets wiped out later
+                break; // Break out of the while loop because now we need to store course IDs
+            }
+        }
+
+        // New loop to start storing course IDs into the array list
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next();
+            CS400CourseList.add(NextCourse.getCourseID());
+        }
+
+        return convertArrayListToArray(CS400CourseList); // Return primitive array with necessary course IDs
+    }
+
+    //public static
 
     /**
      * Converts the Degree object into an ArrayList<ArrayList<String>> for the PlanDisplays
@@ -246,7 +356,7 @@ public class Planner {
      * @param tempList The ArrayList to be converted to an array
      * @return A primitive array with the given information
      */
-    private String[] convertArrayListToArray(ArrayList<String> tempList) {
+    private static String[] convertArrayListToArray(ArrayList<String> tempList) {
         Iterator<String> tempListIterator = tempList.iterator();
         String[] newPrimArray = new String[tempList.size()]; // Array with the exact amount of space necessary for copying
         int index = 0;
