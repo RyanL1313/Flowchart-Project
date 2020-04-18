@@ -12,7 +12,7 @@ import java.util.LinkedList;
 public class DegreeCompletion {
     private static String major;
     private static String minor;
-    private LinkedList<String> coursesNeededToGraduate;
+    private static LinkedList<String> coursesNeededToGraduate;
     private LinkedList<String> coursesRequiredByMajorAndOrMinor;
     private LinkedList<String> nonSpecificCoursesRequiredByMajorOrMinor;
     static DegreeParser degreeParser = new DegreeParser();
