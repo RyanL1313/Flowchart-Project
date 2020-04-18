@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -12,7 +11,7 @@ import java.util.LinkedList;
 public class DegreeCompletion {
     private static String major;
     private static String minor;
-    private LinkedList<String> coursesNeededToGraduate;
+    private static LinkedList<String> coursesNeededToGraduate;
     private LinkedList<String> coursesRequiredByMajorAndOrMinor;
     private LinkedList<String> nonSpecificCoursesRequiredByMajorOrMinor;
     static DegreeParser degreeParser = new DegreeParser();
@@ -36,19 +35,19 @@ public class DegreeCompletion {
         coursesNeededToGraduate = degreeParser.getCoursesRequiredToGraduate();
     }
 
-    public void setCoursesRequiredByMajorAndOrMinorAndNonSpecificCoursesRequiredByMajorAndOrMinor(){
-        coursesRequiredByMajorAndOrMinor = new LinkedList<>();
-        nonSpecificCoursesRequiredByMajorOrMinor = new LinkedList<>();
-
-        for(String course: coursesNeededToGraduate){
-            if(checkIfTextIsCourse(course) == true){
-               this.coursesRequiredByMajorAndOrMinor.add(course);
-            }
-            else{
-                this.nonSpecificCoursesRequiredByMajorOrMinor.add(course);
-            }
-        }
-    }
+//    public void setCoursesRequiredByMajorAndOrMinorAndNonSpecificCoursesRequiredByMajorAndOrMinor(){
+//        coursesRequiredByMajorAndOrMinor = new LinkedList<>();
+//        nonSpecificCoursesRequiredByMajorOrMinor = new LinkedList<>();
+//
+//        for(String course: coursesNeededToGraduate){
+//            if(checkIfTextIsCourse(course) == true){
+//               this.coursesRequiredByMajorAndOrMinor.add(course);
+//            }
+//            else{
+//                this.nonSpecificCoursesRequiredByMajorOrMinor.add(course);
+//            }
+//        }
+//    }
 
     public LinkedList<String> getCoursesNeededToGraduate(){
         return coursesNeededToGraduate;
@@ -60,12 +59,14 @@ public class DegreeCompletion {
     //debugging purposes
     public LinkedList<String> getNonSpecificCoursesRequiredByMajorOrMinor(){return nonSpecificCoursesRequiredByMajorOrMinor;}
 
-    public static String[] coursesListAcronyms = {"ACC", "AMS","ARH", "ARS","AST", "ATS", "BYS","BLS","CHE","CH","CE","CM","CPE","CS",
-            "ECH","ESS","ECN","ED","EDC","EE","ENG", "EH","EHL","FIN", "GY","GS","HPE","HY","ISE","IS","KIN","MGT",
-            "MSC","MS","MKT","MA","MAE","ME","MIL","MU","MUA","MUE","MUJ","NUR","OPE","OPT","PHL","PH","PSC","PRO",
-            "PY","SOC","ST","TH","WGS","WLC"};
-
-    public boolean isMajorComplete(Degree degree) throws IOException {
+    /**
+     * Checks if the degree is complete by making sure all of the classes inside the semesters
+     * are valid and then removes the courses from coursesNeededToGraduate.
+     * @return LinkedList<Strings> of courses that are still needed to graduate OR it can be empty meaning
+     * the degree is completed
+     * @param degree the degree the user created
+     */
+    public LinkedList<String> isDegreeComplete(Degree degree) throws IOException {
 
         boolean majorComplete = true;
 
@@ -74,41 +75,24 @@ public class DegreeCompletion {
        for(Semester singleSemester: degreeSemesters){
            for(Course singleCourse: singleSemester.getCourseList()){
                String singleCourseID = singleCourse.getCourseID();
-                    boolean courseRemoved = false;
                     //check to see if its in coursesRequiredByMajorAndOrMinor list
                    for(String singleCourseFromMajorOrMinorList: coursesRequiredByMajorAndOrMinor){
                        if(singleCourseID.equals(singleCourseFromMajorOrMinorList)){
                            coursesNeededToGraduate.removeFirstOccurrence(singleCourseID);
-                           courseRemoved = true;
+                           break;
                        }
-                   }
-                   if(courseRemoved == false){
-                        //check if it's a lab science
-                       //break
-
-                       //check if it's an elective
-
-                       //check if it's FYE 101
-
-                       //check if it's MA 200+ level course
-
-
-                       //check if it's
                    }
 
            }
        }
 
-       if(coursesNeededToGraduate.isEmpty()){
-           majorComplete = true;
-       }
-       else{
-           majorComplete = false;
-       }
-
-       return majorComplete;
+       return coursesNeededToGraduate;
     }
 
+    /**
+     * Checks if the course is an already required course.
+     * @return true or false of whether the course is an already required course
+     */
     public boolean checkIfItsAnAlreadyRequiredCourse(String course){
         boolean alreadyRequiredCourse =  false;
         for(String singleReqCourse: coursesRequiredByMajorAndOrMinor){
@@ -120,111 +104,26 @@ public class DegreeCompletion {
         return alreadyRequiredCourse;
     }
 
-    public boolean checkIfElectiveIsValid(String elective){
-        //Electives can be taken from any department and do not have to be taken in your major or minor.
-        //No more than 4 credit hours of 100 level HPE courses can count toward degree requirements.
-        boolean validCourse = true;
-
-        return validCourse;
-    }
-    public boolean checkIf200PlusCourseIsValid(String course){
-        boolean validCourse = true;
-
-        for(String singleNonSpecificCourse: nonSpecificCoursesRequiredByMajorOrMinor){
-            String[] arrOfCourse = course.split(" ");
-            String[] arrOfSingleNonSpecificCourse = singleNonSpecificCourse.split(" ");
-
-            //remove the first occurrance of that 300+ course with the matching acronym
-            if(arrOfCourse[0].equals(arrOfSingleNonSpecificCourse[0])){
-                coursesNeededToGraduate.removeFirstOccurrence(arrOfSingleNonSpecificCourse + " 200+");
-                validCourse = true;
-                break;
-            }
-            else{
-                validCourse = false;
-            }
-
-        }
-        return validCourse;
-    }
-
-    public boolean checkIf300PlusCourseIsValid(String course){
-    //Choose CS courses at the 300 level not listed in required courses.
-        boolean validCourse = true;
-
-        for(String singleNonSpecificCourse: nonSpecificCoursesRequiredByMajorOrMinor){
-            String[] arrOfCourse = course.split(" ");
-            String[] arrOfSingleNonSpecificCourse = singleNonSpecificCourse.split(" ");
-
-            //remove the first occurrance of that 300+ course with the matching acronym
-            if(arrOfCourse[0].equals(arrOfSingleNonSpecificCourse[0])){
-                coursesNeededToGraduate.removeFirstOccurrence(arrOfSingleNonSpecificCourse + " 300+");
-                validCourse = true;
-                break;
-            }
-            else{
-                validCourse = false;
-            }
-
-        }
-        return validCourse;
-    }
-
-    public boolean checkIf400PlusCourseIsValid(String course){
-        boolean validCourse = true;
-
-        for(String singleNonSpecificCourse: nonSpecificCoursesRequiredByMajorOrMinor){
-            String[] arrOfCourse = course.split(" ");
-            String[] arrOfSingleNonSpecificCourse = singleNonSpecificCourse.split(" ");
-
-            //remove the first occurrance of that 300+ course with the matching acronym
-            if(arrOfCourse[0].equals(arrOfSingleNonSpecificCourse[0])){
-                coursesNeededToGraduate.removeFirstOccurrence(arrOfSingleNonSpecificCourse + " 400+");
-                validCourse = true;
-                break;
-            }
-            else{
-                validCourse = false;
-            }
-
-        }
-        return validCourse;
-    }
-
-    public boolean checkIfHumFineArtOrLiteratureIsValid(String course){
-
-        boolean validCourse = true;
-
-
-
-        return validCourse;
-    }
-    public boolean checkIfTechnicalElectiveIsValid(String course){
-        //Choose any 300+ level or higher course in the College of Science, IS 400+ course, CPE 412, CPE 436, or PHL 320
-        boolean validCourse = true;
-
-        return validCourse;
-    }
-
-    public boolean checkIfTextIsCourse(String text){
-
-        boolean trueOrFalse = false;
-        String[] arr = text.split(" ");
-        for (int i = 0; i < coursesListAcronyms.length; i++) {
-            if (arr[0].equals(coursesListAcronyms[i])) {
-                if (text.contains("+")) {
-                    trueOrFalse = false;
-                    break;
-                }
-                trueOrFalse = true;
-                break;
-
+    /**
+     * Whenever the user selects a course from the drop-down options, that course will be sent back to
+     * here and removed from coursesNeedToGraduate
+     * @param typeOfCourse type of course the user selects
+     */
+    public void removeCourseFromCoursesNeededToGraduate(String typeOfCourse){
+        for(int i = 0; i < coursesNeededToGraduate.size(); i++){
+            if(typeOfCourse.equals(coursesNeededToGraduate.get(i))){
+                coursesNeededToGraduate.removeFirstOccurrence(coursesNeededToGraduate.get(i));
             }
         }
-        return trueOrFalse;
     }
-
-
+    /**
+     * In case that the user changes their mind about the course they selected, the type of course
+     * previously selected is added back to coursesNeededToGraduate
+     * @param typeOfCourse type of course the user selects
+     */
+    public void addBackInCourse(String typeOfCourse){
+        coursesNeededToGraduate.add(typeOfCourse);
+    }
 
 
 

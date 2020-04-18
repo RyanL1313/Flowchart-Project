@@ -425,9 +425,7 @@ public class DegreeParser {
     }
 
     public static Course makeStringToCourseObject(String courseID){
-
-        FullCourseList fullCourseList = new FullCourseList();
-        Course newCourse = fullCourseList.getCourseByID(courseID);
+        Course newCourse = FullCourseList.getCourseByID(courseID);
         return newCourse;
     }
 

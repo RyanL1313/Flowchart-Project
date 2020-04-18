@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -13,6 +15,7 @@ public class Planner {
     public static String CONCENTRATION;
     public static ArrayList<String> coursesAlreadyTaken = new ArrayList<String>();
     public static Degree deg = new Degree();
+    private static String courseGroupsTextFileLocation = "./List of Courses/Various Courses"; // Used for reading in Humanities course IDs, for example
 
     /**
      * Uses the findCourse method in FullCourseList to check if a course ID entered by the user is valid or not, then removes it from
@@ -153,6 +156,391 @@ public class Planner {
     }
 
     /**
+     * Retrieves all MA 200+ courses and puts their course IDs into an array.
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of course IDS for MA 200+ courses
+     */
+    public static String[] getMA200PlusCourseIDs() {
+        LinkedList<SpecificCourse> MACourses = FullCourseList.getFullCourseList().get("MA"); // All MA courses
+        Iterator<SpecificCourse> courseIterator = MACourses.iterator();
+        ArrayList<String> MA200CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
+
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next(); // Get the next course in the linked list
+            if (NextCourse.getCourseID().contains("MA 2")) { // Start looping at this point to get 200+ courses
+                MA200CourseList.add(NextCourse.getCourseID()); // Store this course now; it gets wiped out later
+                break; // Break out of the while loop because now we need to store course IDs
+            }
+        }
+
+        // New loop to start storing course IDs into the array list
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next();
+            MA200CourseList.add(NextCourse.getCourseID());
+        }
+
+        return convertArrayListToArray(MA200CourseList); // Return primitive array with necessary course IDs
+
+    }
+
+    /**
+     * Retrieves all CS 200+ courses and puts their course IDs into an array.
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of course IDS for CS 200+ courses
+     */
+    public static String[] getCS200PlusCourseIDs() {
+        LinkedList<SpecificCourse> CSCourses = FullCourseList.getFullCourseList().get("CS"); // All CS courses
+        Iterator<SpecificCourse> courseIterator = CSCourses.iterator();
+        ArrayList<String> CS200CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
+
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next(); // Get the next course in the linked list
+            if (NextCourse.getCourseID().contains("CS 2")) { // Start looping at this point to get 200+ courses
+                CS200CourseList.add(NextCourse.getCourseID()); // Store this course now; it gets wiped out later
+                break; // Break out of the while loop because now we need to store course IDs
+            }
+        }
+
+        // New loop to start storing course IDs into the array list
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next();
+            CS200CourseList.add(NextCourse.getCourseID());
+        }
+
+        return convertArrayListToArray(CS200CourseList); // Return primitive array with necessary course IDs
+    }
+
+    /**
+     * Retrieves all MA 300+ courses and puts their course IDs into an array.
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of course IDS for MA 300+ courses
+     */
+    public static String[] getMA300PlusCourseIDs() {
+        LinkedList<SpecificCourse> MACourses = FullCourseList.getFullCourseList().get("MA"); // All MA courses
+        Iterator<SpecificCourse> courseIterator = MACourses.iterator();
+        ArrayList<String> MA300CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
+
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next(); // Get the next course in the linked list
+            if (NextCourse.getCourseID().contains("MA 3")) { // Start looping at this point to get 300+ courses
+                MA300CourseList.add(NextCourse.getCourseID()); // Store this course now; it gets wiped out later
+                break; // Break out of the while loop because now we need to store course IDs
+            }
+        }
+
+        // New loop to start storing course IDs into the array list
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next();
+            MA300CourseList.add(NextCourse.getCourseID());
+        }
+
+        return convertArrayListToArray(MA300CourseList); // Return primitive array with necessary course IDs
+    }
+
+    /**
+     * Retrieves all CS 300+ courses and puts their course IDs into an array.
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of course IDS for CS 300+ courses
+     */
+    public static String[] getCS300PlusCourseIDs() {
+        LinkedList<SpecificCourse> CSCourses = FullCourseList.getFullCourseList().get("CS"); // All CS courses
+        Iterator<SpecificCourse> courseIterator = CSCourses.iterator();
+        ArrayList<String> CS300CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
+
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next(); // Get the next course in the linked list
+            if (NextCourse.getCourseID().contains("CS 3")) { // Start looping at this point to get 300+ courses
+                CS300CourseList.add(NextCourse.getCourseID()); // Store this course now; it gets wiped out later
+                break; // Break out of the while loop because now we need to store course IDs
+            }
+        }
+
+        // New loop to start storing course IDs into the array list
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next();
+            CS300CourseList.add(NextCourse.getCourseID());
+        }
+
+        return convertArrayListToArray(CS300CourseList); // Return primitive array with necessary course IDs
+    }
+
+    /**
+     * Retrieves all MA 400+ courses and puts their course IDs into an array.
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of course IDS for MA 400+ courses
+     */
+    public static String[] getMA400PlusCourseIDs() {
+        LinkedList<SpecificCourse> MACourses = FullCourseList.getFullCourseList().get("MA"); // All MA courses
+        Iterator<SpecificCourse> courseIterator = MACourses.iterator();
+        ArrayList<String> MA400CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
+
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next(); // Get the next course in the linked list
+            if (NextCourse.getCourseID().contains("MA 4")) { // Start looping at this point to get 400+ courses
+                MA400CourseList.add(NextCourse.getCourseID()); // Store this course now; it gets wiped out later
+                break; // Break out of the while loop because now we need to store course IDs
+            }
+        }
+
+        // New loop to start storing course IDs into the array list
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next();
+            MA400CourseList.add(NextCourse.getCourseID());
+        }
+
+        return convertArrayListToArray(MA400CourseList); // Return primitive array with necessary course IDs
+    }
+
+    /**
+     * Retrieves all CS 400+ courses and puts their course IDs into an array.
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of course IDS for CS 400+ courses
+     */
+    public static String[] getCS400PlusCourseIDs() {
+        LinkedList<SpecificCourse> CSCourses = FullCourseList.getFullCourseList().get("CS"); // All CS courses
+        Iterator<SpecificCourse> courseIterator = CSCourses.iterator();
+        ArrayList<String> CS400CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
+
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next(); // Get the next course in the linked list
+            if (NextCourse.getCourseID().contains("CS 4")) { // Start looping at this point to get 400+ courses
+                CS400CourseList.add(NextCourse.getCourseID()); // Store this course now; it gets wiped out later
+                break; // Break out of the while loop because now we need to store course IDs
+            }
+        }
+
+        // New loop to start storing course IDs into the array list
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next();
+            CS400CourseList.add(NextCourse.getCourseID());
+        }
+
+        return convertArrayListToArray(CS400CourseList); // Return primitive array with necessary course IDs
+    }
+
+    /**
+     * Getter for literature course IDs
+     * Used by FourYearPlanDisplay's dropdowns.
+     * Just three courses count for a literature credit at UAH.
+     * @return List of literature course IDs
+     */
+    public static String[] getLiteratureCourseIDs() {
+        final int litCourses = 3; // 3 literature courses offered at UAH
+        String[] literatureCourseList = new String[litCourses];
+
+        literatureCourseList[0] = "EH 207"; literatureCourseList[1] = "EH 208"; literatureCourseList[2] = "EH 242";
+
+        return literatureCourseList;
+
+    }
+
+    /**
+     * Getter for History course IDs
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of History course IDs
+     */
+    public static String[] getHistoryCourseIDs() {
+        File courseFile = new File(courseGroupsTextFileLocation); // File for reading
+        Scanner scanCourseFile;
+        String tempLine;
+        ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+
+        try {
+            scanCourseFile = new Scanner(courseFile); // Scanner to read the file
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        while (scanCourseFile.hasNext()) {
+            tempLine = scanCourseFile.nextLine();
+            if (tempLine.equals("History")) // Start reading from here
+                break; // Go to next loop
+        }
+
+        tempLine = scanCourseFile.nextLine();
+        while (scanCourseFile.hasNext() && !tempLine.equals("Fine Arts") && !tempLine.equals("Lab Science") && !tempLine.equals("Technical Elective") && !tempLine.equals("Humanities") && !tempLine.equals("Social and Behavioral Science")) {
+            courseIDs.add(tempLine);
+
+            tempLine = scanCourseFile.nextLine();
+        }
+
+        return convertArrayListToArray(courseIDs);
+    }
+
+    /**
+     * Getter for fine arts course IDs
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of fine arts course IDs
+     */
+    public static String[] getFineArtsCourseIDs() {
+        File courseFile = new File(courseGroupsTextFileLocation); // File for reading
+        Scanner scanCourseFile;
+        String tempLine;
+        ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+
+        try {
+            scanCourseFile = new Scanner(courseFile); // Scanner to read the file
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        while (scanCourseFile.hasNext()) {
+            tempLine = scanCourseFile.nextLine();
+            if (tempLine.equals("Fine Arts")) // Start reading from here
+                break; // Go to next loop
+        }
+
+        tempLine = scanCourseFile.nextLine();
+        while (scanCourseFile.hasNext() && !tempLine.equals("Lab Science") && !tempLine.equals("Technical Elective") && !tempLine.equals("Humanities") && !tempLine.equals("Social and Behavioral Science")) {
+            courseIDs.add(tempLine);
+
+            tempLine = scanCourseFile.nextLine();
+        }
+
+        return convertArrayListToArray(courseIDs);
+    }
+
+    /**
+     * Getter for Lab Science course IDs
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of lab science course IDs
+     */
+    public static String[] getLabScienceCourseIDs() {
+        File courseFile = new File(courseGroupsTextFileLocation); // File for reading
+        Scanner scanCourseFile;
+        String tempLine;
+        ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+
+        try {
+            scanCourseFile = new Scanner(courseFile); // Scanner to read the file
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        while (scanCourseFile.hasNext()) {
+            tempLine = scanCourseFile.nextLine();
+            if (tempLine.equals("Lab Science")) // Start reading from here
+                break; // Go to next loop
+        }
+
+        tempLine = scanCourseFile.nextLine();
+        while (scanCourseFile.hasNext() && !tempLine.equals("Technical Elective") && !tempLine.equals("Humanities") && !tempLine.equals("Social and Behavioral Science")) {
+            courseIDs.add(tempLine);
+
+            tempLine = scanCourseFile.nextLine();
+        }
+
+        return convertArrayListToArray(courseIDs);
+    }
+
+    /**
+     * Getter for technical elective course IDs
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of technical elective course IDs for CS courses
+     */
+    public static String[] getTechnicalElectiveCourseIDs() {
+        File courseFile = new File(courseGroupsTextFileLocation); // File for reading
+        Scanner scanCourseFile;
+        String tempLine;
+        ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+
+        try {
+            scanCourseFile = new Scanner(courseFile); // Scanner to read the file
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        while (scanCourseFile.hasNext()) {
+            tempLine = scanCourseFile.nextLine();
+            if (tempLine.equals("Technical Elective")) // Start reading from here
+                break; // Go to next loop
+        }
+
+        tempLine = scanCourseFile.nextLine();
+        while (scanCourseFile.hasNext() && !tempLine.equals("Humanities") && !tempLine.equals("Social and Behavioral Science")) {
+            courseIDs.add(tempLine);
+
+            tempLine = scanCourseFile.nextLine();
+        }
+
+        return convertArrayListToArray(courseIDs);
+    }
+
+    /**
+     * Getter for humanities course IDs
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of humanities course IDs
+     */
+    public static String[] getHumanitiesCourseIDs() {
+        File courseFile = new File(courseGroupsTextFileLocation); // File for reading
+        Scanner scanCourseFile;
+        String tempLine;
+        ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+
+        try {
+            scanCourseFile = new Scanner(courseFile); // Scanner to read the file
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        while (scanCourseFile.hasNext()) {
+            tempLine = scanCourseFile.nextLine();
+            if (tempLine.equals("Humanities")) // Start reading from here
+                break; // Go to next loop
+        }
+
+        tempLine = scanCourseFile.nextLine();
+        while (scanCourseFile.hasNext() && !tempLine.equals("Social and Behavioral Science")) {
+            courseIDs.add(tempLine);
+
+            tempLine = scanCourseFile.nextLine();
+        }
+
+        return convertArrayListToArray(courseIDs);
+    }
+
+    /**
+     * Getter for social and behavioral science course IDs
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of social and behavioral science course IDs
+     */
+    public static String[] getSocialAndBehavioralSciencesCourseIDs() {
+        File courseFile = new File(courseGroupsTextFileLocation); // File for reading
+        Scanner scanCourseFile;
+        String tempLine;
+        ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+
+        try {
+            scanCourseFile = new Scanner(courseFile); // Scanner to read the file
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        while (scanCourseFile.hasNext()) {
+            tempLine = scanCourseFile.nextLine();
+            if (tempLine.equals("Social and Behavioral Science")) // Start reading from here
+                break; // Go to next loop
+        }
+
+        tempLine = scanCourseFile.nextLine();
+        while (scanCourseFile.hasNext()) {
+            courseIDs.add(tempLine);
+
+            tempLine = scanCourseFile.nextLine();
+        }
+
+        courseIDs.add(tempLine); // To read in last course of file
+
+        return convertArrayListToArray(courseIDs);
+    }
+
+    /**
      * Converts the Degree object into an ArrayList<ArrayList<String>> for the PlanDisplays
      * @return ArrayList<ArrayList<String>> which has the courseID's separated by semester.
      */
@@ -184,4 +572,22 @@ public class Planner {
         deg.setMinor(min);
         deg.setSemesters();
     }
+
+    /**
+     * Converts an ArrayList to an array
+     * Useful in the getters for MA 200+, CS 200+ courses etc.
+     * @param tempList The ArrayList to be converted to an array
+     * @return A primitive array with the given information
+     */
+    private static String[] convertArrayListToArray(ArrayList<String> tempList) {
+        Iterator<String> tempListIterator = tempList.iterator();
+        String[] newPrimArray = new String[tempList.size()]; // Array with the exact amount of space necessary for copying
+        int index = 0;
+
+        while (tempListIterator.hasNext())
+            newPrimArray[index++] = tempListIterator.next();
+
+        return newPrimArray;
+    }
+
 }
