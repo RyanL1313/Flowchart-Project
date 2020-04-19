@@ -8,8 +8,10 @@ import java.util.*;
  * the Model-View-Control principle. It will process user interactions with the GUI, and it will send data to the GUI
  * from the model (such as the full hash map of courses to the drop-down box of electives the user can choose from).
  */
+
 public class Planner {
     private boolean studentFinishedEnteringCourses; // Is set to true when the user selects "Done" when they're done entering previous credits into the textbox (should be in a loop)
+    private boolean degreeComplete; // Is true if coursesReqToGraduate is empty
     public static String MAJOR;
     public static String MINOR;
     public static String CONCENTRATION;
@@ -582,10 +584,40 @@ public class Planner {
 
     public static void setMajor(String maj) { deg.setMajor(maj);}
 
-    public static void setMinor(String min) throws IOException
+    public static void setMinor(String min)
     {
         deg.setMinor(min);
-        deg.setSemesters();
+        //deg.setSemesters(); // Note from Ryan - Made the semesters get set in DegreeParser, so this is not necessary
+    }
+
+    /**
+     * Calls the DegreeParser object so the program can get information about the user's selected major/minor
+     * @param major Student's selected major (from DegreeSelectorWindow)
+     * @param minor Student's selected minor (from DegreeSelectorWindow)
+     */
+    public static void callDegreeParser(String major, String minor) {
+        DegreeParser parser = new DegreeParser(); // Should be the only time this gets called in the program
+        if (minor != "N/A") {
+            try {
+                parser.degreeParser(major, minor);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            try {
+                parser.degreeParser(major);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Can delete; for debugging
+        LinkedList<String> courses = parser.getCoursesRequiredToGraduate();
+         Iterator coursesIterator = courses.iterator();
+         while (coursesIterator.hasNext()) {
+            System.out.println(coursesIterator.next());
+         }
     }
 
     /**
@@ -616,6 +648,19 @@ public class Planner {
     {
 
     }
+
+    /**
+     * Used to tell the user if their plan on the flowchart has all required credits for their selected degree
+     * @return Whether or not the linked list coursesRequiredToGraduate is empty.
+     */
+    public static boolean isDegreeComplete() {
+        LinkedList<String> coursesRequiredToGraduate = DegreeParser.getCoursesRequiredToGraduate();
+
+        return coursesRequiredToGraduate.size() == 0; // True if its size is 0
+    }
+
+   // public static String
+
     //TODO logic about the classes that the user enters if they have previous classes
 
     //TODO send course that user picked from drop-down menu to removeCourseFromCoursesNeededToGraduate in DegreeCompletion class

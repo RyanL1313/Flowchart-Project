@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.util.*;
 import java.awt.event.ActionListener;
 /**
  * The DegreeSelectorWindow class is a GUI class that will be a window containing
@@ -61,16 +59,16 @@ public class DegreeSelectorWindow extends JFrame //implements Runnable
         public void actionPerformed(ActionEvent e)
         {
             String maj = major.getSelectedItem() + " Major";
-            String min = minor.getSelectedItem() + " Minor";
+            String min = (String) minor.getSelectedItem();
+            if (min != "N/A") // Don't want to add " Minor" if it's N/A
+                 min = min.concat(" Minor");
+
             Planner.setMajor(maj);
-            try
-            {
-                Planner.setMinor(min);
-            } catch (IOException ex)
-            {
-                ex.printStackTrace();
-            }
+            Planner.setMinor(min);
+
+
             dispose();
+            Planner.callDegreeParser(maj, min);
             Planner.drawFourYearPlanDisplay();
         }
     };
@@ -85,16 +83,14 @@ public class DegreeSelectorWindow extends JFrame //implements Runnable
             // - possible course to take with a check box next to it. It is the user's responsibility to
             // - know what classes they have credit for already.
             String maj = major.getSelectedItem() + " Major";
-            String min = minor.getSelectedItem() + " Minor";
+            String min = (String) minor.getSelectedItem();
+            if (min != "N/A") // Don't want to add " Minor" if it's N/A
+                min = min.concat(" Minor");
             Planner.setMajor(maj);
-            try
-            {
-                Planner.setMinor(min);
-            } catch (IOException ex)
-            {
-                ex.printStackTrace();
-            }
+            Planner.setMinor(min);
+
             dispose();
+            Planner.callDegreeParser(maj, min);
             Planner.drawCreditAdder();
         }
     };

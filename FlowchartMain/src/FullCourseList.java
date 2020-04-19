@@ -16,7 +16,6 @@ import java.util.*;
 public class FullCourseList {
     private static HashMap<String, LinkedList<SpecificCourse>> FullCourseList = new HashMap<String, LinkedList<SpecificCourse>>(); // The full list of UAH courses
     private ArrayList<String> HTMLFileList = new ArrayList<String>(); // List of file names for all departments
-
     /**
      * The FullCourselist constructor goes through each HTML file for each department code and uses DOM parsing to
      * extract out the courseblock sections of each file. These courseblock sections have 3 subsections of information
@@ -75,6 +74,17 @@ public class FullCourseList {
                 e.printStackTrace();
             }
         }
+
+        // Adding FYE 101
+        SpecificCourse FYE = new SpecificCourse();
+        FYE.setCourseID("FYE 101");
+        FYE.setFullCourseName("Charger Success");
+        FYE.setHours(1);
+        FYE.setPrereqs(new ArrayList<ArrayList<String>>());
+        FYE.setCoreqs(new ArrayList<ArrayList<String>>());
+        LinkedList<SpecificCourse> FYECourses= new LinkedList();
+        FYECourses.add(FYE);
+        FullCourseList.put("FYE", FYECourses);
 
         // Sorting the hashmap by its key
         ArrayList<String> sortedDepartmentKeys = new ArrayList(FullCourseList.keySet());
@@ -341,6 +351,11 @@ public class FullCourseList {
         return -1; // The course was not found in FullCourseList
     }
 
+    /**
+     * Used to return the requested SpecificCourse object by providing just the course's ID
+     * @param courseID The course ID
+     * @return The SpecificCourse object found in FullCourseList for this course ID
+     */
     public static SpecificCourse getCourseByID(String courseID) {
         String courseDepartment; // Stores the key value of the FullCourseList hash map
         int indexOfCourse; // Index of the course in the respective linked list for that department
@@ -373,8 +388,8 @@ public class FullCourseList {
      * Used to print every course in FullCourseList
      * Used for debugging purposes
      */
-    public void printFullCourseList() {
-        for (HashMap.Entry<String, LinkedList<SpecificCourse>> entry: FullCourseList.entrySet()) {
+    public static void printFullCourseList() {
+        for (HashMap.Entry<String, LinkedList<SpecificCourse>> entry : FullCourseList.entrySet()) {
             String key = entry.getKey();
             System.out.printf(key + " courses:\n");
 
@@ -387,6 +402,5 @@ public class FullCourseList {
                 courseListIterator.next().printCourseValues();
             }
         }
-
     }
 }

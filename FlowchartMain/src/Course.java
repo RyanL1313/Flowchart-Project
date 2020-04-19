@@ -1,5 +1,3 @@
-import java.util.*;
-
 /**
  * A course has a course ID, name, prerequisites and corequisites list, and number of credit hours.
  * A course is the most concrete object type used in this program
@@ -13,13 +11,27 @@ public interface Course {
      * Getter for the course ID
      * @return The course ID
      */
-    public String getCourseID();
+    String getCourseID();
+
+    /**
+     * Getter for the full course name
+     * @return The full course name
+     */
+     String getFullCourseName();
 
     /**
      * Getter for the course's hours
      * @return The course's hours
      */
-    public int getHours();
+    int getHours();
+
+    /**
+     * Setter for the course ID
+     * @param courseID The course ID
+     */
+    void setCourseID(String courseID);
+
+
 
     /**
      * Tells if a course is equal to another course or not
@@ -27,5 +39,5 @@ public interface Course {
      * @param courseID The ID of the course (i.e. CS 321)
      * @return Whether or not the two courses are equal
      */
-    public boolean equals(String courseID);
+    boolean equals(String courseID);
 }

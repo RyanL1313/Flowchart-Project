@@ -34,9 +34,9 @@ public class Degree {
     /**
      * Setter for the major
      *
-     * @param major The Degree's major
+     * @param Major The Degree's major
      */
-    public void setMajor(String major) {
+    public void setMajor(String Major) {
         this.major = major;
 
     }
@@ -44,26 +44,26 @@ public class Degree {
     /**
      * Setter for the minor
      *
-     * @param minor The Degree's minor
+     * @param Minor The Degree's minor
      */
-    public void setMinor(String minor) {
+    public void setMinor(String Minor) {
         this.minor = minor;
     }
 
     /**
-     * Sets the semesters for the degree by calling DegreeParser, sending the major, minor, and concentration
-     * if applicable
+     * Sets the semesters for the degree by calling DegreeParser, sending the major and minor
      *
      */
-    public static void setSemesters() throws IOException {
+    public static void setSemesters(ArrayList<Semester> semesters) throws IOException {
+        semesterList = semesters;
 
-        if(minor.equals("N/A Minor")) {
+       /* if(minor.equals("N/A Minor")) {
             semesterList = degreeParser.degreeParser(major);
         }
         else {
             semesterList = degreeParser.degreeParser(major, minor);
 
-        }
+        }*/
 
     }
     /**
@@ -205,10 +205,18 @@ public class Degree {
 //
 //    }
 
+    public static void printSemesters() {
+        for (Semester sem : semesterList) {
+            for (Course c : sem.getCourseList()) {
+                System.out.println("The course is " + c.getCourseID());
+            }
+        }
+    }
+
     public Course removeObtainedCredit(String courseID)
     {
         Course result = null;
-        for(int i =0; i < semesterList.size(); i++)
+        for(int i = 0; i < semesterList.size(); i++)
         {
             result = semesterList.get(i).removeCourse(courseID);
             if(result != null)

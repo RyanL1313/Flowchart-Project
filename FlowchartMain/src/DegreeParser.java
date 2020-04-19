@@ -1,4 +1,3 @@
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -6,6 +5,7 @@ import org.jsoup.nodes.Element;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class DegreeParser {
     private static LinkedList<String> coursesReqToGraduate = new LinkedList<>();
 
     public static String[] coursesListAcronyms = {"ACC", "AMS","ARH", "ARS","AST", "ATS", "BYS","BLS","CHE","CH","CE","CM","CPE","CS",
-            "ECH","ESS","ECN","ED","EDC","EE","ENG", "EH","EHL","FIN", "GY","GS","HPE","HY","ISE","IS","KIN","MGT",
+            "ECH","ESS","ECN","ED","EDC","EE","ENG", "EH","EHL","FIN", "FYE", "GY","GS","HPE","HY","ISE","IS","KIN","MGT",
             "MSC","MS","MKT","MA","MAE","ME","MIL","MU","MUA","MUE","MUJ","NUR","OPE","OPT","PHL","PH","PSC","PRO",
             "PY","SOC","ST","TH","WGS","WLC"};
 
@@ -70,8 +70,8 @@ public class DegreeParser {
         for (int j = 0; j < arr1.size(); j++) {
             if (arr1.get(j).contains("Electives") || arr1.get(j).contains("No more than") || arr1.get(j).contains("Term Semester")
                     || arr1.get(j).contains("If interested") || arr1.get(j).contains("Choose") || arr1.get(j).contains("For a")
-                    || arr1.get(j).contains("Ex:") || arr1.get(j).contains("Total") || arr1.get(j).contains("See Requirements")
-                    || arr1.get(j).startsWith("or")) {
+                    || arr1.get(j).contains("Ex:") || arr1.get(j).contains("Total") || arr1.get(j).startsWith("See Requirements")
+                    || arr1.get(j).startsWith("or") || arr1.get(j).startsWith("if considering")) {
                 arr1.remove(j);
                 j--;
             }
@@ -112,7 +112,9 @@ public class DegreeParser {
                     else{
                         boolean checkIfItsACourse = checkIfTextIsCourse(newText);
                         Course newCourse2;
-                        if((newText.contains("+")) || (newText.contains("Elective")) || (newText.contains("Humanities"))){
+                        if(newText.contains("+") || newText.contains("Lab Science") || newText.contains("Elective")
+                                || newText.contains("Literature") || newText.contains("Fine Art") || newText.contains("Social")
+                                || newText.contains("Humanities") || newText.contains("History")){
                             newCourse2 = new BroadCourse(newText);
                         }
                         else
@@ -125,7 +127,9 @@ public class DegreeParser {
                             coursesReqToGraduate.add(newText);
                             semester.addCourse(newCourse2);
                         }
-                        else{
+                        else {
+                            newText = removeSeeRequirementsTab(newText);
+                            newCourse2.setCourseID(newText);
                             coursesReqToGraduate.add(newText);
                             semester.addCourse(newCourse2);
                         }
@@ -170,7 +174,9 @@ public class DegreeParser {
                     else{
                         boolean checkIfItsACourse = checkIfTextIsCourse(newText);
                         Course newCourse2;
-                        if((newText.contains("+")) || (newText.contains("Elective")) || (newText.contains("Humanities"))){
+                        if (newText.contains("+") || (newText.contains("+") || newText.contains("Lab Science") || newText.contains("Elective")
+                                || newText.contains("Literature") || newText.contains("Fine Art") || newText.contains("Social")
+                                || newText.contains("Humanities") || newText.contains("History"))){
                             newCourse2 = new BroadCourse(newText);
                         }
                         else
@@ -184,6 +190,8 @@ public class DegreeParser {
                             semester.addCourse(newCourse2);
                         }
                         else{
+                            newText = removeSeeRequirementsTab(newText);
+                            newCourse2.setCourseID(newText);
                             coursesReqToGraduate.add(newText);
                             semester.addCourse(newCourse2);
                         }
@@ -221,7 +229,8 @@ public class DegreeParser {
                 coursesReqToGraduate.add(newText);
             }
             else{
-                coursesReqToGraduate.add(newText);
+                if (!newText.contains("recommended"))
+                    coursesReqToGraduate.add(newText);
             }
 
         }
@@ -229,6 +238,12 @@ public class DegreeParser {
 //       for(int k = 0; k < semesterArrayList.size(); k++){
 //           System.out.println(semesterArrayList.get(k));
 //       }
+
+        removeCoreCoursesFromCNG(coursesReqToGraduate);
+        if (coursesReqToGraduate.getLast().contains("ST 300+"))
+            separateIntoTwoEntriesMAOrST();
+
+        Degree.setSemesters(semesterArrayList);
         return semesterArrayList;
 //        for(String singleCourse: coursesReqToGraduate){
 //            System.out.println(singleCourse);
@@ -268,7 +283,7 @@ public class DegreeParser {
         for (int j = 0; j < arr1.size(); j++) {
             if (arr1.get(j).contains("Electives") || arr1.get(j).contains("No more than") || arr1.get(j).contains("Term Semester")
                     || arr1.get(j).contains("If interested") || arr1.get(j).contains("Choose") || arr1.get(j).contains("For a")
-                    || arr1.get(j).contains("Ex:") || arr1.get(j).contains("Total") || arr1.get(j).contains("See Requirements")
+                    || arr1.get(j).contains("Ex:") || arr1.get(j).contains("Total") || arr1.get(j).startsWith("See Requirements")
                     || arr1.get(j).startsWith("or")) {
                 arr1.remove(j);
                 j--;
@@ -310,7 +325,9 @@ public class DegreeParser {
                     else{
                         boolean checkIfItsACourse = checkIfTextIsCourse(newText);
                         Course newCourse2;
-                        if((newText.contains("+")) || (newText.contains("Elective")) || (newText.contains("Humanities"))){
+                        if(newText.contains("+") || (newText.contains("+") || newText.contains("Lab Science") || newText.contains("Elective")
+                                || newText.contains("Literature") || newText.contains("Fine Art") || newText.contains("Social")
+                                || newText.contains("Humanities") || newText.contains("History"))) {
                             newCourse2 = new BroadCourse(newText);
                         }
                         else
@@ -323,7 +340,9 @@ public class DegreeParser {
                             coursesReqToGraduate.add(newText);
                             semester.addCourse(newCourse2);
                         }
-                        else{
+                        else {
+                            newText = removeSeeRequirementsTab(newText);
+                            newCourse2.setCourseID(newText);
                             coursesReqToGraduate.add(newText);
                             semester.addCourse(newCourse2);
                         }
@@ -368,8 +387,9 @@ public class DegreeParser {
                     else{
                         boolean checkIfItsACourse = checkIfTextIsCourse(newText);
                         Course newCourse2;
-                        if((newText.contains("+")) || (newText.contains("Elective")) || (newText.contains("Humanities"))){
-                            System.out.println("The course is " + newText + "...");
+                        if(newText.contains("+") || (newText.contains("+") || newText.contains("Lab Science") || newText.contains("Elective")
+                                || newText.contains("Literature") || newText.contains("Fine Art") || newText.contains("Social")
+                                || newText.contains("Humanities") || newText.contains("History"))){
                             newCourse2 = new BroadCourse(newText);
                         }
                         else
@@ -383,6 +403,8 @@ public class DegreeParser {
                             semester.addCourse(newCourse2);
                         }
                         else{
+                            newText = removeSeeRequirementsTab(newText);
+                            newCourse2.setCourseID(newText);
                             coursesReqToGraduate.add(newText);
                             semester.addCourse(newCourse2);
                         }
@@ -406,6 +428,9 @@ public class DegreeParser {
 //       for(int k = 0; k < semesterArrayList.size(); k++){
 //           System.out.println(semesterArrayList.get(k));
 //       }
+
+        removeCoreCoursesFromCNG(coursesReqToGraduate);
+        Degree.setSemesters(semesterArrayList);
         return semesterArrayList;
 //        for(String singleCourse: coursesReqToGraduate){
 //            System.out.println(singleCourse);
@@ -415,9 +440,15 @@ public class DegreeParser {
     public static String removeCreditHrs(String text){
 
         if(text.equals("Elective 3") || text.equals("Elective 1")) {
+            text = text.substring(0, text.length() - 2);
             return text;
         }
         //String[] arrOfText = text.split(" ");
+
+        if (text.contains("course 3 or")) {
+            text = text.substring(0, text.length() - 6);
+            return text;
+        }
         StringBuilder sb = new StringBuilder(text);
         sb.deleteCharAt(text.length() - 1);
         String newText = sb.toString();
@@ -432,12 +463,14 @@ public class DegreeParser {
     public static boolean checkIfTextIsCourse(String text){
 
         boolean trueOrFalse = false;
+        if (text.contains("recommended"))
+            return false;
+
         String[] arr = text.split(" ");
         for(int i = 0; i < coursesListAcronyms.length;i++){
             if(arr[0].equals(coursesListAcronyms[i])) {
                 if(text.contains("+")){
-                    trueOrFalse = false;
-                    break;
+                    return false;
                 }
                 trueOrFalse = true;
                 break;
@@ -472,7 +505,49 @@ public class DegreeParser {
         return courseIDplusAcr;
     }
 
-    public LinkedList getCoursesRequiredToGraduate(){
+    private String removeSeeRequirementsTab(String text) {
+        int index = 0; // Index where the parentheses start
+        if (text.contains("(See Requirements tab") || text.contains("See requirements tab")) {
+            index = text.indexOf("(See");
+            text = text.substring(0, index - 1); // Removing that part
+        }
+
+        return text;
+    }
+
+    /**
+     * Removes the core courses from courses needed to graduate
+     */
+    public void removeCoreCoursesFromCNG(LinkedList<String> originalCNG) {
+        Iterator<String> courseIterator = originalCNG.iterator();
+
+        while (courseIterator.hasNext())
+        {
+            String course = courseIterator.next();
+            if (checkIfTextIsCourse(course)) {
+                courseIterator.remove();
+            }
+
+        }
+    }
+
+    /**
+     * Used to separate the "Select two MA or ST 300+ or 400+ level courses" entry in coursesReqToGraduate
+     * into two separate entries.
+     * @return The new altered string
+     */
+    public String separateIntoTwoEntriesMAOrST() {
+        String original = coursesReqToGraduate.getLast();
+        original = original.substring(11, original.length() - 3); // Making it neater
+
+        coursesReqToGraduate.remove(coursesReqToGraduate.size() - 1); // Remove the original
+        coursesReqToGraduate.add(original); // Add the new ones
+        coursesReqToGraduate.add(original); // Add it an extra time
+
+        return original;
+    }
+
+    public static LinkedList getCoursesRequiredToGraduate(){
         return coursesReqToGraduate;
     }
 
