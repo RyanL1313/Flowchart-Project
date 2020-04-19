@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
 public class DegreeSelectorWindow extends JFrame //implements Runnable
 {
     String MAJORS[] = {"Please select a Major", "Computer Science", "Mathematical Sciences"};
-    String MINORS[] = {"N/A", "Mathematical Sciences"};
+    String MINORS[] = {"N/A", "Computer Science","Mathematical Sciences"};
 
     JComboBox major = new JComboBox(MAJORS);
     JComboBox minor = new JComboBox(MINORS);

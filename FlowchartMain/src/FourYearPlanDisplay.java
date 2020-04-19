@@ -24,12 +24,20 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay//, Runnab
             for (int j = 0; j < Degree.get(i).size(); j++)
             {
                 FlowNode node;
-                if((Degree.get(i).get(j).contains("+")) || Degree.get(i).get(j).contains("Elective"))
+ //               System.out.println ("This is what Degree.get(" + i + ").get(" + j + ") contains: " + Degree.get(i).get(j));
+                if(((Degree.get(i).get(j).contains("+")) || Degree.get(i).get(j).contains("Elective")) || (Degree.get(i).get(j).contains("Humanities")))
                     node = new FlowNode();
+/*                else if(Degree.get(i).get(j).contains("Lab Science"))
+                {
+                    node = new FlowNode();
+                    System.out.println("Semester " + i + " Course " + j + " is a lab science adding another node now");
+                    semester.add(node,BorderLayout.CENTER);
+                }   */
                 else
                     node = new FlowNode(Degree.get(i).get(j));
 
                 semester.add(node, BorderLayout.CENTER);
+//                System.out.println ("Adding a node at " + i + " " + j);
                 node.setVisible(true);
                 chart.add(semester);
             }
@@ -66,7 +74,21 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay//, Runnab
             y += 140;
         }
     }*/
+/*
+    public FlowNode search(String courseID)
+    {
+        JPanel chart = (JPanel)getComponent(0).getComponentAt(0,0);
+        for(int i = 1; i < chart.getComponentCount(); i += 2)
+        {
+            for(int j = 0; j < chart.getComponent(i).)
+        }
+    }
 
+    public static void addNode(FlowNode node)
+    {
+
+    }
+*/
     public static void updateDisplay()
     {
 
@@ -88,17 +110,4 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay//, Runnab
             }
         });
     }
-/*
-    public static void main(String[] args)
-    {
-        Thread object = new Thread(new FourYearPlanDisplay());
-        object.start();
-    }
-
-    @Override
-    public void run()
-    {
-        updateDisplay();
-    }
-    */
 }

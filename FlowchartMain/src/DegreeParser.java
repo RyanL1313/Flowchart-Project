@@ -30,7 +30,7 @@ public class DegreeParser {
         String majorName = "Degree Plans/" + major + ".html";
         //String majorName = "Degree Plans/Mathematical_Sciences_Major.html";
 
-        String minorName = minor + "Degree Plans/" + minor + ".html";
+        String minorName = "Degree Plans/" + minor + ".html";
         //String minorName = "Degree Plans/Mathematical Sciences Minor.html";
 
         Document doc1 = Jsoup.parse(new File(majorName), "utf-8");
@@ -112,7 +112,7 @@ public class DegreeParser {
                     else{
                         boolean checkIfItsACourse = checkIfTextIsCourse(newText);
                         Course newCourse2;
-                        if(newText.contains("+")){
+                        if((newText.contains("+")) || (newText.contains("Elective")) || (newText.contains("Humanities"))){
                             newCourse2 = new BroadCourse(newText);
                         }
                         else
@@ -170,7 +170,7 @@ public class DegreeParser {
                     else{
                         boolean checkIfItsACourse = checkIfTextIsCourse(newText);
                         Course newCourse2;
-                        if(newText.contains("+")){
+                        if((newText.contains("+")) || (newText.contains("Elective")) || (newText.contains("Humanities"))){
                             newCourse2 = new BroadCourse(newText);
                         }
                         else
@@ -310,7 +310,7 @@ public class DegreeParser {
                     else{
                         boolean checkIfItsACourse = checkIfTextIsCourse(newText);
                         Course newCourse2;
-                        if((newText.contains("+")) || (newText.contains("Elective"))){
+                        if((newText.contains("+")) || (newText.contains("Elective")) || (newText.contains("Humanities"))){
                             newCourse2 = new BroadCourse(newText);
                         }
                         else
@@ -368,7 +368,7 @@ public class DegreeParser {
                     else{
                         boolean checkIfItsACourse = checkIfTextIsCourse(newText);
                         Course newCourse2;
-                        if((newText.contains("Elective")) ||(newText.contains("+"))){
+                        if((newText.contains("+")) || (newText.contains("Elective")) || (newText.contains("Humanities"))){
                             System.out.println("The course is " + newText + "...");
                             newCourse2 = new BroadCourse(newText);
                         }

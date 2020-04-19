@@ -16,6 +16,7 @@ public class Planner {
     public static ArrayList<String> coursesAlreadyTaken = new ArrayList<String>();
     public static Degree deg = new Degree();
     private static String courseGroupsTextFileLocation = "./List of Courses/Various Courses"; // Used for reading in Humanities course IDs, for example
+    //public static FourYearPlanDisplay FYPD = new FourYearPlanDisplay();
 
     /**
      * Uses the findCourse method in FullCourseList to check if a course ID entered by the user is valid or not, then removes it from
@@ -110,11 +111,12 @@ public class Planner {
                     electiveList.remove(i);
                     i--;
                 }
-        String[] electivesArray = new String[electiveList.size() + 1];
+        String[] electivesArray = new String[electiveList.size() + 2];
         electivesArray[0] = "BACK";
-        for (int i = 1; i < electiveList.size() + 1; i++)
+        electivesArray[1] = "General Elective";     // added title of list to list
+        for (int i = 2; i < electiveList.size() + 2; i++)
         {
-            electivesArray[i] = electiveList.get(i - 1); // The array and array list are offset by 1 because of the EMPTY slot in the array
+            electivesArray[i] = electiveList.get(i - 2); // The array and array list are offset by 2 because of the BACK slot in the array and the title slot
         }
         return electivesArray;
     }
@@ -164,6 +166,7 @@ public class Planner {
         LinkedList<SpecificCourse> MACourses = FullCourseList.getFullCourseList().get("MA"); // All MA courses
         Iterator<SpecificCourse> courseIterator = MACourses.iterator();
         ArrayList<String> MA200CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
+        MA200CourseList.add("MA 200+");     // added title of list to list
 
         while (courseIterator.hasNext()) {
             SpecificCourse NextCourse = courseIterator.next(); // Get the next course in the linked list
@@ -192,6 +195,7 @@ public class Planner {
         LinkedList<SpecificCourse> CSCourses = FullCourseList.getFullCourseList().get("CS"); // All CS courses
         Iterator<SpecificCourse> courseIterator = CSCourses.iterator();
         ArrayList<String> CS200CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
+        CS200CourseList.add("CS 200+");     //added title of list to list
 
         while (courseIterator.hasNext()) {
             SpecificCourse NextCourse = courseIterator.next(); // Get the next course in the linked list
@@ -219,6 +223,7 @@ public class Planner {
         LinkedList<SpecificCourse> MACourses = FullCourseList.getFullCourseList().get("MA"); // All MA courses
         Iterator<SpecificCourse> courseIterator = MACourses.iterator();
         ArrayList<String> MA300CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
+        MA300CourseList.add("MA 300+");     // added title of list to list
 
         while (courseIterator.hasNext()) {
             SpecificCourse NextCourse = courseIterator.next(); // Get the next course in the linked list
@@ -246,6 +251,7 @@ public class Planner {
         LinkedList<SpecificCourse> CSCourses = FullCourseList.getFullCourseList().get("CS"); // All CS courses
         Iterator<SpecificCourse> courseIterator = CSCourses.iterator();
         ArrayList<String> CS300CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
+        CS300CourseList.add("CS 300+");     // added title of list to list
 
         while (courseIterator.hasNext()) {
             SpecificCourse NextCourse = courseIterator.next(); // Get the next course in the linked list
@@ -273,6 +279,7 @@ public class Planner {
         LinkedList<SpecificCourse> MACourses = FullCourseList.getFullCourseList().get("MA"); // All MA courses
         Iterator<SpecificCourse> courseIterator = MACourses.iterator();
         ArrayList<String> MA400CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
+        MA400CourseList.add("MA 400+");     // added title of list to list
 
         while (courseIterator.hasNext()) {
             SpecificCourse NextCourse = courseIterator.next(); // Get the next course in the linked list
@@ -300,6 +307,7 @@ public class Planner {
         LinkedList<SpecificCourse> CSCourses = FullCourseList.getFullCourseList().get("CS"); // All CS courses
         Iterator<SpecificCourse> courseIterator = CSCourses.iterator();
         ArrayList<String> CS400CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
+        CS400CourseList.add("CS 400+");     // added title of list to list
 
         while (courseIterator.hasNext()) {
             SpecificCourse NextCourse = courseIterator.next(); // Get the next course in the linked list
@@ -325,10 +333,11 @@ public class Planner {
      * @return List of literature course IDs
      */
     public static String[] getLiteratureCourseIDs() {
-        final int litCourses = 3; // 3 literature courses offered at UAH
+        final int litCourses = 5; // 3 literature courses offered at UAH
         String[] literatureCourseList = new String[litCourses];
 
-        literatureCourseList[0] = "EH 207"; literatureCourseList[1] = "EH 208"; literatureCourseList[2] = "EH 242";
+        literatureCourseList[0] = "BACK"; literatureCourseList[1] = "Literature";     // added title of list to list
+        literatureCourseList[2] = "EH 207"; literatureCourseList[3] = "EH 208"; literatureCourseList[4] = "EH 242";
 
         return literatureCourseList;
 
@@ -344,6 +353,7 @@ public class Planner {
         Scanner scanCourseFile;
         String tempLine;
         ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+        courseIDs.add("History");   // added title of list to list
 
         try {
             scanCourseFile = new Scanner(courseFile); // Scanner to read the file
@@ -378,6 +388,7 @@ public class Planner {
         Scanner scanCourseFile;
         String tempLine;
         ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+        courseIDs.add("Fine Art");     // added title of list to list
 
         try {
             scanCourseFile = new Scanner(courseFile); // Scanner to read the file
@@ -412,6 +423,7 @@ public class Planner {
         Scanner scanCourseFile;
         String tempLine;
         ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+        courseIDs.add("Lab Science");      // added title of list to list
 
         try {
             scanCourseFile = new Scanner(courseFile); // Scanner to read the file
@@ -446,6 +458,7 @@ public class Planner {
         Scanner scanCourseFile;
         String tempLine;
         ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+        courseIDs.add("Technical Elective");       // added title of list to list
 
         try {
             scanCourseFile = new Scanner(courseFile); // Scanner to read the file
@@ -480,6 +493,7 @@ public class Planner {
         Scanner scanCourseFile;
         String tempLine;
         ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+        courseIDs.add("Humanities");        // added title of list to list
 
         try {
             scanCourseFile = new Scanner(courseFile); // Scanner to read the file
@@ -514,6 +528,7 @@ public class Planner {
         Scanner scanCourseFile;
         String tempLine;
         ArrayList<String> courseIDs = new ArrayList(); // Course IDs that get returned
+        courseIDs.add("Soc. & Behav. Science");     // added title of list to list
 
         try {
             scanCourseFile = new Scanner(courseFile); // Scanner to read the file
@@ -581,13 +596,24 @@ public class Planner {
      */
     private static String[] convertArrayListToArray(ArrayList<String> tempList) {
         Iterator<String> tempListIterator = tempList.iterator();
-        String[] newPrimArray = new String[tempList.size()]; // Array with the exact amount of space necessary for copying
-        int index = 0;
-
+        String[] newPrimArray = new String[tempList.size() + 1]; // Array with the exact amount of space necessary for copying
+        int index = 1;
+        newPrimArray[0] = "BACK";
         while (tempListIterator.hasNext())
             newPrimArray[index++] = tempListIterator.next();
 
         return newPrimArray;
     }
 
+    public static ArrayList<ArrayList<String>> getCoReq (String course)
+    {
+        SpecificCourse inNeedofCoReq = FullCourseList.getCourseByID(course);
+        ArrayList<ArrayList<String>> coreqs = inNeedofCoReq.getCoreqs();
+        return coreqs;
+    }
+
+    public static void addNode(FlowNode node)
+    {
+
+    }
 }
