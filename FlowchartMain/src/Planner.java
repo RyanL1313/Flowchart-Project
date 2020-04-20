@@ -708,7 +708,6 @@ public class Planner {
                 if (courseInThisSemester.getClass().toString().contains(("SpecificCourse"))) {// It's a core course
                     FullCourseList.removeCourse(courseInThisSemester.getCourseID());
                     FullCourseList.removeCourse(courseInThisSemester.getCourseID().concat("L")); // Also remove the lab associated with the course if necessary
-                   System.out.println("REMOVING" + courseInThisSemester.getCourseID().concat("R"));
                     FullCourseList.removeCourse(courseInThisSemester.getCourseID().concat("R")); // Remove recitation for this course too
                 }
             }
