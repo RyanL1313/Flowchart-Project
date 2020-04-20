@@ -1,5 +1,3 @@
-import java.util.*;
-
 /**
  * A course has a course ID, name, prerequisites and corequisites list, and number of credit hours.
  * A course is the most concrete object type used in this program
@@ -8,8 +6,8 @@ import java.util.*;
  * Equivalents are in the same row (or same ArrayList in the ArrayList of ArrayLists), separates are on different rows (different ArrayList inside the ArrayList of ArrayLists)
  */
 public class BroadCourse implements Course{
-    public String fullCourseName;
-    public String courseID;
+    private String fullCourseName;
+    private String courseID;
 
     /**
      * Course constructor

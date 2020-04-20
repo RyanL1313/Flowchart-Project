@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class FlowNode extends JComponent
 {
-    String[] menu = {"Menu","MA 200+","MA 300+","MA 400+","CS 200+","CS 300+","CS 400+",
+    String[] menu = {"Menu","MA 200+","MA 300+","MA 400+","CS 200+","CS 300+","CS 400+", "ST 400+",
             "Literature","Soc. & Behav. Science","Fine Art","History",
             "Lab Science","Technical Elective","Humanities","General Elective"};
     static String[] ma200plus = Planner.getMA200PlusCourseIDs();
@@ -15,6 +15,7 @@ public class FlowNode extends JComponent
     static String[] cs200plus = Planner.getCS200PlusCourseIDs();
     static String[] cs300plus = Planner.getCS300PlusCourseIDs();
     static String[] cs400plus = Planner.getCS400PlusCourseIDs();
+    static String[] st400plus = Planner.getST400PlusCourseIDs();
     static String[] technicalElective = Planner.getTechnicalElectiveCourseIDs();
     static String[] fineArts = Planner.getFineArtsCourseIDs();
     static String[] history = Planner.getHistoryCourseIDs();
@@ -87,6 +88,11 @@ public class FlowNode extends JComponent
                         for (int i = 0; i < cs400plus.length; i++)
                             dropDown.addItem(cs400plus[i]);
                         break;
+                    case "ST 400+":
+                        dropDown.removeAllItems();
+                        for (int i = 0; i < st400plus.length; i++)
+                            dropDown.addItem(st400plus[i]);
+                        break;
                     case "Literature":
                         dropDown.removeAllItems();
                         for (int i = 0; i < literatures.length; i++)
@@ -134,8 +140,10 @@ public class FlowNode extends JComponent
                         clearButton.setVisible(true);
 
                         String menuSlot = (String)dropDown.getItemAt(1);    // this gets the intended category the class falls under
-                        System.out.println (menuSlot);
+
+                        Planner.removeFromCoursesReqToGraduate(menuSlot); // Ex: remove Technical Elective from CRG
 /*
+
                         ArrayList<ArrayList<String>> coreqs = Planner.getCoReq((String)dropDown.getSelectedItem());
                         if(!coreqs.isEmpty())
                              Planner.FYPD.addNode(new FlowNode(coreqs));

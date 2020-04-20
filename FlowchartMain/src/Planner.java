@@ -329,6 +329,35 @@ public class Planner {
     }
 
     /**
+     * Getter for ST 400+ course IDs
+     * There are no ST 300+ courses so we shouldn't worry about that
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of ST 400+ course IDs
+     */
+    public static String[] getST400PlusCourseIDs() {
+        LinkedList<SpecificCourse> STCourses = FullCourseList.getFullCourseList().get("ST"); // All ST courses
+        Iterator<SpecificCourse> courseIterator = STCourses.iterator();
+        ArrayList<String> ST400CourseList = new ArrayList<>(); // Temporarily holds the courses to be returned
+        ST400CourseList.add("ST 400+");     // added title of list to list
+
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next(); // Get the next course in the linked list
+            if (NextCourse.getCourseID().contains("ST 4")) { // Start looping at this point to get 400+ courses
+                ST400CourseList.add(NextCourse.getCourseID()); // Store this course now; it gets wiped out later
+                break; // Break out of the while loop because now we need to store course IDs
+            }
+        }
+
+        // New loop to start storing course IDs into the array list
+        while (courseIterator.hasNext()) {
+            SpecificCourse NextCourse = courseIterator.next();
+            ST400CourseList.add(NextCourse.getCourseID());
+        }
+
+        return convertArrayListToArray(ST400CourseList); // Return primitive array with necessary course IDs
+    }
+
+    /**
      * Getter for literature course IDs
      * Used by FourYearPlanDisplay's dropdowns.
      * Just three courses count for a literature credit at UAH.
@@ -650,6 +679,43 @@ public class Planner {
     }
 
     /**
+     * Removes a broad course from CoursesReqToGraduate in the DegreeParser class
+     * Goes through a hierarchy of substring checks to determine what to remove (General elective at the bottom of hierarchy).
+     * @param selectedCourseType The course type selected from the dropdown in the flowchart
+     * (ex: Technical Elective, CS 300+)
+     */
+    public static void removeFromCoursesReqToGraduate(String selectedCourseType) {
+        LinkedList<String> crg = DegreeParser.getCoursesRequiredToGraduate();
+
+        if (selectedCourseType.equals("Lab Science")) {
+            crg.removeFirstOccurrence("Lab Science");
+            // Not even close to being done with this method yet
+        }
+    }
+
+    /**
+     * Removes SpecificCourse objects in semesterList from FullCourseList so they don't
+     * appear again in the dropdowns in the flowchart.
+     */
+    public static void removeCoreCoursesFromFullCourseList() {
+        LinkedList<String> coursesInDegree = DegreeParser.getCoursesRequiredToGraduate();
+        ArrayList<Semester> semesters = Degree.getSemesterList();
+
+        for (Semester sem : semesters) {
+            for (int i = 0; i < sem.getCourseList().size(); i++) {
+                Course courseInThisSemester = sem.getCourseList().get(i);
+
+                if (courseInThisSemester.getClass().toString().contains(("SpecificCourse"))) {// It's a core course
+                    FullCourseList.removeCourse(courseInThisSemester.getCourseID());
+                    FullCourseList.removeCourse(courseInThisSemester.getCourseID().concat("L")); // Also remove the lab associated with the course if necessary
+                   System.out.println("REMOVING" + courseInThisSemester.getCourseID().concat("R"));
+                    FullCourseList.removeCourse(courseInThisSemester.getCourseID().concat("R")); // Remove recitation for this course too
+                }
+            }
+        }
+    }
+
+    /**
      * Used to tell the user if their plan on the flowchart has all required credits for their selected degree
      * @return Whether or not the linked list coursesRequiredToGraduate is empty.
      */
@@ -658,8 +724,6 @@ public class Planner {
 
         return coursesRequiredToGraduate.size() == 0; // True if its size is 0
     }
-
-   // public static String
 
     //TODO logic about the classes that the user enters if they have previous classes
 

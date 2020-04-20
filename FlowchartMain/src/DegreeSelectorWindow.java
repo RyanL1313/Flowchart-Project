@@ -69,6 +69,7 @@ public class DegreeSelectorWindow extends JFrame //implements Runnable
 
             dispose();
             Planner.callDegreeParser(maj, min);
+            Planner.removeCoreCoursesFromFullCourseList(); // Added by Ryan - So core courses already in flowchart don't show up in dropdowns
             Planner.drawFourYearPlanDisplay();
         }
     };

@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 
 public class CreditAdder extends JFrame
 {
@@ -17,6 +16,7 @@ public class CreditAdder extends JFrame
             String addedCourse = entryBox.getText();
             entryBox.setText("");
             removeCourse(addedCourse);
+
         }
     };
 
@@ -27,6 +27,7 @@ public class CreditAdder extends JFrame
 
         {
             dispose();
+            Planner.removeCoreCoursesFromFullCourseList(); // Added by Ryan so dropdowns in the flowchart can't have the core courses
             Planner.drawFourYearPlanDisplay();
         }
     };

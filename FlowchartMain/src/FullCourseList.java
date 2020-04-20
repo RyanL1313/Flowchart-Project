@@ -319,11 +319,13 @@ public class FullCourseList {
         int indexToRemove = findCourse(courseID); // Index in the linked list with the associated key
         String courseDepartment;  // Stores the key value of the FullCourseList hash map
 
+        if (indexToRemove == -1)
+            return null; // Not in FullCourseList
+
         Scanner courseIDScanner = new Scanner(courseID);
         courseDepartment = courseIDScanner.next();
 
         LinkedList<SpecificCourse> ListToShorten = FullCourseList.get(courseDepartment); // Return the linked list for the necessary department
-
         return ListToShorten.remove(indexToRemove); // Remove the course from FullCourseList and return the course object
     }
 
@@ -334,6 +336,9 @@ public class FullCourseList {
      * @return The index of the course in the corresponding linked list for that course's department (i.e. The CS linked list)
      */
     public static int findCourse(String courseID) {
+        if (!checkIfValidCourseFormat(courseID))
+            return -1; // Invalid course
+
         String courseDepartment; // Stores the key value of the FullCourseList hash map
 
         Scanner courseIDScanner = new Scanner(courseID);
@@ -402,5 +407,23 @@ public class FullCourseList {
                 courseListIterator.next().printCourseValues();
             }
         }
+    }
+
+    /**
+     * Internal method for determining if a string is in valid course form
+     * Used in FindCourse
+     * @param potentialCourse The string to check
+     * @return If it's 2 words (department and number)
+     */
+    private static boolean checkIfValidCourseFormat(String potentialCourse) {
+        char[] potentialCourseCharacters = potentialCourse.toCharArray();
+        int count = 0; // How many spaces
+
+        for (char character : potentialCourseCharacters) {
+            if (character == ' ')
+                count++;
+        }
+
+        return count == 1; // There's one space in a proper entry of a course ID
     }
 }
