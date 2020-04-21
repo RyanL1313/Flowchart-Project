@@ -344,6 +344,9 @@ public class FullCourseList {
         Scanner courseIDScanner = new Scanner(courseID);
         courseDepartment = courseIDScanner.next();
 
+        if (!FullCourseList.containsKey(courseDepartment))
+            return -1; // For when the user enters an invalid course department
+
         LinkedList<SpecificCourse> ListToShorten = FullCourseList.get(courseDepartment); // Return the linked list for the necessary department
 
         Iterator<SpecificCourse> courseIterator = ListToShorten.iterator();
