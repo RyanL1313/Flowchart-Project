@@ -1,5 +1,3 @@
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -10,74 +8,8 @@ import java.util.LinkedList;
  */
 
 public class DegreeCompletion {
-    private static String major;
-    private static String minor;
-    private LinkedList<String> coursesRequiredByMajorAndOrMinor;
-    private LinkedList<String> nonSpecificCoursesRequiredByMajorOrMinor;
+
     static DegreeParser degreeParser = new DegreeParser();
-
-    public void setMajor(String major) {
-        this.major = major;
-
-    }
-
-    public void setMinor(String minor) {
-        this.minor = minor;
-    }
-
-
-//    public void setCoursesRequiredByMajorAndOrMinorAndNonSpecificCoursesRequiredByMajorAndOrMinor(){
-//        coursesRequiredByMajorAndOrMinor = new LinkedList<>();
-//        nonSpecificCoursesRequiredByMajorOrMinor = new LinkedList<>();
-//
-//        for(String course: coursesNeededToGraduate){
-//            if(checkIfTextIsCourse(course) == true){
-//               this.coursesRequiredByMajorAndOrMinor.add(course);
-//            }
-//            else{
-//                this.nonSpecificCoursesRequiredByMajorOrMinor.add(course);
-//            }
-//        }
-//    }
-
-    //debugging purposes
-    public LinkedList<String> getCoursesRequiredByMajorAndOrMinor(){return coursesRequiredByMajorAndOrMinor;}
-
-    //debugging purposes
-    public LinkedList<String> getNonSpecificCoursesRequiredByMajorOrMinor(){return nonSpecificCoursesRequiredByMajorOrMinor;}
-
-    /**
-     * Checks if the degree is complete by making sure all of the classes inside the semesters
-     * are valid and then removes the courses from coursesNeededToGraduate.
-     * @return LinkedList<Strings> of courses that are still needed to graduate OR it can be empty meaning
-     * the degree is completed
-     * @param degree the degree the user created
-     */
-    public static boolean isDegreeComplete(Degree degree) throws IOException {
-        LinkedList<String> CRG = DegreeParser.getCoursesRequiredToGraduate();
-        boolean majorComplete = false;
-
-        if(CRG.isEmpty()){
-            majorComplete = true;
-        }
-        return majorComplete;
-
-    }
-
-    /**
-     * Checks if the course is an already required course.
-     * @return true or false of whether the course is an already required course
-     */
-    public boolean checkIfItsAnAlreadyRequiredCourse(String course){
-        boolean alreadyRequiredCourse =  false;
-        for(String singleReqCourse: coursesRequiredByMajorAndOrMinor){
-            if(course.equals(singleReqCourse)){
-                alreadyRequiredCourse = true;
-                break;
-            }
-        }
-        return alreadyRequiredCourse;
-    }
 
     /**
      * Removes a broad course from CoursesReqToGraduate in the DegreeParser class
@@ -257,7 +189,7 @@ public class DegreeCompletion {
             case "General Elective":
                 while (courseIterator.hasNext()) {
                     courseInIteration = (String) courseIterator.next();
-                    if (courseInIteration.equals("Elective")) {
+                    if (courseInIteration.trim().equals("Elective")) {
                         CRG.removeFirstOccurrence(courseInIteration);
                         courseRemoved = courseInIteration;
                         break;
@@ -266,7 +198,7 @@ public class DegreeCompletion {
             default: // Not really necessary. All cases are covered
         }
 
-       // System.out.printf("\nCourse removed: " + courseRemoved + "\n\n");
+       System.out.printf("\nCourse removed: " + courseRemoved + "\n\n");
 
         return courseRemoved; // Could be the empty string if the user's selected course type is not in CRG. Therefore, nothing was removed in this case
     }
