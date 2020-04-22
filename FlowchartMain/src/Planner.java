@@ -7,6 +7,10 @@ import java.util.*;
  * A planner object is used to facilitate interactions between the GUI and the model. It is important for upholding
  * the Model-View-Control principle. It will process user interactions with the GUI, and it will send data to the GUI
  * from the model (such as the full hash map of courses to the drop-down box of electives the user can choose from).
+ *
+ * Planner follows the Observer pattern as it notifies the various GUI windows when they should be displayed by using
+ * the draw methods for each window (ex: drawSelectorWindow()). Also, it notifies the model when data needs to be changed
+ * (ex: remove a course from FullCourseList, or remove a course from coursesReqToGraduate in DegreeParser).
  */
 
 public class Planner {
@@ -587,6 +591,37 @@ public class Planner {
     }
 
     /**
+     * Getter for Elective 300+ course IDs
+     * Used by FourYearPlanDisplay's dropdowns.
+     * @return List of Elective 300+ course IDs
+     */
+    public static String[] getElective300PlusCourseIDs() {
+        ArrayList<String> Elective300CourseList = new ArrayList(); // List of 300+ elective courses to be returned
+        HashMap<String, LinkedList<SpecificCourse>> courseList = FullCourseList.getFullCourseList();
+
+        Elective300CourseList.add("General Elective 300+");     // added title of list to list
+
+        for (HashMap.Entry<String, LinkedList<SpecificCourse>> entry : courseList.entrySet()) {
+            LinkedList<SpecificCourse> coursesInDepartment;
+            coursesInDepartment = entry.getValue();
+            String courseNumberString = "";
+
+            Iterator<SpecificCourse> courseListIterator = coursesInDepartment.iterator(); // To iterate over a linked list of courses
+
+            while (courseListIterator.hasNext()) {
+                SpecificCourse nextCourse = courseListIterator.next();
+                Scanner courseIDScanner = new Scanner(nextCourse.getCourseID());
+                courseIDScanner.next(); // Throw out the course
+                courseNumberString = courseIDScanner.next(); // The course number
+                if (courseNumberString.startsWith("3") || courseNumberString.startsWith("4")) // 300+ course
+                    Elective300CourseList.add(nextCourse.getCourseID()); // Add the course to the array list if it is 300+
+            }
+        }
+
+        return convertArrayListToArray(Elective300CourseList); // Return primitive array with necessary course IDs
+    }
+
+    /**
      * Converts the Degree object into an ArrayList<ArrayList<String>> for the PlanDisplays
      * @return ArrayList<ArrayList<String>> which has the courseID's separated by semester.
      */
@@ -681,16 +716,25 @@ public class Planner {
     /**
      * Removes a broad course from CoursesReqToGraduate in the DegreeParser class
      * Goes through a hierarchy of substring checks to determine what to remove (General elective at the bottom of hierarchy).
+     * Uses method in DegreeCompletion to complete this task.
+     *
      * @param selectedCourseType The course type selected from the dropdown in the flowchart
-     * (ex: Technical Elective, CS 300+)
+     * (ex: Technical Elective, CS 300+).
      */
-    public static void removeFromCoursesReqToGraduate(String selectedCourseType) {
-        LinkedList<String> crg = DegreeParser.getCoursesRequiredToGraduate();
+    public static String removeFromCoursesReqToGraduate(String selectedCourseType) {
+        return DegreeCompletion.removeCourseFromCoursesNeededToGraduate(selectedCourseType);
+    }
 
-        if (selectedCourseType.equals("Lab Science")) {
-            crg.removeFirstOccurrence("Lab Science");
-            // Not even close to being done with this method yet
-        }
+    /**
+     * The removeFromCoursesReqToGraduate method could fail at removing anything from coursesReqToGraduate, and
+     * if this happens, it returns the empty string. Using this method in FlowNode ensures that the user will
+     * empty the coursesReqToGraduate linked list.
+     *
+     * @param returnedSelectedCourseType String returned from removeFromCoursesReqToGraduate method.
+     * @return Whether or not returnedSelectedCourseType is empty.
+     */
+    public static boolean checkIfValidCourseReqToGraduateRemoval(String returnedSelectedCourseType) {
+        return !returnedSelectedCourseType.equals(""); // If the string is not empty, return true. It was a valid entry.
     }
 
     /**

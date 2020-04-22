@@ -10,8 +10,14 @@ import java.util.*;
 
 /**
  * The FullCourseList is designed to hold every undergraduate class offered at UAH
+ *
  * In the FullCourseList hashmap, the key is the first part of the course ID (i.e. CS), and the
  * value is a linked list of courses associated with that key.
+ *
+ * FullCourseList uses the Iterator Pattern because removing a course from the FullCourseList hash map
+ * requires the programmer to only provide the course ID string, and the internal methods of FullCourseList
+ * iterate through the hash map to find the course and remove it. Also, retrieving a SpecificCourse object from the
+ * hash map requires the programmer to only provide the course ID string.
  */
 public class FullCourseList {
     private static HashMap<String, LinkedList<SpecificCourse>> FullCourseList = new HashMap<String, LinkedList<SpecificCourse>>(); // The full list of UAH courses

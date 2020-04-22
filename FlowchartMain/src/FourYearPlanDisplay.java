@@ -2,6 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * The FourYearPlanDisplay class is used to display the flowchart based on the major/minor combination the student
+ * entered and the previous courses they have already taken.
+ *
+ * This class uses the Decorator pattern since it implements a scroll bar to prevent the course nodes from being
+ * squashed. The scroll bar does not alter the underlying functionality of the flowchart display. It simply
+ * enhances the visual aspect of the flowchart.
+ */
 public class FourYearPlanDisplay extends JFrame implements PlanDisplay//, Runnable
 {
     ArrayList<ArrayList<String>> Degree = Planner.getDegree();
@@ -25,7 +33,9 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay//, Runnab
             {
                 FlowNode node;
  //               System.out.println ("This is what Degree.get(" + i + ").get(" + j + ") contains: " + Degree.get(i).get(j));
-                if(((Degree.get(i).get(j).contains("+")) || Degree.get(i).get(j).contains("Elective")) || (Degree.get(i).get(j).contains("Humanities")))
+                if(((Degree.get(i).get(j).contains("+")) || Degree.get(i).get(j).contains("Elective")) || (Degree.get(i).get(j).contains("Humanities")) ||
+                        (Degree.get(i).get(j).contains("History")) || (Degree.get(i).get(j).contains("Lab Science")) || (Degree.get(i).get(j).contains("Social")) ||
+                        (Degree.get(i).get(j).contains("Literature") || (Degree.get(i).get(j).contains("Fine"))))
                     node = new FlowNode();
 /*                else if(Degree.get(i).get(j).contains("Lab Science"))
                 {

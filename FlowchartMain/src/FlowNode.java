@@ -2,13 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.*;
 
 public class FlowNode extends JComponent
 {
     String[] menu = {"Menu","MA 200+","MA 300+","MA 400+","CS 200+","CS 300+","CS 400+", "ST 400+",
             "Literature","Soc. & Behav. Science","Fine Art","History",
-            "Lab Science","Technical Elective","Humanities","General Elective"};
+            "Lab Science","Technical Elective","Humanities", "General Elective 300+", "General Elective"};
     static String[] ma200plus = Planner.getMA200PlusCourseIDs();
     static String[] ma300plus = Planner.getMA300PlusCourseIDs();
     static String[] ma400plus = Planner.getMA400PlusCourseIDs();
@@ -23,6 +23,7 @@ public class FlowNode extends JComponent
     static String[] humanities = Planner.getHumanitiesCourseIDs();
     static String[] literatures = Planner.getLiteratureCourseIDs();
     static String[] socBeh = Planner.getSocialAndBehavioralSciencesCourseIDs();
+    static String[] electiveCourses300plus = Planner.getElective300PlusCourseIDs();
     static String[] electiveCourses = Planner.getElectives();
     JComboBox dropDown = new JComboBox(menu);
     JLabel courseID = new JLabel();
@@ -128,6 +129,11 @@ public class FlowNode extends JComponent
                         for (int i = 0; i < humanities.length; i++)
                             dropDown.addItem(humanities[i]);
                         break;
+                    case "General Elective 300+":
+                        dropDown.removeAllItems();
+                        for (int i = 0; i < electiveCourses300plus.length; i++)
+                            dropDown.addItem(electiveCourses300plus[i]);
+                        break;
                     case "General Elective":
                         dropDown.removeAllItems();
                         for (int i = 0; i < electiveCourses.length; i++)
@@ -140,8 +146,25 @@ public class FlowNode extends JComponent
                         clearButton.setVisible(true);
 
                         String menuSlot = (String)dropDown.getItemAt(1);    // this gets the intended category the class falls under
+                        System.out.println("Menu slot: " + menuSlot);
+                        String returnedCourse = Planner.removeFromCoursesReqToGraduate(menuSlot); // Ex: remove Technical Elective from CRG
 
-                        Planner.removeFromCoursesReqToGraduate(menuSlot); // Ex: remove Technical Elective from CRG
+                        // Check if removal was invalid
+                        if (!Planner.checkIfValidCourseReqToGraduateRemoval(returnedCourse)) { // Something was unsuccessfully removed from CRG
+                            // We need something in here to tell the student that they already have every credit for the course type selected, and they need to select something else
+                            // Also set the drop-down back to its initial state
+                        }
+
+                        // Next part for debugging purposes:
+
+                        /* System.out.println("After removal: ");
+                        LinkedList<String> courses = DegreeParser.getCoursesRequiredToGraduate();
+                        Iterator coursesIterator = courses.iterator();
+                        while (coursesIterator.hasNext()) {
+                            System.out.println(coursesIterator.next());
+                        } */
+
+
 /*
 
                         ArrayList<ArrayList<String>> coreqs = Planner.getCoReq((String)dropDown.getSelectedItem());
