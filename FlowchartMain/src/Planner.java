@@ -57,6 +57,7 @@ public class Planner {
         else
         {
             Course removed = deg.removeObtainedCredit(courseID);
+            FullCourseList.removeCourse(courseID);
             return "Success";
         }
     }
@@ -766,6 +767,11 @@ public class Planner {
         LinkedList<String> coursesRequiredToGraduate = DegreeParser.getCoursesRequiredToGraduate();
 
         return coursesRequiredToGraduate.size() == 0; // True if its size is 0
+    }
+
+    public static LinkedList getRequiredCourses()
+    {
+        return DegreeParser.getCoursesRequiredToGraduate();
     }
 
     //TODO logic about the classes that the user enters if they have previous classes

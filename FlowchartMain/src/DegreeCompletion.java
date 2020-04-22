@@ -17,13 +17,13 @@ public class DegreeCompletion {
     private LinkedList<String> nonSpecificCoursesRequiredByMajorOrMinor;
     static DegreeParser degreeParser = new DegreeParser();
 
-    public void setMajor(String major) {
-        this.major = major;
+    public void setMajor(String maj) {
+        major = maj;
 
     }
 
-    public void setMinor(String minor) {
-        this.minor = minor;
+    public void setMinor(String min) {
+        minor = min;
     }
 
     public void setCoursesNeededToGraduate() throws IOException {
@@ -50,7 +50,7 @@ public class DegreeCompletion {
 //        }
 //    }
 
-    public LinkedList<String> getCoursesNeededToGraduate(){
+    public static LinkedList<String> getCoursesNeededToGraduate(){
         return coursesNeededToGraduate;
     }
 

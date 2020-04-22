@@ -140,20 +140,27 @@ public class FlowNode extends JComponent
                             dropDown.addItem(electiveCourses[i]);
                         break;
                     default:
+                        String menuSlot = (String) dropDown.getItemAt(1);    // this gets the intended category the class falls under
+                        System.out.println("Menu slot: " + menuSlot);
+                        String returnedCourse = Planner.removeFromCoursesReqToGraduate(menuSlot); // Ex: remove Technical Elective from CRG
+                        if (!Planner.checkIfValidCourseReqToGraduateRemoval(returnedCourse)) { // Something was unsuccessfully removed from CRG
+                            JFrame popup = new JFrame();
+                            popup.setBounds(525,152,250,200);
+                            popup.add(new JLabel("<html>Requirements for " + menuSlot + " already fulfilled, please select a different course type."));
+                            popup.setVisible(true);
+
+                            dropDown.removeAllItems();
+                            for(int i = 0; i < menu.length; i++)
+                                dropDown.addItem(menu[i]);
+                        }
+                        else {
                         dropDown.setVisible(false);
                         courseID.setText((String) dropDown.getSelectedItem());
                         courseID.setVisible(true);
                         clearButton.setVisible(true);
-
-                        String menuSlot = (String)dropDown.getItemAt(1);    // this gets the intended category the class falls under
-                        System.out.println("Menu slot: " + menuSlot);
-                        String returnedCourse = Planner.removeFromCoursesReqToGraduate(menuSlot); // Ex: remove Technical Elective from CRG
-
+                    }
                         // Check if removal was invalid
-                        if (!Planner.checkIfValidCourseReqToGraduateRemoval(returnedCourse)) { // Something was unsuccessfully removed from CRG
-                            // We need something in here to tell the student that they already have every credit for the course type selected, and they need to select something else
-                            // Also set the drop-down back to its initial state
-                        }
+
 
                         // Next part for debugging purposes:
 
