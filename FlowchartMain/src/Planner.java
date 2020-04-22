@@ -758,16 +758,6 @@ public class Planner {
         }
     }
 
-    /**
-     * Used to tell the user if their plan on the flowchart has all required credits for their selected degree
-     * @return Whether or not the linked list coursesRequiredToGraduate is empty.
-     */
-    public static boolean isDegreeComplete() {
-        LinkedList<String> coursesRequiredToGraduate = DegreeParser.getCoursesRequiredToGraduate();
-
-        return coursesRequiredToGraduate.size() == 0; // True if its size is 0
-    }
-
     //TODO logic about the classes that the user enters if they have previous classes
 
     //TODO send course that user picked from drop-down menu to removeCourseFromCoursesNeededToGraduate in DegreeCompletion class

@@ -157,12 +157,12 @@ public class FlowNode extends JComponent
 
                         // Next part for debugging purposes:
 
-                        /* System.out.println("After removal: ");
+                         System.out.println("After removal: ");
                         LinkedList<String> courses = DegreeParser.getCoursesRequiredToGraduate();
                         Iterator coursesIterator = courses.iterator();
                         while (coursesIterator.hasNext()) {
                             System.out.println(coursesIterator.next());
-                        } */
+                        }
 
 
 /*
