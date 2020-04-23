@@ -1,10 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 /**
  * The FourYearPlanDisplay class is used to display the flowchart based on the major/minor combination the student
@@ -18,47 +14,8 @@ public class FourYearPlanDisplay extends JFrame implements PlanDisplay//, Runnab
 {
     ArrayList<ArrayList<String>> Degree = Planner.getDegree();
 
-    ActionListener check = new ActionListener()
-    {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-                LinkedList<String> CRG = Planner.getRequiredCourses();
-                JFrame popup = new JFrame();
-                popup.setBounds(100,100,500,500);
-                JLabel requirements = new JLabel();
-                String message;
-                if(CRG.isEmpty())
-                {
-                    message = "<html>Congratulations! All Degree requirements filled. Close this window and use the snipping tool to save your plan!";
-                }
-                else
-                {
-                     message = "<html>These courses/course types are still required: ";
-                    for (int i = 0; i < CRG.size(); i++)
-                    {
-                        if(i != CRG.size() - 1)
-                            message = message.concat(CRG.get(i) + ", ");
-                        else
-                            message = message.concat(CRG.get(i) + ".");
-                    }
-                    requirements.setText(message);
-                }
-                popup.add(requirements);
-                popup.setVisible(true);
-        }
-    };
-
     public FourYearPlanDisplay()
     {
-        JPanel completion = new JPanel();
-        completion.setSize(1200,60);
-        JButton checkForCompletion = new JButton("Check Schedule for Completion");
-        checkForCompletion.addActionListener(check);
-        completion.add(checkForCompletion);
-        add(completion,BorderLayout.NORTH);
-        completion.setVisible(true);
-
         JPanel chart = new JPanel(new GridLayout(0,1));
         chart.setPreferredSize(new Dimension(1200,1500));
 

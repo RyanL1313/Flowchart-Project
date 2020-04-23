@@ -22,16 +22,18 @@ public class DegreeParser {
             "MSC","MS","MKT","MA","MAE","ME","MIL","MU","MUA","MUE","MUJ","NUR","OPE","OPT","PHL","PH","PSC","PRO",
             "PY","SOC","ST","TH","WGS","WLC"};
 
-
+    /**
+     * Parses an HTML file for a major and minor
+     * @param major The provided major
+     * @param minor The provided minor
+     * @return The array list of Semester objects as determined in the parsing
+     * @throws IOException
+     */
     public ArrayList<Semester> degreeParser(String major, String minor) throws IOException
     {
-//public static void main(String[] args) throws IOException {
-
         String majorName = "Degree Plans/" + major + ".html";
-        //String majorName = "Degree Plans/Mathematical_Sciences_Major.html";
 
         String minorName = "Degree Plans/" + minor + ".html";
-        //String minorName = "Degree Plans/Mathematical Sciences Minor.html";
 
         Document doc1 = Jsoup.parse(new File(majorName), "utf-8");
 
@@ -105,9 +107,8 @@ public class DegreeParser {
                         newCourse3 = makeStringToCourseObject(labCourse);
                         semester.addCourse(newCourse1);
                         semester.addCourse(newCourse3);
-                        //System.out.println(RegCourse);
-                        //System.out.println(labCourse);
                     }
+
                     //course doesn't have lab
                     else{
                         boolean checkIfItsACourse = checkIfTextIsCourse(newText);
@@ -133,9 +134,6 @@ public class DegreeParser {
                             coursesReqToGraduate.add(newText);
                             semester.addCourse(newCourse2);
                         }
-
-                        // System.out.println(newText);
-
                     }
                     i++;
                     if (i == arr1.size()) {
@@ -167,8 +165,6 @@ public class DegreeParser {
                         newCourse3 = makeStringToCourseObject(labCourse);
                         semester.addCourse(newCourse1);
                         semester.addCourse(newCourse3);
-                        //System.out.println(RegCourse);
-                        //System.out.println(labCourse);
                     }
                     //course doesn't have lab
                     else{
@@ -195,9 +191,6 @@ public class DegreeParser {
                             coursesReqToGraduate.add(newText);
                             semester.addCourse(newCourse2);
                         }
-
-
-
                     }
 
                     i++;
@@ -206,17 +199,19 @@ public class DegreeParser {
                         break;
                     }
                 } while (!arr1.get(i).contains("Fall") && !arr1.get(i).equals("Spring") && !arr1.get(i).contains("Year"));
+
                 semester.updateSemesterHours();
                 semesterArrayList.add(semester);
             }
+
             text1 = arr1.get(i);
         }
 
-        //minor HTML is parsed by tag "tr" and put into the LinkedList
+        // Minor HTML file is parsed by "tr" tags
         for (Element tr : table2.getElementsByTag("tr")) {
             arr2.add(tr.text());
-            //System.out.println(tr.text());
         }
+
         arr2.remove(0);
         arr2.remove(arr2.size()-1);
         for(int j = 0; j < arr2.size(); j++) {
@@ -229,35 +224,33 @@ public class DegreeParser {
                 coursesReqToGraduate.add(newText);
             }
             else{
-                if (!newText.contains("recommended"))
+                if (!newText.contains("recommended")) {
                     coursesReqToGraduate.add(newText);
+                }
             }
-
         }
-
-//       for(int k = 0; k < semesterArrayList.size(); k++){
-//           System.out.println(semesterArrayList.get(k));
-//       }
 
         removeCoreCoursesFromCNG(coursesReqToGraduate);
         if (coursesReqToGraduate.getLast().contains("ST 300+"))
             separateIntoTwoEntriesMAOrST();
 
         Degree.setSemesters(semesterArrayList);
+
         return semesterArrayList;
-//        for(String singleCourse: coursesReqToGraduate){
-//            System.out.println(singleCourse);
-//        }
     }
 
+    /**
+     * Parses an HTML file for a major only.
+     * @param major The provided major
+     * @return The array list of semester objects as determined in the parsing
+     * @throws IOException
+     */
     public ArrayList<Semester> degreeParser(String major) throws IOException
     {
-//public static void main(String[] args) throws IOException {
-
         String majorName = "Degree Plans/" + major + ".html";
-        //String majorName = "Degree Plans/Mathematical_Sciences_Major.html";
 
         Document doc1 = Jsoup.parse(new File(majorName), "utf-8");
+
         /*
         Removes all of the unnecessary parts of the major html document
          */
@@ -346,9 +339,6 @@ public class DegreeParser {
                             coursesReqToGraduate.add(newText);
                             semester.addCourse(newCourse2);
                         }
-
-                        // System.out.println(newText);
-
                     }
                     i++;
                     if (i == arr1.size()) {
@@ -380,8 +370,6 @@ public class DegreeParser {
                         newCourse3 = makeStringToCourseObject(labCourse);
                         semester.addCourse(newCourse1);
                         semester.addCourse(newCourse3);
-                        //System.out.println(RegCourse);
-                        //System.out.println(labCourse);
                     }
                     //course doesn't have lab
                     else{
@@ -425,41 +413,50 @@ public class DegreeParser {
             text1 = arr1.get(i);
         }
 
-//       for(int k = 0; k < semesterArrayList.size(); k++){
-//           System.out.println(semesterArrayList.get(k));
-//       }
-
         removeCoreCoursesFromCNG(coursesReqToGraduate);
         Degree.setSemesters(semesterArrayList);
+
         return semesterArrayList;
-//        for(String singleCourse: coursesReqToGraduate){
-//            System.out.println(singleCourse);
-//        }
     }
 
+    /**
+     * Remove the credit hours from course string
+     * @param text The original course string
+     * @return The updated course string
+     */
     public static String removeCreditHrs(String text){
 
         if(text.equals("Elective 3") || text.equals("Elective 1")) {
             text = text.substring(0, text.length() - 2);
             return text;
         }
-        //String[] arrOfText = text.split(" ");
 
         if (text.contains("course 3 or")) {
             text = text.substring(0, text.length() - 6);
             return text;
         }
+
         StringBuilder sb = new StringBuilder(text);
         sb.deleteCharAt(text.length() - 1);
         String newText = sb.toString();
         return newText;
     }
 
-    public static Course makeStringToCourseObject(String courseID){
-        Course newCourse = FullCourseList.getCourseByID(courseID);
+    /**
+     * Takes a course ID and finds that SpecificCourse object in FullCourseList.
+     * @param courseID The course ID
+     * @return The SpecificCourse object
+     */
+    public static SpecificCourse makeStringToCourseObject(String courseID){
+        SpecificCourse newCourse = FullCourseList.getCourseByID(courseID);
         return newCourse;
     }
 
+    /**
+     * Checks if the string contains an actual SpecificCourse type
+     * @param text The string to check
+     * @return Whether or not it's an actual specific course offered at UAH
+     */
     public static boolean checkIfTextIsCourse(String text){
 
         boolean trueOrFalse = false;
@@ -482,7 +479,11 @@ public class DegreeParser {
 
     }
 
-
+    /**
+     * Split the course and lab section into two separate courses.
+     * @param text String to split
+     * @return The course and lab section strings
+     */
     public static String[] splitCourseAndLab(String text){
 
         String[] arr = text.split(" ");
@@ -494,6 +495,11 @@ public class DegreeParser {
         return courseAndLab;
     }
 
+    /**
+     * Remove the course description from SpecificCourse course IDs
+     * @param text Original course
+     * @return Trimmed-down course
+     */
     public static String takeAwayCourseDescr(String text){
 
         String[] arr = text.split(" ");
@@ -505,6 +511,11 @@ public class DegreeParser {
         return courseIDplusAcr;
     }
 
+    /**
+     * Remove see requirements tab from courses with this in them.
+     * @param text Original course
+     * @return Trimmed-down course
+     */
     private String removeSeeRequirementsTab(String text) {
         int index = 0; // Index where the parentheses start
         if (text.contains("(See Requirements tab") || text.contains("See requirements tab")) {
@@ -547,6 +558,10 @@ public class DegreeParser {
         return original;
     }
 
+    /**
+     * Gets the linked list of courses still needed to be satisfied in the student's degree.
+     * @return The courses needed to graduate
+     */
     public static LinkedList getCoursesRequiredToGraduate(){
         return coursesReqToGraduate;
     }

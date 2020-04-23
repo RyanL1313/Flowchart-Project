@@ -1,5 +1,3 @@
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -191,7 +189,7 @@ public class DegreeCompletion {
             case "General Elective":
                 while (courseIterator.hasNext()) {
                     courseInIteration = (String) courseIterator.next();
-                    if (courseInIteration.equals("Elective")) {
+                    if (courseInIteration.trim().equals("Elective")) {
                         CRG.removeFirstOccurrence(courseInIteration);
                         courseRemoved = courseInIteration;
                         break;
@@ -200,7 +198,7 @@ public class DegreeCompletion {
             default: // Not really necessary. All cases are covered
         }
 
-       // System.out.printf("\nCourse removed: " + courseRemoved + "\n\n");
+       System.out.printf("\nCourse removed: " + courseRemoved + "\n\n");
 
         return courseRemoved; // Could be the empty string if the user's selected course type is not in CRG. Therefore, nothing was removed in this case
     }

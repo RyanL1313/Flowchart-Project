@@ -57,7 +57,6 @@ public class Planner {
         else
         {
             Course removed = deg.removeObtainedCredit(courseID);
-            FullCourseList.removeCourse(courseID);
             return "Success";
         }
     }
@@ -629,6 +628,29 @@ public class Planner {
     }
 
     /**
+     * Getter for the core courses in the student's degree plan
+     * @return The list of core courses
+     */
+    public static String[] getCoreCourseIDs() {
+        ArrayList<String> coreCourseList = new ArrayList<>(); // List of core courses in the student's degree to be returned
+
+        coreCourseList.add("Core Course"); // For the drop-down menu
+
+        ArrayList<Semester> semesters = Degree.getSemesterList(); // List of semesters with SpecificCourse objects and BroadCourse objects
+
+        for (Semester sem : semesters) {
+            for (int i = 0; i < sem.getCourseList().size(); i++) {
+                Course courseInThisSemester = sem.getCourseList().get(i);
+                if (courseInThisSemester.getClass().toString().contains(("SpecificCourse"))) {// Core course
+                    coreCourseList.add(courseInThisSemester.getCourseID());
+                }
+            }
+        }
+
+        return convertArrayListToArray(coreCourseList);
+    }
+
+    /**
      * Converts the Degree object into an ArrayList<ArrayList<String>> for the PlanDisplays
      * @return ArrayList<ArrayList<String>> which has the courseID's separated by semester.
      */
@@ -763,16 +785,6 @@ public class Planner {
                 }
             }
         }
-    }
-
-    /**
-     * Used to tell the user if their plan on the flowchart has all required credits for their selected degree
-     * @return Whether or not the linked list coursesRequiredToGraduate is empty.
-     */
-    public static boolean isDegreeComplete() {
-        LinkedList<String> coursesRequiredToGraduate = DegreeParser.getCoursesRequiredToGraduate();
-
-        return coursesRequiredToGraduate.size() == 0; // True if its size is 0
     }
 
     public static LinkedList getRequiredCourses()
