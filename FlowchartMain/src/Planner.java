@@ -138,7 +138,7 @@ public class Planner {
      * Uses checkPreReq method from Degree to obtain the missing prerequisites that need to be put into the String to be returned
      * @return A String telling the user what prereqs they must take before the class they just tried
      */
-    public String electivePrereqAddError(String courseID, int semesterNumber) {
+    public static String electivePrereqAddError(String courseID, int semesterNumber) {
         String errorMessage = ""; // Error message to be returned
         Degree degreePlan = new Degree();
         ArrayList<ArrayList<String>> missingPrereqs = degreePlan.checkPreReq(courseID, semesterNumber);
@@ -146,7 +146,7 @@ public class Planner {
             return errorMessage; // The user had all the prerequisites, the course can be added to the flowchart (returns empty string)
         // Otherwise there was an error adding electives. Send a message to the user.
 
-        errorMessage = "Missing prereqs: ";
+        errorMessage = "Missing prereqs for " + courseID + ": ";
         String errorMessageAddition = ""; // Adds on to errorMessage throughout the loop
 
         for (ArrayList<String> orRelationshipRow : missingPrereqs) {
