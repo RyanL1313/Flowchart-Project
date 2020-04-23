@@ -37,8 +37,8 @@ public class CreditAdder extends JFrame
         {
             String addedCourse = (String)dropDown.getSelectedItem();
             //entryBox.setText("");
-            removeCourse(addedCourse);
             dropDown.setSelectedIndex(0);
+            removeCourse(addedCourse);
         }
     };
 

@@ -216,11 +216,47 @@ public class Degree {
     public Course removeObtainedCredit(String courseID)
     {
         Course result = null;
+
+        ArrayList<String[]> list = new ArrayList<String[]>();           // Order of priority
+        list.add(Planner.getCS400PlusCourseIDs());                      // CS 400+
+        list.add(Planner.getMA400PlusCourseIDs());                      // MA 400+
+        list.add(Planner.getCS300PlusCourseIDs());                      // CS 300+
+        list.add(Planner.getMA300PlusCourseIDs());                      // MA 300+
+        list.add(Planner.getCS200PlusCourseIDs());                      // CS 200+
+        list.add(Planner.getMA200PlusCourseIDs());                      // MA 200+
+        list.add(Planner.getHistoryCourseIDs());                        // History
+        list.add(Planner.getSocialAndBehavioralSciencesCourseIDs());    // Soc. & Behav. Sciences
+        list.add(Planner.getHumanitiesCourseIDs());                     // Humanities
+        list.add(Planner.getLiteratureCourseIDs());                     // Literature
+        list.add(Planner.getLabScienceCourseIDs());                     // Lab Sciences
+        list.add(Planner.getTechnicalElectiveCourseIDs());              // Technical Electives
+        list.add(Planner.getFineArtsCourseIDs());                       // Fine Arts
+        list.add(Planner.getST400PlusCourseIDs());                      // ST 400+
+        list.add(Planner.getElective300PlusCourseIDs());                // Elective 300+
+        list.add(Planner.getElectives(1));                         // Electives
+
         for(int i = 0; i < semesterList.size(); i++)
         {
             result = semesterList.get(i).removeCourse(courseID);
-            if(result != null)
+            if(result != null)      // if result is an instance of SpecificCourse
                 return result;
+            else                    // else result is an instance of BroadCourse
+            {
+                int x = 0;
+                while(x < 16)   // check if the Course ID is in each list, it will always be in Electives at the end.
+                {
+                    for(int j = 0; j < list.get(x).length; j++)     // checks each list for the course ID.
+                    {
+                        if(courseID.equals(list.get(x)[j]))     // if found, the semester removes that BroadCourse
+                        {
+                            semesterList.get(i).removeCourse(list.get(x)[1]);   // BroadCourse type
+                            x = 16;
+                            break;
+                        }
+                    }
+                    x++;
+                }
+            }
         }
         return result;
     }
