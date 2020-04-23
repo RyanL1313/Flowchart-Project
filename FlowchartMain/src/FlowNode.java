@@ -24,7 +24,7 @@ public class FlowNode extends JComponent
     static String[] literatures = Planner.getLiteratureCourseIDs();
     static String[] socBeh = Planner.getSocialAndBehavioralSciencesCourseIDs();
     static String[] electiveCourses300plus = Planner.getElective300PlusCourseIDs();
-    static String[] electiveCourses = Planner.getElectives();
+    static String[] electiveCourses = Planner.getElectives(1);
     JComboBox dropDown = new JComboBox(menu);
     JLabel courseID = new JLabel();
     JButton clearButton = new JButton("CLEAR");

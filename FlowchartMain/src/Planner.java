@@ -83,7 +83,7 @@ public class Planner {
      * Used in the GUI to display all possible electives in a drop-down box
      * @return A basic array of Strings that correspond to the full list of courses
      */
-    public static String[] getElectives() {
+    public static String[] getElectives(int flag) {
         HashMap<String, LinkedList<SpecificCourse>> courseMap = FullCourseList.getFullCourseList(); // Full list/mapping of UAH's courses
         ArrayList<String> electiveList = new ArrayList<String>(); // The list of elective courses to be returned
 
@@ -111,20 +111,26 @@ public class Planner {
             }
         }
 
-        for(int i = 0; i < electiveList.size(); i++)
-            for(int j = 0; j < coreCourses.size(); j++)
-                if(coreCourses.get(j).equals(electiveList.get(i)))
-                {
-                    electiveList.remove(i);
-                    i--;
-                }
         String[] electivesArray = new String[electiveList.size() + 2];
         electivesArray[0] = "BACK";
         electivesArray[1] = "General Elective";     // added title of list to list
+
+        if(flag == 1)
+        {
+            for (int i = 0; i < electiveList.size(); i++)
+                for (int j = 0; j < coreCourses.size(); j++)
+                    if (coreCourses.get(j).equals(electiveList.get(i)))
+                    {
+                        electiveList.remove(i);
+                        i--;
+                    }
+        }
+
         for (int i = 2; i < electiveList.size() + 2; i++)
         {
             electivesArray[i] = electiveList.get(i - 2); // The array and array list are offset by 2 because of the BACK slot in the array and the title slot
         }
+
         return electivesArray;
     }
 
