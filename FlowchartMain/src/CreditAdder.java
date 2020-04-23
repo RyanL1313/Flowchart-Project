@@ -9,7 +9,7 @@ public class CreditAdder extends JFrame
     String[] menu = {"Menu","Core Courses","MA 200+","MA 300+","MA 400+","CS 200+","CS 300+","CS 400+", "ST 400+",
             "Literature","Soc. & Behav. Science","Fine Art","History",
             "Lab Science","Technical Elective","Humanities", "General Elective 300+", "All Courses"};
-    //static String[] corecourses = Planner.getCoreCourseIDs();
+    static String[] corecourses = Planner.getCoreCourseIDs();
     static String[] ma200plus = Planner.getMA200PlusCourseIDs();
     static String[] ma300plus = Planner.getMA300PlusCourseIDs();
     static String[] ma400plus = Planner.getMA400PlusCourseIDs();
@@ -71,8 +71,8 @@ public class CreditAdder extends JFrame
                 {
                     case "Core Courses":
                         dropDown.removeAllItems();
-                        //for(int i = 0; i < corecourses.length; i++)
-                            //dropDown.addItem(corecourses[i]);
+                        for(int i = 0; i < corecourses.length; i++)
+                            dropDown.addItem(corecourses[i]);
                         break;
                     case "MA 200+":
                         dropDown.removeAllItems();
