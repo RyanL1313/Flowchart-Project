@@ -272,21 +272,26 @@ public class Degree {
      * Shifts semesterList after a course is removed from it so that each semester stays between 12-18 credit hours
      */
     public static void shiftSemesters() {
-        semesterList.get(0).removeCourse("EH 101");
-        semesterList.get(0).removeCourse("CS 102");
-        semesterList.get(1).getCourseList().add(0, FullCourseList.getCourseByID("PH 111"));
-       // semesterList.get(3).removeCourse("CS 309");
-       // semesterList.get(3).removeCourse("CS 321");
-       // semesterList.get(1).removeCourse("MA 172");
+       // semesterList.get(0).removeCourse("EH 101");
+       // semesterList.get(0).removeCourse("CS 102");
+        //semesterList.get(1).getCourseList().add(0, FullCourseList.getCourseByID("PH 111"));
+       // semesterList.get(1).removeCourse("CS 121");
+       // semesterList.get(4).removeCourse("MA 385");
+      // semesterList.get(6).removeCourse("CS 424");
+       //semesterList.get(6).getCourseList().add(FullCourseList.getCourseByID("CS 317"));
+      // semesterList.get(6).removeCourse("CS 490");
+      // semesterList.get(4).removeCourse("CS 317");
+       // semesterList.get(5).removeCourse("CS 413");
+        //semesterList.get(7).removeCourse("CS 499");
+       // semesterList.get(0).removeCourse("MA 171");
+      //  semesterList.get(1).removeCourse("MA 172");
+       // semesterList.get(2).removeCourse("MA 201");
+        //semesterList.get(3).removeCourse("MA 238");
         //semesterList.get(3).removeCourse("MA 244");
-       // semesterList.get(6).removeCourse("EH 301");
-
-        int numberOfShifts = 1;
+      // semesterList.get(6).removeCourse("EH 301");
 
         while (!checkIfSemestersHaveValidHourRange()) { // Only want to shift semesters if necessary
             for (int i = 0; i < semesterList.size(); i++) {
-                System.out.println(numberOfShifts++ + " shift:");
-                System.out.println("Semester " + (i + 1) + " hours: " + semesterList.get(i).getSemesterHours());
                 if (semesterList.get(i).getSemesterHours() < 12 && i != semesterList.size() - 1) { // Can't do this for the last semester
                     for (int courseIndex = 0; courseIndex < semesterList.get(i + 1).getTotalNumberOfCourses(); courseIndex++) { // Checking if we can move any courses from the next semester down
                         if (checkIfBroadCourse(semesterList.get(i + 1).getCourseList().get(courseIndex))) { // Check if a broad course is in the next semester up. If so, shift that course up.
@@ -304,9 +309,10 @@ public class Degree {
                         }
                     }
                 }
-
             }
-
+            // Check if last semester is below 12. If it is, we call another method to shift the courses in that semester up
+            if (semesterList.get(semesterList.size() - 1).getSemesterHours() < 12)
+                shiftUpLastSemesterAndDelete(semesterList.size() - 1); // Move the courses out of the last semester, then remove the empty semester object from semesterList
         }
     }
 
@@ -373,6 +379,35 @@ public class Degree {
 
         return false; // The course does not have coreqs, can be messed with if its prereqs don't cause issues
     }
+
+    /**
+     * Shifts all courses in the last semester up, then deletes the last semester.
+     * Called in shiftSemesters when the last semester's hours dip below 12.
+     */
+    public static void shiftUpLastSemesterAndDelete(int lastSemesterIndex) {
+        while (semesterList.get(lastSemesterIndex).getSemesterHours() != 0) { // Loop until the last semester has been emptied
+            for (int i = lastSemesterIndex; i > 0; i--) { // Looping backwards through all semesters but the first one
+                for (int j = 0; j < semesterList.get(lastSemesterIndex).getTotalNumberOfCourses(); j++) { // Try to shift the courses in the last semester up one-by-one
+                    if (checkIfBroadCourse(semesterList.get(lastSemesterIndex).getCourseList().get(j))) { // We'll shift the broad course up no matter what
+                        semesterList.get(i - 1).getCourseList().add(semesterList.get(i).getCourseList().get(j)); // Shifting the broad course up
+                        semesterList.get(i).getCourseList().remove(j); // Also, remove the shifted course from the semester it was previously in
+                    }
+                }
+            }
+        }
+
+        semesterList.remove(semesterList.size() - 1); // Remove the empty semester, reducing semesterList's size by 1
+    }
+
+    /**
+     * Takes a course in a semester, then looks to the previous semester to see if it has prereqs in that semester.
+     * Even if the course does have prereqs in the previous semester, it could still be fine to shift it if other prereqs
+     * for it that have an "or" relationship with that prereq are in the even more previous semesters, so we check for that
+     * too.
+     *
+     * Used by shiftUpLastSemesterAndDelete
+     */
+    //public static int checkIfPreviousSemesterHasPrereqsForCourse(SpecificCourse courseInQuestion)
 
 }
 
