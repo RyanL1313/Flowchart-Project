@@ -234,6 +234,14 @@ public class DegreeParser {
         if (coursesReqToGraduate.getLast().contains("ST 300+"))
             separateIntoTwoEntriesMAOrST();
 
+        if (minor.equals("Computer Science Minor")) {
+            semesterArrayList.get(1).getCourseList().add(0, new BroadCourse("Elective"));
+            semesterArrayList.get(7).getCourseList().add(0, new BroadCourse("Elective"));
+        }
+        else if (minor.equals("Mathematical Sciences Minor")) {
+            semesterArrayList.get(6).getCourseList().add(0, new BroadCourse("Elective"));
+            semesterArrayList.get(7).getCourseList().add(0, new BroadCourse("Elective"));
+        }
         Degree.setSemesters(semesterArrayList);
 
         return semesterArrayList;
