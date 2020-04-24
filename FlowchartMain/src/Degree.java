@@ -268,6 +268,112 @@ public class Degree {
         return result;
     }
 
+    /**
+     * Shifts semesterList after a course is removed from it so that each semester stays between 12-18 credit hours
+     */
+    public static void shiftSemesters() {
+        semesterList.get(0).removeCourse("EH 101");
+        semesterList.get(0).removeCourse("CS 102");
+        semesterList.get(1).getCourseList().add(0, FullCourseList.getCourseByID("PH 111"));
+       // semesterList.get(3).removeCourse("CS 309");
+       // semesterList.get(3).removeCourse("CS 321");
+       // semesterList.get(1).removeCourse("MA 172");
+        //semesterList.get(3).removeCourse("MA 244");
+       // semesterList.get(6).removeCourse("EH 301");
+
+        int numberOfShifts = 1;
+
+        while (!checkIfSemestersHaveValidHourRange()) { // Only want to shift semesters if necessary
+            for (int i = 0; i < semesterList.size(); i++) {
+                System.out.println(numberOfShifts++ + " shift:");
+                System.out.println("Semester " + (i + 1) + " hours: " + semesterList.get(i).getSemesterHours());
+                if (semesterList.get(i).getSemesterHours() < 12 && i != semesterList.size() - 1) { // Can't do this for the last semester
+                    for (int courseIndex = 0; courseIndex < semesterList.get(i + 1).getTotalNumberOfCourses(); courseIndex++) { // Checking if we can move any courses from the next semester down
+                        if (checkIfBroadCourse(semesterList.get(i + 1).getCourseList().get(courseIndex))) { // Check if a broad course is in the next semester up. If so, shift that course up.
+                            semesterList.get(i).getCourseList().add(semesterList.get(i + 1).getCourseList().get(courseIndex)); // Shifting the broad course up
+                            semesterList.get(i + 1).getCourseList().remove(courseIndex); // Also, remove the shifted course from the semester it was previously in
+                            break;
+                        } else { // It's a specific course, so we need to check if the previous semester contains prereqs for this course, and if this course has coreqs in this semester. If no for both conditions, the course can be shifted.
+                            SpecificCourse courseToCheck = (SpecificCourse) semesterList.get(i + 1).getCourseList().get(courseIndex);
+
+                            if (!checkIfThisCourseHasCoreqs(courseToCheck) && checkIfShiftableBasedOnPrereqsForThisCourse(courseToCheck, semesterList.get(i).getCourseList(), i)) {
+                                semesterList.get(i).getCourseList().add(semesterList.get(i + 1).getCourseList().get(courseIndex)); // Shifting the specific course up
+                                semesterList.get(i + 1).getCourseList().remove(courseIndex); // Also, remove the shifted course from the semester it was previously in
+                                break;
+                            }
+                        }
+                    }
+                }
+
+            }
+
+        }
+    }
+
+    /**
+     * Checks if every semester in semesterList has between 12-18 hours.
+     * Used in shiftSemesters.
+     * @return Whether or not the above statement is true.
+     */
+    public static boolean checkIfSemestersHaveValidHourRange() {
+        for (int i = 0; i < semesterList.size(); i++) {
+            if (semesterList.get(i).getSemesterHours() < 12 || semesterList.get(i).getSemesterHours() > 18)
+                return false;
+        }
+
+        return true; // Otherwise, all the semesters had a valid amount of hours.
+    }
+
+    /**
+     * Checks if a given course is a BroadCourse object
+     * Used in shiftSemesters
+     * @param course The course object in question
+     * @return Whether or not the course is a BroadCourse object.
+     */
+    public static boolean checkIfBroadCourse(Course course) {
+        return course.getClass().toString().contains("BroadCourse"); // True if it's a broad course, false if specific course
+    }
+
+    /**
+     * Checks if a course in the next semester has prereqs in the this semester.
+     * Used in shiftSemesters to check if a course can be shifted to this semester
+     * @param courseInNextSemester The course in question
+     * @param coursesInThisSemester List of courses in the current semester which will have their prereqs checked
+     * @param currentIndexOfSemesterList Current semester being evaluated; used when calling Planner.electivePrereqAddError
+     * @return Whether or not the prereqs allow for this shifting
+     */
+    public static boolean checkIfShiftableBasedOnPrereqsForThisCourse(SpecificCourse courseInNextSemester, ArrayList<Course> coursesInThisSemester, int currentIndexOfSemesterList) {
+
+        ArrayList<ArrayList<String>> prereqsForCourseInQuestion = courseInNextSemester.getPrereqs();
+
+        for (ArrayList<String> andRelationshipCourses : prereqsForCourseInQuestion) {
+            for (String orRelationshipCourse : andRelationshipCourses) { // If none of the strings match the strings of courses in this semester, the course is still shiftable.
+                for (Course courseInThisSemester : coursesInThisSemester) {
+                    // Firstly, a prereq for the course could be in the current semester. This could be fine if the prereq has an "or" relationship with another course, and that other course is in a previous semester.
+                    if (orRelationshipCourse.equals(courseInThisSemester.getCourseID()) && !Planner.electivePrereqAddError(courseInNextSemester.getCourseID(), currentIndexOfSemesterList).equals("")) // Then the course can't be shifted, return false
+                        return false;
+                }
+            }
+        }
+
+        return true; // Otherwise, the course is able to be shifted to the current semester. Shift it.
+    }
+
+    /**
+     * Checks if a course has coreqs.
+     * If a course does have coreqs, then it shouldn't be moved unless we're moving a whole semester up and then removing the semester
+     * which happens when the last semester dips below 12 credit hours.
+     * @param course The course in the next semester that needs to be checked if it can be shifted
+     * @return Whether or not the course can be shifted based on its coreqs
+     */
+    public static boolean checkIfThisCourseHasCoreqs(SpecificCourse course) {
+        ArrayList<ArrayList<String>> coreqs = course.getCoreqs();
+        if (coreqs.size() != 0) {// The course has coreqs and should be left alone (unless shifting from the last semester up for removing a semester)
+            return true;}
+
+        return false; // The course does not have coreqs, can be messed with if its prereqs don't cause issues
+    }
+
 }
 
 

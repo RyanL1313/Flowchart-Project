@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -49,6 +48,8 @@ public class CreditAdder extends JFrame
 
         {
             dispose();
+            Degree.shiftSemesters();
+            Degree.printSemesters();
             Planner.removeCoreCoursesFromFullCourseList(); // Added by Ryan so dropdowns in the flowchart can't have the core courses
             Planner.drawFourYearPlanDisplay();
         }

@@ -141,7 +141,7 @@ public class DegreeParser {
                         break;
                     }
                 } while (!arr1.get(i).contains("Fall") && !arr1.get(i).equals("Spring") && !arr1.get(i).contains("Year"));
-                semester.updateSemesterHours();
+                //semester.updateSemesterHours();
                 semesterArrayList.add(semester);
             }
             text1 = arr1.get(i);
@@ -200,7 +200,7 @@ public class DegreeParser {
                     }
                 } while (!arr1.get(i).contains("Fall") && !arr1.get(i).equals("Spring") && !arr1.get(i).contains("Year"));
 
-                semester.updateSemesterHours();
+               // semester.updateSemesterHours();
                 semesterArrayList.add(semester);
             }
 
@@ -346,7 +346,7 @@ public class DegreeParser {
                         break;
                     }
                 } while (!arr1.get(i).contains("Fall") && !arr1.get(i).equals("Spring") && !arr1.get(i).contains("Year"));
-                semester.updateSemesterHours();
+                //semester.updateSemesterHours();
                 semesterArrayList.add(semester);
             }
             text1 = arr1.get(i);
@@ -407,7 +407,7 @@ public class DegreeParser {
                         break;
                     }
                 } while (!arr1.get(i).contains("Fall") && !arr1.get(i).equals("Spring") && !arr1.get(i).contains("Year"));
-                semester.updateSemesterHours();
+               // semester.updateSemesterHours();
                 semesterArrayList.add(semester);
             }
             text1 = arr1.get(i);

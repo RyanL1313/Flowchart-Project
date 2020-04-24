@@ -10,8 +10,9 @@ public class Semester {
     /**
      * Updates the semester's hours as courses get added to it
      */
-    public void updateSemesterHours()
+    public void setSemesterHours()
     {
+        semesterHours = 0;
         //iterates through courseList
         for (Course course : courseList) semesterHours += course.getHours(); // tallies the hours of each class
     }
@@ -73,7 +74,7 @@ public class Semester {
      * @return
      */
     public int getSemesterHours(){
-
+        setSemesterHours();
         return semesterHours;
     }
 
