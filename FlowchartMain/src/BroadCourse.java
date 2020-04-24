@@ -29,7 +29,7 @@ public class BroadCourse implements Course{
     @Override
     public int getHours()
     {
-        return 0;
+        return 3;
     }
 
     /**

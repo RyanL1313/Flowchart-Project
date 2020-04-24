@@ -37,6 +37,11 @@ public class Semester {
                 courseList.remove(course);
                 return course;
             }
+            else if(course.getCourseID().contains(cID))
+            {
+                courseList.remove(course);
+                return course;
+            }
         }
         return null;
     }

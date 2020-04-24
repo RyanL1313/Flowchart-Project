@@ -82,7 +82,7 @@ public class Planner {
      * Used in the GUI to display all possible electives in a drop-down box
      * @return A basic array of Strings that correspond to the full list of courses
      */
-    public static String[] getElectives() {
+    public static String[] getElectives(int flag) {
         HashMap<String, LinkedList<SpecificCourse>> courseMap = FullCourseList.getFullCourseList(); // Full list/mapping of UAH's courses
         ArrayList<String> electiveList = new ArrayList<String>(); // The list of elective courses to be returned
 
@@ -110,20 +110,26 @@ public class Planner {
             }
         }
 
-        for(int i = 0; i < electiveList.size(); i++)
-            for(int j = 0; j < coreCourses.size(); j++)
-                if(coreCourses.get(j).equals(electiveList.get(i)))
-                {
-                    electiveList.remove(i);
-                    i--;
-                }
         String[] electivesArray = new String[electiveList.size() + 2];
         electivesArray[0] = "BACK";
         electivesArray[1] = "General Elective";     // added title of list to list
+
+        if(flag == 1)
+        {
+            for (int i = 0; i < electiveList.size(); i++)
+                for (int j = 0; j < coreCourses.size(); j++)
+                    if (coreCourses.get(j).equals(electiveList.get(i)))
+                    {
+                        electiveList.remove(i);
+                        i--;
+                    }
+        }
+
         for (int i = 2; i < electiveList.size() + 2; i++)
         {
             electivesArray[i] = electiveList.get(i - 2); // The array and array list are offset by 2 because of the BACK slot in the array and the title slot
         }
+
         return electivesArray;
     }
 
@@ -132,14 +138,14 @@ public class Planner {
      * Uses checkPreReq method from Degree to obtain the missing prerequisites that need to be put into the String to be returned
      * @return A String telling the user what prereqs they must take before the class they just tried
      */
-    public String electivePrereqAddError(String courseID, int semesterNumber) {
+    public static String electivePrereqAddError(String courseID, int semesterNumber) {
         String errorMessage = ""; // Error message to be returned
         ArrayList<ArrayList<String>> missingPrereqs = deg.checkPreReq(courseID, semesterNumber);
         if (missingPrereqs.size() == 0)
             return errorMessage; // The user had all the prerequisites, the course can be added to the flowchart (returns empty string)
         // Otherwise there was an error adding electives. Send a message to the user.
 
-        errorMessage = "Missing prereqs: ";
+        errorMessage = "Missing prereqs for " + courseID + ": ";
         String errorMessageAddition = ""; // Adds on to errorMessage throughout the loop
 
         for (ArrayList<String> orRelationshipRow : missingPrereqs) {
