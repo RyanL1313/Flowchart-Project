@@ -134,8 +134,7 @@ public class Planner {
      */
     public String electivePrereqAddError(String courseID, int semesterNumber) {
         String errorMessage = ""; // Error message to be returned
-        Degree degreePlan = new Degree();
-        ArrayList<ArrayList<String>> missingPrereqs = degreePlan.checkPreReq(courseID, semesterNumber);
+        ArrayList<ArrayList<String>> missingPrereqs = deg.checkPreReq(courseID, semesterNumber);
         if (missingPrereqs.size() == 0)
             return errorMessage; // The user had all the prerequisites, the course can be added to the flowchart (returns empty string)
         // Otherwise there was an error adding electives. Send a message to the user.
@@ -158,6 +157,48 @@ public class Planner {
 
             errorMessage = errorMessage.concat(errorMessageAddition + ". ");
             errorMessageAddition = ""; // Make this empty again
+        }
+
+        return errorMessage;
+    }
+
+    /**
+     * Tells the user what corequisite courses they are missing in their degree plan.
+     * Uses checkCoReq method from Degree to obtain the missing corequisites that need to be put into the String to be returned
+     * @return A String telling the user what coreqs they must take in that semester
+     */
+    public String electiveCoreqAddError(Semester singleSemesterList, int semesterNumber) {
+        String errorMessage = ""; // Error message to be returned
+        ArrayList<ArrayList<String>> missingCoreqs = new ArrayList<ArrayList<String>>();
+
+        for(int i = 0; i < singleSemesterList.getCourseList().size(); i++){
+            String singleCourse = singleSemesterList.getCourseList().get(i).getCourseID();
+            missingCoreqs = deg.checkCoReq(singleCourse, semesterNumber);
+
+            if(!missingCoreqs.isEmpty()){
+             return errorMessage;
+            }
+            else {
+                errorMessage = "Missing coreqs: ";
+                String errorMessageAddition = ""; // Adds on to errorMessage throughout the loop
+                for (ArrayList<String> orRelationshipRow : missingCoreqs) {
+                    errorMessage = errorMessage.concat("Must take ");
+                    Iterator<String> colIterator = orRelationshipRow.iterator(); // Goes through each course ID in the row
+                    while (colIterator.hasNext()) {
+                        int count = 0; // Number of courses read in on this row
+
+                        errorMessageAddition = errorMessageAddition.concat(colIterator.next()); // A course
+                        if (colIterator.hasNext()) { // Need to add an "or". Otherwise, we are at the end of this row. No more "ors".
+                            errorMessageAddition = errorMessageAddition.concat(" or ");
+                        }
+                        count++;
+                    }
+
+                    errorMessage = errorMessage.concat(errorMessageAddition + ". ");
+                    errorMessageAddition = ""; // Make this empty again
+                }
+            }
+
         }
 
         return errorMessage;
@@ -786,11 +827,12 @@ public class Planner {
         return DegreeParser.getCoursesRequiredToGraduate();
     }
 
+
+
     //TODO logic about the classes that the user enters if they have previous classes
 
-    //TODO send course that user picked from drop-down menu to removeCourseFromCoursesNeededToGraduate in DegreeCompletion class
 
     //TODO in the case the user changes their mind and picks another course, we send it to removeCourseFromCoursesNeededToGraduate and addBackInCourse in DegreeCompletion class
 
-    //TODO check to see if the coursesNeededToGraduate in DegreeCompletion class is empty. If it is, then degree is complete. If not, then send back the leftover courses in the linked list
+
 }

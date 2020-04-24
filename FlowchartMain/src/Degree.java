@@ -129,8 +129,8 @@ public class Degree {
             for (int row = 0; row < preReqCourses.size(); row++) {
                 PreReqs = false;
                 for (int column = 0; column < preReqCourses.get(row).size(); column++){
-                    for (Course allPreviousCours : allPreviousCourses) {
-                        if (preReqCourses.get(row).get(column).equals(allPreviousCours.getCourseID())) {
+                    for (Course previousCourse : allPreviousCourses) {
+                        if (preReqCourses.get(row).get(column).equals(previousCourse.getCourseID())) {
                             PreReqs = true;
                         }
                     }
