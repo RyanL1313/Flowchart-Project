@@ -566,6 +566,20 @@ public class DegreeParser {
         return coursesReqToGraduate;
     }
 
+    public static Course removeFromCRG(Course cID)
+    {
+        String courseID = cID.getCourseID();
+        for(int i = 0; i < coursesReqToGraduate.size(); i++)
+        {
+            if(coursesReqToGraduate.get(i).contains(courseID))
+            {
+                coursesReqToGraduate.remove(i);
+                return cID;
+            }
+        }
+        return null;
+    }
+
 }
 
 

@@ -249,9 +249,16 @@ public class Degree {
                     {
                         if(courseID.equals(list.get(x)[j]))     // if found, the semester removes that BroadCourse
                         {
-                            semesterList.get(i).removeCourse(list.get(x)[1]);   // BroadCourse type
-                            x = 16;
-                            break;
+                            //semesterList.get(i).removeCourse(list.get(x)[1]);   // BroadCourse type
+                            result = semesterList.get(i).removeCourse(list.get(x)[1]);
+                            if(result == null)
+                                break;
+                            else
+                            {
+                                result = DegreeParser.removeFromCRG(result);
+                                x = 16;
+                                return result;
+                            }
                         }
                     }
                     x++;
