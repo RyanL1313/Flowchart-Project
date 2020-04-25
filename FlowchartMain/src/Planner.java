@@ -1,3 +1,5 @@
+package edu.cs321.controller;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -8,7 +10,7 @@ import java.util.*;
  * the Model-View-Control principle. It will process user interactions with the GUI, and it will send data to the GUI
  * from the model (such as the full hash map of courses to the drop-down box of electives the user can choose from).
  *
- * Planner follows the Observer pattern as it notifies the various GUI windows when they should be displayed by using
+ * edu.cs321.controller.Planner follows the Observer pattern as it notifies the various GUI windows when they should be displayed by using
  * the draw methods for each window (ex: drawSelectorWindow()). Also, it notifies the model when data needs to be changed
  * (ex: remove a course from FullCourseList, or remove a course from coursesReqToGraduate in DegreeParser).
  */
@@ -63,7 +65,7 @@ public class Planner {
     /**
      * Creates a new instance of DegreeSelectorWindow and runs its main method.
      */
-    void drawSelectorWindow()
+    public void drawSelectorWindow()
     {
         DegreeSelectorWindow selection = new DegreeSelectorWindow();
         selection.main(null);
