@@ -1,3 +1,6 @@
+package parsing;
+
+import degree.SpecificCourse;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -30,7 +33,7 @@ public class FullCourseList {
      * full course name, number of credits, prerequisites, and corequisites, which is done through separate methods
      * but called in the constructor.
      */
-    FullCourseList() {
+    public FullCourseList() {
         // These get data extracted from them in the extractDataFromStrings method
         String courseTitle; // Contains the course code, full course name
         String courseCredits; // Contains the credit hours for this course

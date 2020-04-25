@@ -1,3 +1,8 @@
+package controller;
+import degree.*;
+import parsing.*;
+import gui.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -65,7 +70,7 @@ public class Planner {
     /**
      * Creates a new instances of CreditAdder
      */
-    static void drawCreditAdder()
+    public static void drawCreditAdder()
     {
         CreditAdder adder = new CreditAdder();
     }
@@ -73,7 +78,7 @@ public class Planner {
     /**
      * Creates a new instance of PlanDisplay and runs its main method.
      */
-    static void drawPlanDisplay()
+    public static void drawPlanDisplay()
     {
         PlanDisplay display = new PlanDisplay();
         display.main(null);

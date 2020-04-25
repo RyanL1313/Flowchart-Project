@@ -1,3 +1,8 @@
+package degree;
+import parsing.*;
+import controller.Planner;
+import degree.Course;
+
 import java.io.IOException;
 import java.util.*;
 

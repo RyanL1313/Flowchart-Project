@@ -1,3 +1,5 @@
+package degree;
+
 /**
  * A course has a course ID, name, prerequisites and corequisites list, and number of credit hours.
  * A course is the most concrete object type used in this program
@@ -5,7 +7,7 @@
  * The nested Array Lists for prereqs and coreqs are necessary to distinguish equivalent prereqs and coreqs from separate preregs and coregs.
  * Equivalents are in the same row (or same ArrayList in the ArrayList of ArrayLists), separates are on different rows (different ArrayList inside the ArrayList of ArrayLists)
  */
-public class BroadCourse implements Course{
+public class BroadCourse implements Course {
     private String fullCourseName;
     private String courseID;
 
@@ -13,7 +15,7 @@ public class BroadCourse implements Course{
      * Course constructor
      * If the attributes end up staying with these values, then that shows us an error in file reading occurred.
      */
-    BroadCourse(String broadTitle) {
+    public BroadCourse(String broadTitle) {
         fullCourseName = broadTitle;
         courseID = broadTitle;
     }

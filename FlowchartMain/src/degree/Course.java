@@ -1,3 +1,5 @@
+package degree;
+
 /**
  * A course has a course ID, name, prerequisites and corequisites list, and number of credit hours.
  * A course is the most concrete object type used in this program

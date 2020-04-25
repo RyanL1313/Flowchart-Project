@@ -1,3 +1,7 @@
+package degree;
+
+import degree.Course;
+
 import java.util.*;
 
 /**
@@ -7,7 +11,7 @@ import java.util.*;
  * The nested Array Lists for prereqs and coreqs are necessary to distinguish equivalent prereqs and coreqs from separate preregs and coregs.
  * Equivalents are in the same row (or same ArrayList in the ArrayList of ArrayLists), separates are on different rows (different ArrayList inside the ArrayList of ArrayLists)
  */
-public class SpecificCourse implements Course{
+public class SpecificCourse implements Course {
     private ArrayList<ArrayList<String>> prereqs = new ArrayList<ArrayList<String>>(); // ArrayList of ArrayList of prerequisite courses
     private ArrayList<ArrayList<String>> coreqs = new ArrayList<ArrayList<String>>(); // ArrayList of ArrayList of corequisite courses
     private int courseHours; // Hours the course satisfies
@@ -18,7 +22,7 @@ public class SpecificCourse implements Course{
      * Course constructor
      * If the attributes end up staying with these values, then that shows us an error in file reading occurred.
      */
-    SpecificCourse() {
+    public SpecificCourse() {
         courseHours = 0;
         fullCourseName = "Unknown";
         courseID = "Unknown";

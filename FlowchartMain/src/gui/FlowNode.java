@@ -1,3 +1,7 @@
+package gui;
+
+import controller.Planner;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -153,7 +157,7 @@ public class FlowNode extends JComponent
                     default:
                         String menuSlot = (String) dropDown.getItemAt(1);    // this gets the intended category the class falls under
 
-                        String message = Planner.electivePrereqAddError((String)dropDown.getSelectedItem(),PlanDisplay.getSemesterNum(dropDown.getFocusCycleRootAncestor().getLocation()));
+                        String message = Planner.electivePrereqAddError((String)dropDown.getSelectedItem(), PlanDisplay.getSemesterNum(dropDown.getFocusCycleRootAncestor().getLocation()));
                         if(!(message.equals("")))
                         {
                             JFrame popup = new JFrame();

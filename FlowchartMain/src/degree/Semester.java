@@ -1,3 +1,8 @@
+package degree;
+
+import degree.BroadCourse;
+import degree.Course;
+
 import java.util.*;
 
 /**
