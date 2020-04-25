@@ -152,40 +152,36 @@ public class FlowNode extends JComponent
                         break;
                     default:
                         String menuSlot = (String) dropDown.getItemAt(1);    // this gets the intended category the class falls under
-                        System.out.println("Menu slot: " + menuSlot);
-                        String returnedCourse = Planner.removeFromCoursesReqToGraduate(menuSlot); // Ex: remove Technical Elective from CRG
-                        if (!Planner.checkIfValidCourseReqToGraduateRemoval(returnedCourse))
-                        { // Something was unsuccessfully removed from CRG
+
+                        String message = Planner.electivePrereqAddError((String)dropDown.getSelectedItem(),PlanDisplay.getSemesterNum(dropDown.getFocusCycleRootAncestor().getLocation()));
+                        if(!(message.equals("")))
+                        {
                             JFrame popup = new JFrame();
                             popup.setBounds(525, 152, 250, 200);
-                            popup.add(new JLabel("<html>Requirements for " + menuSlot + " already fulfilled, please select a different course type."));
+                            popup.add(new JLabel("<html>" + message));
                             popup.setVisible(true);
-
-                            dropDown.removeAllItems();
-                            for (int i = 0; i < menu.length; i++)
-                                dropDown.addItem(menu[i]);
-                        } else
+                        }
+                        else
                         {
-                            String message = Planner.electivePrereqAddError((String)dropDown.getSelectedItem(),PlanDisplay.getSemesterNum((JComboBox)(e.getSource())));
-                            if(!(message.equals("")))
-                            {
+                            String returnedCourse = Planner.removeFromCoursesReqToGraduate(menuSlot); // Ex: remove Technical Elective from CRG
+                            Planner.deg.addCourseToASemester((String)dropDown.getSelectedItem(),8);
+                            if (!Planner.checkIfValidCourseReqToGraduateRemoval(returnedCourse))
+                            { // Something was unsuccessfully removed from CRG
                                 JFrame popup = new JFrame();
                                 popup.setBounds(525, 152, 250, 200);
-                                popup.add(new JLabel("<html>" + message));
+                                popup.add(new JLabel("<html>Requirements for " + menuSlot + " already fulfilled, please select a different course type."));
                                 popup.setVisible(true);
-                            }
-                            message = Planner.electiveCoreqAddError((String)dropDown.getSelectedItem(),PlanDisplay.getSemesterNum((JComboBox)(e.getSource())));
-                            if(!(message.equals("")))
+
+                                dropDown.removeAllItems();
+                                for (int i = 0; i < menu.length; i++)
+                                    dropDown.addItem(menu[i]);
+                            } else
                             {
-                                JFrame popup = new JFrame();
-                                popup.setBounds(525, 152, 250, 200);
-                                popup.add(new JLabel("<html>" + message));
-                                popup.setVisible(true);
+                                dropDown.setVisible(false);
+                                courseID.setText((String) dropDown.getSelectedItem());
+                                courseID.setVisible(true);
+                                clearButton.setVisible(true);
                             }
-                            dropDown.setVisible(false);
-                            courseID.setText((String) dropDown.getSelectedItem());
-                            courseID.setVisible(true);
-                            clearButton.setVisible(true);
                         }
                 }
             }

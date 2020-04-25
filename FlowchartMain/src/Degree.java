@@ -98,7 +98,7 @@ public class Degree {
         //if the 2D array is empty then that means that either there were no pre-reqs for the class
         //or the user had the required pre-reqs for the class they wanted to add
         //and so the course is added successfully to the semester
-        if (preReqCourses.get(0).isEmpty()) {
+        if (preReqCourses.isEmpty()) {
             Course newCourse = makeStringToCourseObject(course);
             semesterList.get(semesterNumber - 1).addCourse(newCourse);
         }
@@ -114,13 +114,14 @@ public class Degree {
      * @return 2D array list with pre-req's needed (may have something or may be empty)
      */
     public ArrayList<ArrayList<String>> checkPreReq(String course, int semesterNumber){
-        java.util.ArrayList<Course> allPreviousCourses = new ArrayList<>();
-        for(int i = 0; i < semesterNumber - 1; i++ ){
-            for(int j = 0; j < semesterList.get(i).getCourseList().size(); j++){
-                allPreviousCourses.add(semesterList.get(i).getCourseList().get(j));
-            }
-        }
+        ArrayList<Course> allPreviousCourses = new ArrayList<>();
+
         SpecificCourse courseUserWantsToAdd = makeStringToCourseObject(course);
+        for(int i = 0; i < semesterList.size(); i++)
+            for(int j = 0; j < semesterList.get(i).getCourseList().size(); j++)
+                allPreviousCourses.add(semesterList.get(i).getCourseList().get(j));
+
+
         ArrayList<ArrayList<String>> preReqCourses = courseUserWantsToAdd.getPrereqs();
         Boolean PreReqs;
         ArrayList<ArrayList<String>> newPreReqCourses = new ArrayList<ArrayList<String>>(); // This 2D array list has rows removed if the user has at least one prereq on that row

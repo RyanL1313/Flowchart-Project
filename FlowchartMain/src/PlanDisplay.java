@@ -96,44 +96,18 @@ public class PlanDisplay extends JFrame
         add(pane, BorderLayout.CENTER);
     }
 
-    public void removeSemester(int yLow, int yHigh)   // erases all nodes within y range.
-    {
-
-    }
-
-    public void removeNode(int x, int y)
-    {
-
-    }
-/*
-    public FlowNode search(String courseID)
-    {
-        JPanel chart = (JPanel)getComponent(0).getComponentAt(0,0);
-        for(int i = 1; i < chart.getComponentCount(); i += 2)
-        {
-            for(int j = 0; j < chart.getComponent(i).get
-        }
-    }
-
-    public static void addNode(FlowNode node)
-    {
-
-    }
-*/
-
     /**
      * Returns what semester the given node is contained in.
-     * @param node
+     * @param coord
      * @return
      */
-    public static int getSemesterNum(JComboBox node)
+    public static int getSemesterNum(Point coord)
     {
-        Point p = node.getLocation();
-        p.move(0,40);
+        Point newP = new Point(coord.x,coord.y + 40);
         for(int i = 0; i < semesters.size(); i++)
         {
             Rectangle bounds = semesters.get(i).getBounds();
-            if((p.getY() > bounds.getMinY()) && (p.getY() < bounds.getMaxY()))
+            if((newP.getY() >= bounds.getMinY()) && (newP.getY() <= bounds.getMaxY()))
                 return i - 7;
         }
         return 0;
