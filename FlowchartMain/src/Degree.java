@@ -168,8 +168,8 @@ public class Degree {
                 boolean coReqs = false;
                 for (column = 0; column < coReqCourses.get(row).size(); column++){
 
-                    for (Course currentSemesterCours : currentSemesterCourses) {
-                        if (coReqCourses.get(row).get(column).equals(currentSemesterCours.getCourseID())) {
+                    for (Course currentSemesterCourse : currentSemesterCourses) {
+                        if (coReqCourses.get(row).get(column).equals(currentSemesterCourse.getCourseID())) {
                             coReqs = true;
                         }
                     }
