@@ -3,12 +3,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 /**
  * The DegreeSelectorWindow class is a GUI class that will be a window containing
- * three dropdown windows; one for the major, one for the minor, and one for a desired concentration.
- * Both the minor and concentration dropdowns will be optional, with their default value being N/A.
- * The major dropdown menu requires input for the program to continue. Upon hitting the continue button,
- * the user will be prompted to enter any college credits they have already obtained. If no credits are
- * entered, the program will progress to the FourYearPlanDisplay class. If credits are entered, the
- * program will progress to the CustomPlanDisplay class.
+ * two dropdown windows; one for the major, one for the minor
+ *
+ * The minor dropdown is optional, its default value is N/A
+ *
+ * The major dropdown menu requires input for the program to continue. Upon hitting the Yes button,
+ * the user will be prompted to enter any college credits they have already obtained.
+ * If the No button is pressed, the program will progress to the PlanDisplay class. If credits are entered, the
+ * program will progress to the CreditAdder class.
  */
 public class DegreeSelectorWindow extends JFrame //implements Runnable
 {
@@ -70,7 +72,7 @@ public class DegreeSelectorWindow extends JFrame //implements Runnable
             dispose();
             Planner.callDegreeParser(maj, min);
             Planner.removeCoreCoursesFromFullCourseList(); // Added by Ryan - So core courses already in flowchart don't show up in dropdowns
-            Planner.drawFourYearPlanDisplay();
+            Planner.drawPlanDisplay();
         }
     };
 
@@ -79,10 +81,6 @@ public class DegreeSelectorWindow extends JFrame //implements Runnable
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            // - This is where a new JFrame will be made for the user to enter their existing
-            // - college credits. It will implement FullCourseList and populate the JFrame with every
-            // - possible course to take with a check box next to it. It is the user's responsibility to
-            // - know what classes they have credit for already.
             String maj = major.getSelectedItem() + " Major";
             String min = (String) minor.getSelectedItem();
             if (min != "N/A") // Don't want to add " Minor" if it's N/A
@@ -96,6 +94,14 @@ public class DegreeSelectorWindow extends JFrame //implements Runnable
         }
     };
 
+    /**
+     * The DegreeSelectorWindow is the initial starting point of the program. It prompts the user to select their major and, if desired,
+     * their intended minor.
+     *
+     * The user is prompted with the ability to enter college credits previously obtained. If they wish to do so, they will be
+     * taken to the CreditAdder window.
+     * If not, the program will progress to PlanDisplay immediately.
+     */
     public DegreeSelectorWindow()
     {
         initMajors();

@@ -22,7 +22,6 @@ public class Planner {
     public static ArrayList<String> coursesAlreadyTaken = new ArrayList<String>();
     public static Degree deg = new Degree();
     private static String courseGroupsTextFileLocation = "./List of Courses/Various Courses"; // Used for reading in Humanities course IDs, for example
-    //public static FourYearPlanDisplay FYPD = new FourYearPlanDisplay();
 
     /**
      * Uses the findCourse method in FullCourseList to check if a course ID entered by the user is valid or not, then removes it from
@@ -61,20 +60,30 @@ public class Planner {
         }
     }
 
+    /**
+     * Creates a new instance of DegreeSelectorWindow and runs its main method.
+     */
     void drawSelectorWindow()
     {
         DegreeSelectorWindow selection = new DegreeSelectorWindow();
         selection.main(null);
     }
+
+    /**
+     * Creates a new instances of CreditAdder
+     */
     static void drawCreditAdder()
     {
         CreditAdder adder= new CreditAdder();
-
     }
-    static void drawFourYearPlanDisplay()
+
+    /**
+     * Creates a new instance of PlanDisplay and runs its main method.
+     */
+    static void drawPlanDisplay()
     {
-        FourYearPlanDisplay FYPD = new FourYearPlanDisplay();
-        FYPD.main(null);
+        PlanDisplay display = new PlanDisplay();
+        display.main(null);
     }
 
     /**
@@ -97,8 +106,6 @@ public class Planner {
                 electiveList.add(courseListIterator.next().getCourseID());
             }
         }
-
-        //------------ ADDED BY BRYCE ------------------------------
 
         ArrayList<String> coreCourses = new ArrayList<String>();
         ArrayList<Semester> sem = deg.getSemesterList();
@@ -710,17 +717,27 @@ public class Planner {
         return degree;
     }
 
+    /**
+     * Sets the static instance of the Degree class deg.
+     * @param degree
+     */
     public static void setDegree(Degree degree)
     {
         deg = degree;
     }
 
+    /**
+     * Sets the major field of the Degree class
+     * @param maj
+     */
     public static void setMajor(String maj) { deg.setMajor(maj);}
 
+    /**
+     * Sets the minor field of the Degree class
+     */
     public static void setMinor(String min)
     {
         deg.setMinor(min);
-        //deg.setSemesters(); // Note from Ryan - Made the semesters get set in DegreeParser, so this is not necessary
     }
 
     /**
@@ -794,6 +811,10 @@ public class Planner {
         return DegreeCompletion.removeCourseFromCoursesNeededToGraduate(selectedCourseType);
     }
 
+    public static void addToCoursesReqToGraduate(String selectedCourseType) {
+        DegreeCompletion.addBackInCourse(selectedCourseType);
+    }
+
     /**
      * The removeFromCoursesReqToGraduate method could fail at removing anything from coursesReqToGraduate, and
      * if this happens, it returns the empty string. Using this method in FlowNode ensures that the user will
@@ -827,17 +848,12 @@ public class Planner {
         }
     }
 
+    /**
+     * Retrieves the LinkedList of courseID's that are required for the Degree to be completed.
+     * @return
+     */
     public static LinkedList getRequiredCourses()
     {
         return DegreeParser.getCoursesRequiredToGraduate();
     }
-
-
-
-    //TODO logic about the classes that the user enters if they have previous classes
-
-
-    //TODO in the case the user changes their mind and picks another course, we send it to removeCourseFromCoursesNeededToGraduate and addBackInCourse in DegreeCompletion class
-
-
 }

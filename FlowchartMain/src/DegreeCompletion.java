@@ -207,7 +207,7 @@ public class DegreeCompletion {
      * previously selected is added back to coursesNeededToGraduate
      * @param typeOfCourse type of course the user selects
      */
-    public void addBackInCourse(String typeOfCourse) {
+    public static void addBackInCourse(String typeOfCourse) {
         LinkedList<String> CRG = DegreeParser.getCoursesRequiredToGraduate();
         CRG.add(typeOfCourse);
 

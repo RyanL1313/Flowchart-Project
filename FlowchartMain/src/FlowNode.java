@@ -2,8 +2,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
 
+/**
+ * The FlowNode is a subclass of the JComponent. It serves the purpose of representing a course
+ * on the PlanDisplay. PlanDisplay draws multiple instances of FlowNode based on the Degree the user selects.
+ *
+ * FlowNode is comprised of several other JComponents: a JComboBox dropDown, a JLabel courseID,
+ * a JButton clearButton, and a JPanel rect for the background.
+ *
+ * dropDown and clearButton have ActionListeners dropDownListener, and clearButtonPress respectively.
+ * These ActionListeners wait for user input to continue the flow of the program.
+ */
 public class FlowNode extends JComponent
 {
     String[] menu = {"Menu","MA 200+","MA 300+","MA 400+","CS 200+","CS 300+","CS 400+", "ST 400+",
@@ -35,6 +44,8 @@ public class FlowNode extends JComponent
         @Override
         public void actionPerformed(ActionEvent e)
         {
+            String courseType = (String)dropDown.getItemAt(1);
+            Planner.addToCoursesReqToGraduate(courseType);
             dropDown.setSelectedIndex(0);
             dropDown.setVisible(true);
             courseID.setVisible(false);
@@ -140,44 +151,53 @@ public class FlowNode extends JComponent
                             dropDown.addItem(electiveCourses[i]);
                         break;
                     default:
-                        dropDown.setVisible(false);
-                        courseID.setText((String) dropDown.getSelectedItem());
-                        courseID.setVisible(true);
-                        clearButton.setVisible(true);
-
-                        String menuSlot = (String)dropDown.getItemAt(1);    // this gets the intended category the class falls under
+                        String menuSlot = (String) dropDown.getItemAt(1);    // this gets the intended category the class falls under
                         System.out.println("Menu slot: " + menuSlot);
                         String returnedCourse = Planner.removeFromCoursesReqToGraduate(menuSlot); // Ex: remove Technical Elective from CRG
+                        if (!Planner.checkIfValidCourseReqToGraduateRemoval(returnedCourse))
+                        { // Something was unsuccessfully removed from CRG
+                            JFrame popup = new JFrame();
+                            popup.setBounds(525, 152, 250, 200);
+                            popup.add(new JLabel("<html>Requirements for " + menuSlot + " already fulfilled, please select a different course type."));
+                            popup.setVisible(true);
 
-                        // Check if removal was invalid
-                        if (!Planner.checkIfValidCourseReqToGraduateRemoval(returnedCourse)) { // Something was unsuccessfully removed from CRG
-                            // We need something in here to tell the student that they already have every credit for the course type selected, and they need to select something else
-                            // Also set the drop-down back to its initial state
+                            dropDown.removeAllItems();
+                            for (int i = 0; i < menu.length; i++)
+                                dropDown.addItem(menu[i]);
+                        } else
+                        {
+                            String message = Planner.electivePrereqAddError((String)dropDown.getSelectedItem(),PlanDisplay.getSemesterNum((JComboBox)(e.getSource())));
+                            if(!(message.equals("")))
+                            {
+                                JFrame popup = new JFrame();
+                                popup.setBounds(525, 152, 250, 200);
+                                popup.add(new JLabel("<html>" + message));
+                                popup.setVisible(true);
+                            }
+                            message = Planner.electiveCoreqAddError((String)dropDown.getSelectedItem(),PlanDisplay.getSemesterNum((JComboBox)(e.getSource())));
+                            if(!(message.equals("")))
+                            {
+                                JFrame popup = new JFrame();
+                                popup.setBounds(525, 152, 250, 200);
+                                popup.add(new JLabel("<html>" + message));
+                                popup.setVisible(true);
+                            }
+                            dropDown.setVisible(false);
+                            courseID.setText((String) dropDown.getSelectedItem());
+                            courseID.setVisible(true);
+                            clearButton.setVisible(true);
                         }
-
-                        // Next part for debugging purposes:
-
-                         System.out.println("After removal: ");
-                        LinkedList<String> courses = DegreeParser.getCoursesRequiredToGraduate();
-                        Iterator coursesIterator = courses.iterator();
-                        while (coursesIterator.hasNext()) {
-                            System.out.println(coursesIterator.next());
-                        }
-
-
-/*
-
-                        ArrayList<ArrayList<String>> coreqs = Planner.getCoReq((String)dropDown.getSelectedItem());
-                        if(!coreqs.isEmpty())
-                             Planner.FYPD.addNode(new FlowNode(coreqs));
-*/
-
                 }
             }
         }
     };
 
-    // Constructor for creating an empty node.
+    /**
+     * The Default FLowNode constructor creates an empty FlowNode with the JComboBox dropDown visible.
+     * The user is then able to select a course from the dropDown. Once selected, the node hides the
+     * dropDown and displays the courseID, along with a clear button should the user wish to revert
+     * the node to its empty state.
+     */
     public FlowNode()
     {
         dropDown.setBounds(20, 20, 160, 20);
@@ -203,7 +223,11 @@ public class FlowNode extends JComponent
         setVisible(true);
     }
 
-    // Constructor for a uneditable, filled node.
+    /**
+     * The overloaded FlowNode constructor that takes a String id in creates a filled, uneditable node.
+     * These nodes are made for the mandatory core classes.
+     * @param id Contains the courseID specifically formatted i.e. "CS 102"
+     */
     public FlowNode(String id)
     {
         courseID.setText(id);
@@ -218,10 +242,5 @@ public class FlowNode extends JComponent
         add(rect);
 
         setVisible(true);
-    }
-
-    public FlowNode(ArrayList<ArrayList<String>> coreqs)
-    {
-
     }
 }

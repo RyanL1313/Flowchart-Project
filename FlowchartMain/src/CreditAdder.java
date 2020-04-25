@@ -2,6 +2,13 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The CreditAdder class is a JFrame in which the user is able to enter in any class if they have a credit for it.
+ * It is up to the user to know which classes they test out of with college credits gained outside of college/in a
+ * previous semester(in the instance that the user is making a schedule for their last two years.
+ *
+ * CreditAdder utilizes a very similar dropDown menu setup as the FlowNodes.
+ */
 public class CreditAdder extends JFrame
 {
 
@@ -26,7 +33,6 @@ public class CreditAdder extends JFrame
     static String[] electiveCourses300plus = Planner.getElective300PlusCourseIDs();
     static String[] electiveCourses = Planner.getElectives(0);
 
-    //JTextField entryBox = new JTextField();
     JComboBox dropDown = new JComboBox(menu);
 
     ActionListener addPress = new ActionListener()
@@ -35,7 +41,6 @@ public class CreditAdder extends JFrame
         public void actionPerformed(ActionEvent e)
         {
             String addedCourse = (String)dropDown.getSelectedItem();
-            //entryBox.setText("");
             dropDown.setSelectedIndex(0);
             removeCourse(addedCourse);
         }
@@ -50,8 +55,8 @@ public class CreditAdder extends JFrame
             dispose();
             Degree.shiftSemesters();
             Degree.printSemesters();
-            Planner.removeCoreCoursesFromFullCourseList(); // Added by Ryan so dropdowns in the flowchart can't have the core courses
-            Planner.drawFourYearPlanDisplay();
+            Planner.removeCoreCoursesFromFullCourseList();
+            Planner.drawPlanDisplay();
         }
     };
 
