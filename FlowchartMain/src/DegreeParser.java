@@ -319,8 +319,6 @@ public class DegreeParser {
                         newCourse3 = makeStringToCourseObject(labCourse);
                         semester.addCourse(newCourse1);
                         semester.addCourse(newCourse3);
-                        //System.out.println(RegCourse);
-                        //System.out.println(labCourse);
                     }
                     //course doesn't have lab
                     else{
@@ -354,7 +352,6 @@ public class DegreeParser {
                         break;
                     }
                 } while (!arr1.get(i).contains("Fall") && !arr1.get(i).equals("Spring") && !arr1.get(i).contains("Year"));
-                //semester.updateSemesterHours();
                 semesterArrayList.add(semester);
             }
             text1 = arr1.get(i);
@@ -415,7 +412,6 @@ public class DegreeParser {
                         break;
                     }
                 } while (!arr1.get(i).contains("Fall") && !arr1.get(i).equals("Spring") && !arr1.get(i).contains("Year"));
-               // semester.updateSemesterHours();
                 semesterArrayList.add(semester);
             }
             text1 = arr1.get(i);

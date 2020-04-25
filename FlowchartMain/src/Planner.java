@@ -14,12 +14,6 @@ import java.util.*;
  */
 
 public class Planner {
-    private boolean studentFinishedEnteringCourses; // Is set to true when the user selects "Done" when they're done entering previous credits into the textbox (should be in a loop)
-    private boolean degreeComplete; // Is true if coursesReqToGraduate is empty
-    public static String MAJOR;
-    public static String MINOR;
-    public static String CONCENTRATION;
-    public static ArrayList<String> coursesAlreadyTaken = new ArrayList<String>();
     public static Degree deg = new Degree();
     private static String courseGroupsTextFileLocation = "./List of Courses/Various Courses"; // Used for reading in Humanities course IDs, for example
 
@@ -32,7 +26,6 @@ public class Planner {
      */
     private static boolean isEnteredCourseValid(String courseID) {
         int indexOfCourse; // Index of the course in question in the linked list associated with the key of the courseID (i.e. the "MA" linked list)
-        //FullCourseList courseList = new FullCourseList();
 
         indexOfCourse = FullCourseList.findCourse(courseID); // Returns -1 if it's not found, otherwise it returns the index of the course's location
 
@@ -74,7 +67,7 @@ public class Planner {
      */
     static void drawCreditAdder()
     {
-        CreditAdder adder= new CreditAdder();
+        CreditAdder adder = new CreditAdder();
     }
 
     /**
@@ -704,7 +697,6 @@ public class Planner {
     public static ArrayList<ArrayList<String>> getDegree()
     {
         ArrayList<ArrayList<String>> degree = new ArrayList<ArrayList<String>>();
-        //ArrayList<Semester> semesterList = deg.getSemesterList();
         for(int i = 0; i < deg.getSemesterList().size(); i++)
         {
             ArrayList<String> semester = new ArrayList<String>();
@@ -761,13 +753,6 @@ public class Planner {
                 e.printStackTrace();
             }
         }
-
-        // Can delete; for debugging
-        LinkedList<String> courses = parser.getCoursesRequiredToGraduate();
-         Iterator coursesIterator = courses.iterator();
-         while (coursesIterator.hasNext()) {
-            System.out.println(coursesIterator.next());
-         }
     }
 
     /**
@@ -792,11 +777,6 @@ public class Planner {
         SpecificCourse inNeedofCoReq = FullCourseList.getCourseByID(course);
         ArrayList<ArrayList<String>> coreqs = inNeedofCoReq.getCoreqs();
         return coreqs;
-    }
-
-    public static void addNode(FlowNode node)
-    {
-
     }
 
     /**
@@ -832,7 +812,6 @@ public class Planner {
      * appear again in the dropdowns in the flowchart.
      */
     public static void removeCoreCoursesFromFullCourseList() {
-        LinkedList<String> coursesInDegree = DegreeParser.getCoursesRequiredToGraduate();
         ArrayList<Semester> semesters = Degree.getSemesterList();
 
         for (Semester sem : semesters) {

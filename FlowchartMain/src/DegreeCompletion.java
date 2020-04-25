@@ -197,9 +197,6 @@ public class DegreeCompletion {
                 }
             default: // Not really necessary. All cases are covered
         }
-
-       System.out.printf("\nCourse removed: " + courseRemoved + "\n\n");
-
         return courseRemoved; // Could be the empty string if the user's selected course type is not in CRG. Therefore, nothing was removed in this case
     }
     /**
