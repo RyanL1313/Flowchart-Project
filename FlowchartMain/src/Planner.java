@@ -169,42 +169,41 @@ public class Planner {
     }
 
     /**
-     * Tells the user what corequisite courses they are missing in their degree plan.
-     * Uses checkCoReq method from Degree to obtain the missing corequisites that need to be put into the String to be returned
-     * @return A String telling the user what coreqs they must take in that semester
+     * Tells the user what corequisite courses they are missing for a single course
+     * Uses checkCoReq method from Degree to obtain the missing corequisites
+     * @return A String telling the user what coreqs they must take for that course
      */
-    public String electiveCoreqAddError(Semester singleSemesterList, int semesterNumber) {
+    public static String electiveCoreqAddError(String courseID, int semesterNumber) {
         String errorMessage = ""; // Error message to be returned
-        ArrayList<ArrayList<String>> missingCoreqs = new ArrayList<ArrayList<String>>();
 
-        for(int i = 0; i < singleSemesterList.getCourseList().size(); i++){
-            String singleCourse = singleSemesterList.getCourseList().get(i).getCourseID();
-            missingCoreqs = deg.checkCoReq(singleCourse, semesterNumber);
+        ArrayList<ArrayList<String>> missingCoreqs = deg.checkCoReq(courseID, semesterNumber); //missing coReq's of a course
 
-            if(!missingCoreqs.isEmpty()){
-             return errorMessage;
-            }
-            else {
-                errorMessage = "Missing coreqs: ";
-                String errorMessageAddition = ""; // Adds on to errorMessage throughout the loop
-                for (ArrayList<String> orRelationshipRow : missingCoreqs) {
-                    errorMessage = errorMessage.concat("Must take ");
-                    Iterator<String> colIterator = orRelationshipRow.iterator(); // Goes through each course ID in the row
-                    while (colIterator.hasNext()) {
-                        int count = 0; // Number of courses read in on this row
+        if(!missingCoreqs.isEmpty()) {
+            return errorMessage; //user has all the coReq's for that course
+        }
+        else { //user is missing some coReq's for that course
 
-                        errorMessageAddition = errorMessageAddition.concat(colIterator.next()); // A course
-                        if (colIterator.hasNext()) { // Need to add an "or". Otherwise, we are at the end of this row. No more "ors".
-                            errorMessageAddition = errorMessageAddition.concat(" or ");
-                        }
-                        count++;
+            errorMessage = "Missing coreqs: ";
+            String errorMessageAddition = ""; // Adds on to errorMessage throughout the loop
+            for (ArrayList<String> orRelationshipRow : missingCoreqs) {
+                errorMessage = errorMessage.concat("Must take ");
+                Iterator<String> colIterator = orRelationshipRow.iterator(); // Goes through each course ID in the row
+                while (colIterator.hasNext()) {
+                    int count = 0; // Number of courses read in on this row
+
+                    errorMessageAddition = errorMessageAddition.concat(colIterator.next()); // A course
+                    if (colIterator.hasNext()) { // Need to add an "or". Otherwise, we are at the end of this row. No more "ors".
+                        errorMessageAddition = errorMessageAddition.concat(" or ");
                     }
-
-                    errorMessage = errorMessage.concat(errorMessageAddition + ". ");
-                    errorMessageAddition = ""; // Make this empty again
+                    count++;
                 }
-            }
 
+                errorMessage = errorMessage.concat(errorMessageAddition + ". ");
+                errorMessageAddition = ""; // Make this empty again
+
+
+
+            }
         }
 
         return errorMessage;
