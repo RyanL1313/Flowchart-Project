@@ -1,5 +1,3 @@
-package edu.cs321.controller;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
